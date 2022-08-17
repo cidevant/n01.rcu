@@ -121,9 +121,4 @@ module.exports = {
         ecmaVersion: 13,
         sourceType: 'module',
     },
-    settings: {
-        'import/resolver': {
-            'babel-module': {},
-        },
-    },
 };
