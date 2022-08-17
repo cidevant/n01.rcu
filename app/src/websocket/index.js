@@ -30,7 +30,7 @@ const WebsocketProvider = ({ children }) => {
 
         ws = {
             socket: socket,
-            sendMessage,
+            // sendMessage,
         };
     }
 
