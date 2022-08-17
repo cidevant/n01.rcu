@@ -7,12 +7,10 @@ import store from './redux/store';
 function App() {
     return (
         <Provider store={store}>
-            <div>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/settings" element={<Settings />} />
-                </Routes>
-            </div>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/settings" element={<Settings />} />
+            </Routes>
         </Provider>
     );
 }
