@@ -1,6 +1,4 @@
-import './index.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.scss';
 
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';

@@ -1,11 +1,23 @@
 import React from 'react';
+import { Nav, Navbar, Container } from 'react-bootstrap';
+import Spinner from 'react-bootstrap/Spinner';
 
 export function StatusBar() {
     return (
-        <div className="d-flex">
-            <div className="">Flex item</div>
-            <div className="">Flex item</div>
-            <div className="ms-auto ">Flex item</div>
-        </div>
+        <>
+            <Navbar sticky="top" bg="dark" variant="dark">
+                <Container fluid>
+                    <Navbar.Brand>
+                        <Spinner className="p-2" animation="border" size="sm" />
+                        Waiting for client connection...
+                    </Navbar.Brand>
+                    <Nav className="ms-auto fs-3">
+                        <Nav.Link href="#home">
+                            <i class="bi bi-three-dots" />
+                        </Nav.Link>
+                    </Nav>
+                </Container>
+            </Navbar>
+        </>
     );
 }
