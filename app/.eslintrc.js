@@ -21,6 +21,7 @@ module.exports = {
     rules: {
         quotes: [2, 'single', 'avoid-escape'],
         semi: [2, 'always'],
+        'default-case': 'off',
         'no-unused-vars': [
             1,
             {

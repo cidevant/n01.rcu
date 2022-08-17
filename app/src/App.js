@@ -1,24 +1,23 @@
 import { Layout } from './components/Layout';
-import { Provider } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { WebsocketProvider } from './websocket';
+import store from './store';
+
 import Home from './pages/Home';
 import Settings from './pages/Settings';
-import store from './redux/store';
-import { ThemeProvider } from 'react-bootstrap';
 
-function App() {
+export default function App() {
     return (
         <Provider store={store}>
-            <ThemeProvider>
+            <WebsocketProvider>
                 <Layout>
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/settings" element={<Settings />} />
                     </Routes>
                 </Layout>
-            </ThemeProvider>
+            </WebsocketProvider>
         </Provider>
     );
 }
-
-export default App;
