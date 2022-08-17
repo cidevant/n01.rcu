@@ -1,0 +1,107 @@
+<link rel="stylesheet" href="css/calc.css">
+<link rel="stylesheet" href="css/modal.css">
+<script src="js/websocket.js"></script>
+<script src="js/index.js"></script>
+<script type="text/javascript">
+  n01obs__controller.__onMessage = function (evt) {
+    console.log('[n01.obs.ws.controller.calc] received message', evt.data);
+
+    const data = JSON.parse(evt.data);
+
+    switch (data['type']) {
+      case 'getFinishDart':
+        getFinishDart(data);
+        break;
+      case 'scoreLeft':
+        setScoreLeft(data);
+      default:
+        break;
+    }
+  }.bind(n01obs__controller);
+
+  n01obs__controller.__onError = function (error) {
+    console.log('[n01.obs.ws.controller.calc] error', error);
+    // document.getElementById('enter_button').classList.add('not_connected');
+  }.bind(n01obs__controller);
+
+  window.onload = () => {
+    n01obs__controller.connect(() => {
+      // document.getElementById('enter_button').classList.remove('not_connected');
+      // document.getElementById('enter_button').classList.add('connected');
+    });
+  };
+
+  window.onbeforeunload = () => {
+    n01obs__controller.disconnect(() => {
+      // document.getElementById('enter_button').classList.remove('not_connected');
+      // document.getElementById('enter_button').classList.remove('connected');
+    });
+  };
+
+</script>
+<meta name="viewport" content="maximum-scale=1.0, user-scalable=no" />
+
+<div class="flex">
+  <div class="flexItem scores">
+    <table class="commonScores">
+      <tr class="scoreRow ">
+        <td class="scoreCell"><span onclick="javascript: sendScore('26')" class="scoreText">26</span></td>
+        <td class="scoreCell"><span onclick="javascript: sendScore('43')" class="scoreText">43</span></td>
+        <td class="scoreCell"><span onclick="javascript: sendScore('58')" class="scoreText">58</span></td>
+      </tr>
+      <tr class="scoreRow ">
+        <td class="scoreCell"><span onclick="javascript: sendScore('45')" class="scoreText">45</span></td>
+        <td class="scoreCell"><span onclick="javascript: sendScore('60')" class="scoreText mostCommon">60</span></td>
+        <td class="scoreCell"><span onclick="javascript: sendScore('41')" class="scoreText">41</span></td>
+      </tr>
+      <tr class="scoreRow ">
+        <td class="scoreCell"><span onclick="javascript: sendScore('85')" class="scoreText">85</span></td>
+        <td class="scoreCell"><span onclick="javascript: sendScore('100')" class="scoreText mostCommon">100</span></td>
+        <td class="scoreCell"><span onclick="javascript: sendScore('81')" class="scoreText">81</span></td>
+      </tr>
+      <tr class="scoreRow ">
+        <td class="scoreCell"><span onclick="javascript: sendScore('95')" class="scoreText">95</span></td>
+        <td class="scoreCell"><span onclick="javascript: sendScore('98')" class="scoreText">98</span></td>
+        <td class="scoreCell"><span onclick="javascript: sendScore('83')" class="scoreText">83</span></td>
+      </tr>
+    </table>
+  </div>
+  <div class="flexItem calc">
+    <div class="input_value_wrapper" id="input_value_wrapper">
+      <div class="value_input" id="score"></div>
+      <div class="value_input left" id="scoreLeft">-</div>
+    </div>
+    <table class="calc_table">
+      <tr class="calcRow">
+        <td class="calcCell"><span onclick="javascript: calc_add(1)" class="text">1</span></td>
+        <td class="calcCell"><span onclick="javascript: calc_add(2)" class="text">2</span></td>
+        <td class="calcCell"><span onclick="javascript: calc_add(3)" class="text">3</span></td>
+      </tr>
+      <tr class="calcRow">
+        <td class="calcCell"><span onclick="javascript: calc_add(4)" class="text">4</span></td>
+        <td class="calcCell"><span onclick="javascript: calc_add(5)" class="text">5</span></td>
+        <td class="calcCell"><span onclick="javascript: calc_add(6)" class="text">6</span></td>
+      </tr>
+      <tr class="calcRow">
+        <td class="calcCell"><span onclick="javascript: calc_add(7)" class="text">7</span></td>
+        <td class="calcCell"><span onclick="javascript: calc_add(8)" class="text">8</span></td>
+        <td class="calcCell"><span onclick="javascript: calc_add(9)" class="text">9</span></td>
+      </tr>
+      <tr class="calcRow">
+        <td class="calcCell"><span onclick="javascript: calc_delete()" class="text delete"><img
+              src="images/backspace.png" height="90" /></span></td>
+        <td class="calcCell"><span onclick="javascript: calc_add(0)" class="text">0</span></td>
+        <td class="calcCell"><span onclick="javascript: calc_enter()" id="enter_button" class="text enter"><img src="images/enter.png"
+              height="90" /></span></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <div id="modal-text">
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+[Unit]
+Description=OBS Controller
+
+[Service]
+ExecStart=node /srv/www/obs.controller.darts/src/index.js
+Type=simple
+Restart=always
+WorkingDirectory=/srv/www/obs.controller.darts
+
+[Install]
+WantedBy=multi-user.target

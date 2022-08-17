@@ -1,0 +1,52 @@
+{
+   "name": "n01.obs",
+   "scripts": {
+      "eslint": "eslint --fix ./*",
+      "daemon:add": "./scripts/systemctl/add.sh",
+      "daemon:remove": "./scripts/systemctl/remove.sh",
+      "daemon:init": "npm run daemon:remove && npm run daemon:add",
+      "check:bin": "./scripts/check-obs-cli.sh",
+      "init": "npm run check:bin && npm run daemon:init",
+      "start": "node src/index.js"
+   },
+   "dependencies": {
+      "chalk": "^5.0.1",
+      "express": "^4.18.1",
+      "node-fetch": "^3.2.10",
+      "query-string": "^7.1.1",
+      "ws": "^8.5.0"
+   },
+   "lint-staged": {
+      "*.js": [
+         "eslint --fix",
+         "git add"
+      ]
+   },
+   "husky": {
+      "hooks": {
+         "pre-commit": "lint-staged"
+      }
+   },
+   "type": "module",
+   "devDependencies": {
+      "@babel/core": "^7.17.10",
+      "@babel/plugin-proposal-class-properties": "^7.16.7",
+      "@babel/plugin-transform-modules-commonjs": "^7.17.9",
+      "@babel/plugin-transform-runtime": "^7.17.10",
+      "@babel/preset-env": "^7.17.10",
+      "@babel/preset-react": "^7.16.7",
+      "babel-eslint": "^10.1.0",
+      "babel-loader": "^8.2.5",
+      "babel-plugin-module-resolver": "^4.1.0",
+      "eslint": "^8.21.0",
+      "eslint-config-prettier": "^8.5.0",
+      "eslint-import-resolver-babel-module": "^5.3.1",
+      "eslint-plugin-import": "^2.26.0",
+      "eslint-plugin-jest": "^26.1.5",
+      "eslint-plugin-jsdoc": "^39.2.9",
+      "eslint-plugin-prettier": "^4.0.0",
+      "husky": "^7.0.4",
+      "lint-staged": "^12.4.1",
+      "prettier": "^2.6.2"
+   }
+}
