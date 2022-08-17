@@ -1,7 +1,7 @@
 import { Layout } from './components/Layout';
 import { Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { WebsocketProvider } from './websocket';
+import { WebsocketProvider } from './websocket/context';
 import store from './store';
 
 import Home from './pages/Home';

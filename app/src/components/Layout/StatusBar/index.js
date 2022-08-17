@@ -13,7 +13,7 @@ export function StatusBar() {
                     </Navbar.Brand>
                     <Nav className="ms-auto fs-3">
                         <Nav.Link href="#home">
-                            <i class="bi bi-three-dots" />
+                            <i className="bi bi-three-dots" />
                         </Nav.Link>
                     </Nav>
                 </Container>
