@@ -3,18 +3,19 @@ import ReactDOM from 'react-dom/client';
 //import "@fortawesome/fontawesome-free/css/all.min.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import 'mdb-react-ui-kit/dist/css/mdb.min.css' //for MDBbootstrap
+import 'mdb-react-ui-kit/dist/css/mdb.min.css'; //for MDBbootstrap
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import registerServiceWorker from './registerServiceWorker';
-import {  BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-    <App />
+      <App />
     </BrowserRouter>
   </React.StrictMode>
 );

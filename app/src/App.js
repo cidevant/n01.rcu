@@ -1,6 +1,6 @@
-import { Route, Routes } from 'react-router-dom'; //use Link to not a href, useMatch end:true for absolute, useResolvedPath (absolute path if /pricing, relative if pricing)
-import Home from './pages/Home'
-import Store from './Redux/Store/Store'
+import { Route, Routes } from 'react-router-dom';
+import Home from './pages/Home';
+import Store from './Redux/Store/Store';
 import { Provider } from 'react-redux';
 
 function App() {
