@@ -1,40 +1,23 @@
 import React, { Component } from 'react';
-import Card from '../components/Card';
-import { MDBContainer, MDBRow, MDBCol } from 'mdb-react-ui-kit';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { fetchPosts } from '../Redux/Actions/TwitterActions';
+import { fetchPosts } from '../redux/actions/TwitterActions';
 
 class Home extends Component {
-  componentDidMount() {
-    this.props.fetchPosts();
-  }
+    componentDidMount() {
+        this.props.fetchPosts();
+    }
 
-  render() {
-    return (
-      <div>
-        <MDBContainer>
-          <MDBRow>
-            {this.props.twitter &&
-              this.props.twitter.map((x, index) => {
-                return (
-                  <MDBCol lg="4" key={index}>
-                    <Card post={x} />
-                  </MDBCol>
-                );
-              })}
-          </MDBRow>
-        </MDBContainer>
-      </div>
-    );
-  }
+    render() {
+        return <div>APP</div>;
+    }
 }
 Home.propTypes = {
-  fetchPosts: PropTypes.func.isRequired,
+    fetchPosts: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  twitter: state.twitter.items,
+    twitter: state.twitter.items,
 });
 
 export default connect(mapStateToProps, { fetchPosts })(Home);
