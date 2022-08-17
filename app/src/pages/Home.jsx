@@ -15,9 +15,9 @@ class Home extends Component {
             <div>
                 <MDBContainer>
                     <MDBRow>
-                        {this.props.twitter && this.props.twitter.map(x => {
+                        {this.props.twitter && this.props.twitter.map((x, index) => {
                             return (
-                                <MDBCol lg="4">
+                                <MDBCol lg="4" key={index}>
                                     <Card post={x} />
                                 </MDBCol>
                             )
