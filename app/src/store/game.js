@@ -9,9 +9,10 @@ export const ACTIONS = {
     INPUT_SCORE: 'INPUT_SCORE',
 };
 
-export function setFinishDart() {
+export function setFinishDart(payload) {
     return {
         type: ACTIONS.SET_FINISH_DART,
+        payload,
     };
 }
 
@@ -26,6 +27,7 @@ const initialState = {
     match: null,
     scoreLeft: null,
     finishDart: null,
+    lastScore: null,
 };
 
 export default function gameReducer(state, action) {
@@ -67,6 +69,10 @@ export default function gameReducer(state, action) {
             };
             break;
         case ACTIONS.INPUT_SCORE:
+            state = {
+                ...state,
+                lastScore: null,
+            };
             break;
     }
 
