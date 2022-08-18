@@ -1,5 +1,5 @@
 import { WS_OUT_PREFIX } from './ws.reducer';
-import { ws } from '../websocket/client';
+import { ws } from '../utils/ws';
 
 export const wsMiddleware = (_store) => (next) => (action) => {
     // pass action forward (calling this changes store: nextState.store !== _store)

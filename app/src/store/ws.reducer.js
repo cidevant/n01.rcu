@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export const WS_IN_PREFIX = 'WS:IN:'; // incoming message
-export const WS_OUT_PREFIX = 'WS:OUT:'; // sending message
+export const WS_IN_PREFIX = 'WS:IN:'; // incoming message action prefix
+export const WS_OUT_PREFIX = 'WS:OUT:'; // sending message action prefix
 
 const initialState = {
     connected: false,
@@ -29,5 +29,4 @@ const slice = createSlice({
 });
 
 export const { onopen, onclose, onerror } = slice.actions;
-
 export default slice.reducer;

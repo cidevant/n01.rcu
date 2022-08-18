@@ -1,22 +1,13 @@
-import React, { createContext } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { ws } from './client';
-import { onopen, onclose, onerror, WS_IN_PREFIX } from '../store/ws.reducer';
+import { ws } from '../../utils/ws';
+import { onopen, onclose, onerror, WS_IN_PREFIX } from '../../store/ws.reducer';
 
-const WebsocketContext = createContext(null);
-
-function WebsocketProvider({ children }) {
-    let socket;
-
+export function WebSocket({ children }) {
     const dispatch = useDispatch();
 
-    if (!socket) {
-        if (!ws.open) {
-            ws.connect();
-        }
-
-        socket = ws;
-        socket.onmessage = (message) => {
+    useEffect(() => {
+        ws.onmessage = (message) => {
             try {
                 const { type, ...payload } = message;
 
@@ -32,10 +23,10 @@ function WebsocketProvider({ children }) {
                 console.error('[ws.provider] unknown message', message);
             }
         };
-        socket.onopen = () => {
+        ws.onopen = () => {
             dispatch(onopen());
         };
-        socket.onclose = (event) => {
+        ws.onclose = (event) => {
             dispatch(
                 onclose({
                     code: event.code,
@@ -44,12 +35,20 @@ function WebsocketProvider({ children }) {
                 })
             );
         };
-        socket.onerror = (error) => {
+        ws.onerror = (error) => {
             dispatch(onerror(error));
         };
-    }
 
-    return <WebsocketContext.Provider value={socket}>{children}</WebsocketContext.Provider>;
+        if (!ws.open) {
+            ws.connect();
+        }
+
+        return () => {
+            if (ws.open) {
+                ws.disconnect();
+            }
+        };
+    }, [dispatch]);
+
+    return <>{children}</>;
 }
-
-export { WebsocketContext, WebsocketProvider };
