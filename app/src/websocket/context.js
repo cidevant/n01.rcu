@@ -1,6 +1,7 @@
 import React, { createContext } from 'react';
 import { useDispatch } from 'react-redux';
 import { wsClient } from './client';
+import { onopen, onclose, onerror } from '../store/ws';
 
 const WebsocketContext = createContext(null);
 
@@ -37,27 +38,19 @@ function WebsocketProvider({ children }) {
             }
         };
         socket.onopen = () => {
-            dispatch({
-                type: 'WS:CONN:ONOPEN',
-            });
+            dispatch(onopen());
         };
         socket.onclose = (event) => {
-            dispatch({
-                type: 'WS:CONN:ONCLOSE',
-                payload: {
+            dispatch(
+                onclose({
                     code: event.code,
                     reason: event.reason,
                     wasClean: event.wasClean,
-                },
-            });
+                })
+            );
         };
         socket.onerror = (error) => {
-            dispatch({
-                type: 'WS:CONN:ONERROR',
-                payload: {
-                    error,
-                },
-            });
+            dispatch(onerror(error));
         };
     }
 
