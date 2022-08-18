@@ -13,7 +13,7 @@ function WebsocketProvider({ children }) {
     if (!socket) {
         socket = wsClient.connect();
         wsActions = {
-            send: function (action, payload) {
+            send(action, payload) {
                 socket.send({
                     type: action,
                     payload,
@@ -29,7 +29,7 @@ function WebsocketProvider({ children }) {
                 }
 
                 dispatch({
-                    type: `WS:ACTION:${type}`,
+                    type: `WS:MSG:${type}`,
                     payload,
                 });
             } catch (error) {
@@ -37,7 +37,6 @@ function WebsocketProvider({ children }) {
             }
         };
         socket.onopen = () => {
-            console.log('ID');
             dispatch({
                 type: 'WS:CONN:ONOPEN',
             });

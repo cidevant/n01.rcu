@@ -69,13 +69,6 @@ class SocketsManager {
     console.log(chalk.green('[sockets][onConnect]'), this.getSerializedInfo(socket));
 
     this.pair(socket);
-
-    setTimeout(() => {
-      this.send(socket, {
-        type: 'FUCK_OFF',
-        value: 'YOU',
-      });
-    }, 2000);
   }
 
   /**
