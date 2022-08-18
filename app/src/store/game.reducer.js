@@ -1,4 +1,4 @@
-import { WS_IN_PREFIX, WS_OUT_PREFIX } from '../websocket';
+import { WS_IN_PREFIX, WS_OUT_PREFIX } from './ws.reducer';
 
 export const ACTIONS = {
     MATCH_START: `${WS_IN_PREFIX}MATCH_START`,

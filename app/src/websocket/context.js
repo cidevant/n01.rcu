@@ -1,8 +1,7 @@
 import React, { createContext } from 'react';
 import { useDispatch } from 'react-redux';
 import { ws } from './client';
-import { onopen, onclose, onerror } from '../store/ws.reducer';
-import { WS_IN_PREFIX } from './index';
+import { onopen, onclose, onerror, WS_IN_PREFIX } from '../store/ws.reducer';
 
 const WebsocketContext = createContext(null);
 
@@ -12,7 +11,11 @@ function WebsocketProvider({ children }) {
     const dispatch = useDispatch();
 
     if (!socket) {
-        socket = ws.connect();
+        if (!ws.open) {
+            ws.connect();
+        }
+
+        socket = ws;
         socket.onmessage = (message) => {
             try {
                 const { type, ...payload } = message;

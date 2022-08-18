@@ -1,4 +1,4 @@
-import { WS_OUT_PREFIX } from '../websocket';
+import { WS_OUT_PREFIX } from './ws.reducer';
 import { ws } from '../websocket/client';
 
 export const wsMiddleware = (_store) => (next) => (action) => {

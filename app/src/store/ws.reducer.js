@@ -1,5 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+export const WS_IN_PREFIX = 'WS:IN:'; // incoming message
+export const WS_OUT_PREFIX = 'WS:OUT:'; // sending message
+
 const initialState = {
     connected: false,
     close: null,
