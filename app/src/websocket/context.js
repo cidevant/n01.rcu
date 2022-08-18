@@ -2,6 +2,7 @@ import React, { createContext } from 'react';
 import { useDispatch } from 'react-redux';
 import { wsClient } from './client';
 import { onopen, onclose, onerror } from '../store/ws';
+import { WS_MSG_PREFIX } from './index';
 
 const WebsocketContext = createContext(null);
 
@@ -30,11 +31,11 @@ function WebsocketProvider({ children }) {
                 }
 
                 dispatch({
-                    type: `WS:MSG:${type}`,
+                    type: `${WS_MSG_PREFIX}${type}`,
                     payload,
                 });
             } catch (error) {
-                console.error('[ws] cant recognize message', message);
+                console.error('[ws.provider] unknown message', message);
             }
         };
         socket.onopen = () => {
