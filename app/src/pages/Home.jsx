@@ -1,15 +1,25 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
+import { WebsocketContext } from '../websocket/context';
 
-class Home extends Component {
-    render() {
-        return (
-            <>
-                <div>HELLO</div>
-                <div>
-                    <button className="btn btn-primary">MY NAME</button>
-                </div>
-            </>
-        );
+function Home() {
+    const ws = useContext(WebsocketContext);
+
+    console.log('WS', ws);
+
+    function sendText() {
+        ws.send('MY_EVENT', { data: 'XXX' });
     }
+
+    return (
+        <>
+            <div>HELLO</div>
+            <div>
+                <button onClick={sendText} className="btn btn-primary">
+                    MY NAME
+                </button>
+            </div>
+        </>
+    );
 }
+
 export default Home;

@@ -1,19 +1,19 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 
-export class WebsocketClient {
+class WebsocketClient {
     constructor(url) {
         this.__url = url;
     }
 
     connect = () => {
         if (this.open) {
-            console.error('[n01.obs.ws.controller] connect error: already connected');
+            console.error('[ws.client] already opened');
         } else {
+            const uuid = localStorage.getItem('uuid');
+
             this.__socket = new WebSocket(
-                `${
-                    this.__url
-                }?client=false&id=${Math.random()}&name=${this.__getName()}&accessCode=TEST`
+                `${this.__url}?client=false&id=${uuid}&name=${this.__getName()}&accessCode=TEST`
             );
             this.__socket.onopen = this.__onOpen;
             this.__socket.onclose = this.__onClose;
@@ -34,11 +34,11 @@ export class WebsocketClient {
 
     disconnect = () => {
         if (this.open) {
-            console.log('[n01.obs.ws.controller] disconnecting');
+            console.log('[ws.client] disconnecting');
 
             this.__socket.close();
         } else {
-            console.error('[n01.obs.ws.controller] disconnect error: no connection to server');
+            console.error('[ws.client] disconnect error: no connection to server');
         }
     };
 
@@ -50,12 +50,12 @@ export class WebsocketClient {
     send = (data) => {
         const msg = JSON.stringify(data);
 
-        console.log('[n01.obs.ws.controller] send message', msg);
+        console.log('[ws.client] send message', msg);
 
         if (this.open) {
             this.__socket.send(msg);
         } else {
-            console.error('[n01.obs.ws.controller] send message error: no connection to server');
+            console.error('[ws.client] send message error: no connection to server');
         }
     };
 
@@ -64,33 +64,44 @@ export class WebsocketClient {
      *
      * @param {*} evt message event
      */
-    __onMessage = (evt) => {
-        console.log('[n01.obs.ws.controller] received message', evt.data);
+    __onMessage = (event) => {
+        console.log('[ws.client] received message', event.data);
+
+        try {
+            const message = JSON.parse(event.data);
+
+            this.onmessage(message);
+        } catch (error) {
+            console.error('[ws.client] cant parse message', event.data);
+        }
     };
 
     __onOpen = () => {
-        console.log('[n01.obs.ws.controller] connected');
+        console.log('[ws.client] connected');
 
         this.onopen();
     };
 
-    __onClose = () => {
-        console.log('[n01.obs.ws.controller] closed connection');
+    __onClose = (code, reason) => {
+        console.log('[ws.client] closed connection');
 
-        this.onclose(error);
+        this.onclose(code, reason);
     };
 
     __onError = (error) => {
-        console.log('[n01.obs.ws.controller] error', error);
+        console.log('[ws.client] error', error);
 
         this.onerror(error);
     };
 
-    onopen() {}
-    onclose() {}
-    onerror() {}
-
     get open() {
         return this.__socket && this.__socket.readyState === WebSocket.OPEN;
     }
+
+    onopen() {}
+    onclose() {}
+    onerror() {}
+    onmessage() {}
 }
+
+export const wsClient = new WebsocketClient('ws://localhost:3000/ws');

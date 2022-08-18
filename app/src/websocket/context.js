@@ -1,31 +1,68 @@
 import React, { createContext } from 'react';
-import { WebsocketClient } from './client';
+import { useDispatch } from 'react-redux';
+import { wsClient } from './client';
 
 const WebsocketContext = createContext(null);
-const wsClient = new WebsocketClient('ws://localhost:3000/ws');
-let socket;
 
 function WebsocketProvider({ children }) {
-    let ws;
+    let wsActions;
+    let socket;
+
+    const dispatch = useDispatch();
 
     if (!socket) {
         socket = wsClient.connect();
-        socket.onopen = () => {
-            console.error('===================> onopen');
+        wsActions = {
+            send: function (action, payload) {
+                socket.send({
+                    type: action,
+                    payload,
+                });
+            },
         };
-        socket.onclose = () => {
-            console.error('===================> onclose');
+        socket.onmessage = (message) => {
+            try {
+                const { type, ...payload } = message;
+
+                if (!type) {
+                    throw message;
+                }
+
+                dispatch({
+                    type: `WS:ACTION:${type}`,
+                    payload,
+                });
+            } catch (error) {
+                console.error('[ws] cant recognize message', message);
+            }
+        };
+        socket.onopen = () => {
+            console.log('ID');
+            dispatch({
+                type: 'WS:CONN:ONOPEN',
+            });
+        };
+        socket.onclose = (event) => {
+            dispatch({
+                type: 'WS:CONN:ONCLOSE',
+                payload: {
+                    code: event.code,
+                    reason: event.reason,
+                    wasClean: event.wasClean,
+                },
+            });
         };
         socket.onerror = (error) => {
-            console.error('===================> onerror', error);
-        };
-
-        ws = {
-            socket,
+            dispatch({
+                type: 'WS:CONN:ONERROR',
+                payload: {
+                    error,
+                },
+            });
         };
     }
 
-    return <WebsocketContext.Provider value={ws}>{children}</WebsocketContext.Provider>;
+    return <WebsocketContext.Provider value={wsActions}>{children}</WebsocketContext.Provider>;
 }
 
 export { WebsocketContext, WebsocketProvider };

@@ -4,10 +4,9 @@
 import { SET_SOCKET_CONNECTION_STATE, SET_CLIENT_CONNECTION_STATE } from './actions';
 
 const initialState = {
-    connection: {
-        socket: null,
-        client: null,
-    },
+    socket: null,
+    client: null,
+    error: null,
 };
 
 export default function websocketReducer(state, action) {

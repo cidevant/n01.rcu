@@ -6,20 +6,44 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import registerServiceWorker from './registerServiceWorker';
 import reportWebVitals from './reportWebVitals';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+// Get UUID
+function getUUID() {
+    return new Promise((resolve) => {
+        const uuid = localStorage.getItem('uuid');
 
-root.render(
-    <React.StrictMode>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
-    </React.StrictMode>
-);
+        if (uuid) {
+            resolve(uuid);
+        } else {
+            FingerprintJS.load()
+                .then((fp) => fp.get())
+                .then((result) => {
+                    localStorage.setItem('uuid', result.visitorId);
+                    resolve(result.visitorId);
+                })
+                .catch(resolve);
+        }
+    });
+}
 
-registerServiceWorker();
+// Render app
+function renderApp() {
+    ReactDOM.createRoot(document.getElementById('root')).render(
+        <React.StrictMode>
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
+        </React.StrictMode>
+    );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+    registerServiceWorker();
+
+    // If you want to start measuring performance in your app, pass a function
+    // to log results (for example: reportWebVitals(console.log))
+    // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+    reportWebVitals();
+}
+
+// Start app
+getUUID().then(renderApp);
