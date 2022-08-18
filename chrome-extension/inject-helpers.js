@@ -18,7 +18,7 @@ function n01obs__onWsMessage(data, ws) {
         n01obs__setFinishDart(data, ws);
         break;
       case 'paired':
-        n01obs__setPaired(true);
+        n01obs__setPaired(true, ws);
         break;
       case 'unpaired':
         n01obs__setPaired(false);
@@ -181,8 +181,9 @@ function n01obs__getLocalStorage(key) {
   }
 }
 
-function n01obs__setPaired(paired = false) {
+function n01obs__setPaired(paired = false, ws) {
   n01obs__changeExtensionIcon(paired ? 'paired' : 'connected');
+  n01obs__sendScoreLeft(ws);
 }
 
 /**
