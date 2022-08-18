@@ -30,11 +30,9 @@ function getUUID() {
 // Render app
 function renderApp() {
     ReactDOM.createRoot(document.getElementById('root')).render(
-        <React.StrictMode>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </React.StrictMode>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
     );
 
     registerServiceWorker();

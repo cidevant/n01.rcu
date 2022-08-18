@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { ws } from '../../utils/ws';
-import { onopen, onclose, onerror, WS_IN_PREFIX } from '../../store/ws.reducer';
+import { connect, onopen, onclose, onerror, WS_IN_PREFIX } from '../../store/ws.reducer';
 
 export function WebSocket({ children }) {
+    const accessCode = localStorage.getItem('accessCode');
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -39,8 +40,8 @@ export function WebSocket({ children }) {
             dispatch(onerror(error));
         };
 
-        if (!ws.open) {
-            ws.connect();
+        if (accessCode) {
+            dispatch(connect(accessCode));
         }
 
         return () => {
@@ -48,7 +49,7 @@ export function WebSocket({ children }) {
                 ws.disconnect();
             }
         };
-    }, [dispatch]);
+    }, [dispatch, accessCode]);
 
     return <>{children}</>;
 }

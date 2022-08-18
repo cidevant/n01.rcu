@@ -4,32 +4,23 @@
 class WebsocketClient {
     constructor(url) {
         this.__url = url;
+        this.__accessCode = null;
     }
 
-    connect = () => {
-        if (this.open) {
-            console.error('[ws.client] already opened');
-        } else {
-            const uuid = localStorage.getItem('uuid');
+    connect = (accessCode) => {
+        if (accessCode !== this.__accessCode) {
+            this.__accessCode = accessCode;
 
-            this.__socket = new WebSocket(
-                `${this.__url}?client=false&id=${uuid}&name=${this.__getName()}&accessCode=TEST`
-            );
-            this.__socket.onopen = this.__onOpen;
-            this.__socket.onclose = this.__onClose;
-            this.__socket.onerror = this.__onError;
-            this.__socket.onmessage = this.__onMessage;
+            if (this.open) {
+                this.disconnect();
+            }
+
+            this.__connect(accessCode);
+        } else if (!this.open) {
+            this.__connect(accessCode);
         }
 
         return this;
-    };
-
-    __getName = () => {
-        try {
-            return navigator.userAgent.split('(')[1].split(')')[0];
-        } catch (error) {
-            return navigator.userAgent;
-        }
     };
 
     disconnect = () => {
@@ -37,8 +28,6 @@ class WebsocketClient {
             console.log('[ws.client] disconnecting');
 
             this.__socket.close();
-        } else {
-            console.error('[ws.client] disconnect error: no connection to server');
         }
     };
 
@@ -56,6 +45,20 @@ class WebsocketClient {
             this.__socket.send(msg);
         } else {
             console.error('[ws.client] send error: no connection', msg);
+        }
+    };
+
+    __connect = (accessCode) => {
+        if (!this.open) {
+            const uuid = localStorage.getItem('uuid');
+            const name = this.__getName();
+            const params = `?client=false&id=${uuid}&name=${name}&accessCode=${accessCode}`;
+
+            this.__socket = new WebSocket(`${this.__url}${params}`);
+            this.__socket.onopen = this.__onOpen;
+            this.__socket.onclose = this.__onClose;
+            this.__socket.onerror = this.__onError;
+            this.__socket.onmessage = this.__onMessage;
         }
     };
 
@@ -88,10 +91,18 @@ class WebsocketClient {
         this.onclose(code, reason);
     };
 
-    __onError = (error) => {
-        console.log('[ws.client] error', error);
+    __onError = () => {
+        console.log('[ws.client] connection error');
 
         this.onerror('connection error');
+    };
+
+    __getName = () => {
+        try {
+            return navigator.userAgent.split('(')[1].split(')')[0];
+        } catch (error) {
+            return navigator.userAgent;
+        }
     };
 
     get open() {
