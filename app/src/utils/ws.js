@@ -91,7 +91,7 @@ class WebsocketClient {
     __onError = (error) => {
         console.log('[ws.client] error', error);
 
-        this.onerror(error);
+        this.onerror('connection error');
     };
 
     get open() {

@@ -16,6 +16,7 @@ const slice = createSlice({
         onopen(state) {
             state.connected = true;
             state.close = null;
+            state.error = null;
         },
         onclose(state, action) {
             state.connected = false;
