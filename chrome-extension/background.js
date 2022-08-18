@@ -1,11 +1,10 @@
 /* eslint-disable no-undef */
 
-
 chrome.runtime.onMessage.addListener(function (msg, _sender, _sendResponse) {
-  console.log('[n01.obs.background] received action', JSON.stringify(msg));
+  console.log('[n01.obs.background] received message', JSON.stringify(msg));
 
-  switch (msg.action) {
-    case 'updateIcon':
+  switch (msg.type) {
+    case 'SET_ICON':
       updateMessage(msg);
       break;
 

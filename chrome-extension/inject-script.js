@@ -30,7 +30,7 @@ const wrapperFunctions = {
       } else {
         // let user choose
         n01obs__client.send({
-          type: 'getFinishDart',
+          type: 'GET_FINISH_DART',
           value: outs,
         });
       }
@@ -56,10 +56,11 @@ const wrapperFunctions = {
   endMatchMsgOpen: function () {
     console.log('[n01.obs.inject-script] wrapper endMatchMsgOpen');
 
+    $('#msg_net_ok').click(); // press OK
+    
     setTimeout(() => {
-      $('#msg_net_ok').click(); // press OK
       menuFunc('menu_new'); // press Exit button
-    }, 4000);
+    }, 3000);
   },
 };
 

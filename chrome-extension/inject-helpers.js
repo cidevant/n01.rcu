@@ -10,18 +10,17 @@
 function n01obs__onWsMessage(data, ws) {
   try {
     switch (data.type) {
-      case 'inputScore':
+      case 'INPUT_SCORE':
         n01obs__inputScore(data, ws);
         break;
-
-      case 'setFinishDart':
+      case 'SET_FINISH_DART':
         n01obs__setFinishDart(data, ws);
         break;
-      case 'paired':
+      case 'PAIRED':
         n01obs__setPaired(true, ws);
         break;
-      case 'unpaired':
-        n01obs__setPaired(false);
+      case 'UNPAIRED':
+        n01obs__setPaired(false, ws);
         break;
       default:
         break;
@@ -76,7 +75,7 @@ function n01obs__sendScoreLeft(ws, value) {
     const score = value ?? n01obs__getPlayerLeftScore();
 
     ws.send({
-      type: 'scoreLeft',
+      type: 'SCORE_LEFT',
       value: score === -1 ? '-' : score,
     });
   } catch (error) {
@@ -94,7 +93,7 @@ function n01obs__changeExtensionIcon(icon = 'default') {
     document.dispatchEvent(
       new CustomEvent('n01obs.Event', {
         detail: {
-          action: 'updateIcon',
+          type: 'SET_ICON',
           icon,
         },
       })
