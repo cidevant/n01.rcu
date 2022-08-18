@@ -1,4 +1,5 @@
-export const WS_MSG_PREFIX = 'WS:MSG';
+// receiving message from websocket
+export const WS_IN_PREFIX = 'WS:IN:';
 
-export { wsClient } from './client';
-export { WebsocketContext, WebsocketProvider } from './context';
+// sending message to websocket
+export const WS_OUT_PREFIX = 'WS:OUT:';

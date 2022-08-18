@@ -1,13 +1,12 @@
-import React, { useContext } from 'react';
-import { WebsocketContext } from '../websocket/context';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { sendInputScore } from '../store/game.reducer';
 
 function Home() {
-    const ws = useContext(WebsocketContext);
-
-    console.log('WS', ws);
+    const dispatch = useDispatch();
 
     function sendText() {
-        ws.send('MY_EVENT', { data: 'XXX' });
+        dispatch(sendInputScore(20));
     }
 
     return (

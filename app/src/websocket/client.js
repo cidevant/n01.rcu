@@ -50,12 +50,12 @@ class WebsocketClient {
     send = (data) => {
         const msg = JSON.stringify(data);
 
-        console.log('[ws.client] send message', msg);
-
         if (this.open) {
+            console.log('[ws.client] send message', msg);
+
             this.__socket.send(msg);
         } else {
-            console.error('[ws.client] send message error: no connection to server');
+            console.error('[ws.client] send error: no connection', msg);
         }
     };
 
@@ -65,7 +65,7 @@ class WebsocketClient {
      * @param {*} evt message event
      */
     __onMessage = (event) => {
-        console.log('[ws.client] received message', event.data);
+        console.log('[ws.client] incoming message', event.data);
 
         try {
             const message = JSON.parse(event.data);
@@ -104,4 +104,5 @@ class WebsocketClient {
     onmessage() {}
 }
 
-export const wsClient = new WebsocketClient('ws://localhost:3000/ws');
+export const ws = new WebsocketClient('ws://localhost:3000/ws');
+export default ws;

@@ -1,24 +1,24 @@
-import { WS_MSG_PREFIX } from '../websocket';
+import { WS_IN_PREFIX, WS_OUT_PREFIX } from '../websocket';
 
 export const ACTIONS = {
-    MATCH_START: `${WS_MSG_PREFIX}:MATCH_START`,
-    MATCH_END: `${WS_MSG_PREFIX}:MATCH_END`,
-    SET_SCORE_LEFT: `${WS_MSG_PREFIX}:SET_SCORE_LEFT`,
-    GET_FINISH_DART: `${WS_MSG_PREFIX}:GET_FINISH_DART`,
-    SET_FINISH_DART: 'SET_FINISH_DART',
-    INPUT_SCORE: 'INPUT_SCORE',
+    MATCH_START: `${WS_IN_PREFIX}MATCH_START`,
+    MATCH_END: `${WS_IN_PREFIX}MATCH_END`,
+    SET_SCORE_LEFT: `${WS_IN_PREFIX}SET_SCORE_LEFT`,
+    GET_FINISH_DART: `${WS_IN_PREFIX}GET_FINISH_DART`,
+    SET_FINISH_DART: `${WS_OUT_PREFIX}SET_FINISH_DART`,
+    INPUT_SCORE: `${WS_OUT_PREFIX}INPUT_SCORE`,
 };
 
-export function setFinishDart(payload) {
+export function sendInputScore(payload) {
     return {
-        type: ACTIONS.SET_FINISH_DART,
+        type: ACTIONS.INPUT_SCORE,
         payload,
     };
 }
 
-export function inputScore(payload) {
+export function sendFinishDart(payload) {
     return {
-        type: ACTIONS.INPUT_SCORE,
+        type: ACTIONS.SET_FINISH_DART,
         payload,
     };
 }
@@ -71,7 +71,7 @@ export default function gameReducer(state, action) {
         case ACTIONS.INPUT_SCORE:
             state = {
                 ...state,
-                lastScore: null,
+                lastScore: action.payload,
             };
             break;
     }

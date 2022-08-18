@@ -1,13 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import ws from './ws';
-import game from './game';
+// reducers
+import ws from './ws.reducer';
+import game from './game.reducer';
 
-const store = configureStore({
+// middlewares
+import { wsMiddleware } from './ws.middleware';
+
+// store
+export const store = configureStore({
     reducer: {
         ws,
         game,
     },
+    middleware: (defaultMiddleware) => defaultMiddleware().concat([wsMiddleware]),
 });
-
 export default store;
