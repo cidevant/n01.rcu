@@ -1,11 +1,13 @@
 import React from 'react';
 import { StatusBar } from './StatusBar';
+import { InputKeyboard } from './InputKeyboard';
 
 export function Layout(props) {
     return (
-        <div>
+        <>
             <StatusBar />
             {props.children}
-        </div>
+            <InputKeyboard />
+        </>
     );
 }

@@ -10,7 +10,7 @@ export function StatusBar() {
     const wsStatus = useSelector((state) => state.ws.status);
     const clientStatus = useSelector((state) => state.client.status);
     const client = useSelector((state) => state.client.client);
-    const [modalShow, setModalShow] = useState(true);
+    const [modalShow, setModalShow] = useState(false);
     const hideModal = useCallback(() => {
         setModalShow(false);
     }, []);
@@ -27,18 +27,18 @@ export function StatusBar() {
     }, [wsStatus, clientStatus]);
     const buttonVariant = useMemo(() => {
         if (wsStatus === WebSocket.OPEN) {
-            return 'success';
+            return clientStatus === 'PAIRED' ? 'success' : 'warning';
         }
 
         return 'danger';
-    }, [wsStatus]);
+    }, [wsStatus, clientStatus]);
     const connectionMessage = useMemo(() => {
         if (wsStatus === WebSocket.OPEN) {
             if (clientStatus === 'PAIRED' && client.name) {
                 return <div className="ms-2 d-inline fw-bold">{client.name?.toUpperCase()}</div>;
             }
 
-            return <div className="ms-2 d-inline">Waiting for client...</div>;
+            return <div className="ms-2 d-inline">WAITING FOR CLIENT</div>;
         }
 
         return '';
