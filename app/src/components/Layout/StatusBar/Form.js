@@ -32,10 +32,32 @@ function AccessCodeForm(props) {
         props.updateFormValues('serverUrl', event.target.value);
     }
 
+    function connectionStatus() {
+        return (
+            <>
+                <ConnectionStatus
+                    title="Server"
+                    iconVariant={isConnected ? 'success' : 'danger'}
+                    server
+                    status={isConnected}
+                    text={isConnected ? 'CONNECTED' : 'DISCONNECTED'}
+                />
+                {isConnected && (
+                    <ConnectionStatus
+                        title="Client"
+                        iconVariant={isPaired ? 'success' : 'warning'}
+                        client={client}
+                        status={isPaired}
+                    />
+                )}
+            </>
+        );
+    }
+
     function connectionSettings() {
         return (
             <>
-                <h4>Settings</h4>
+                <h4 className="mt-1">Settings</h4>
                 <Row>
                     <Col className="col-4 d-flex align-items-center">
                         <Title>Access code</Title>
@@ -64,28 +86,6 @@ function AccessCodeForm(props) {
                         />
                     </Col>
                 </Row>
-            </>
-        );
-    }
-
-    function connectionStatus() {
-        return (
-            <>
-                <ConnectionStatus
-                    title="Server"
-                    iconVariant={isConnected ? 'success' : 'danger'}
-                    server
-                    status={isConnected}
-                    text={isConnected ? 'CONNECTED' : 'DISCONNECTED'}
-                />
-                {isConnected && (
-                    <ConnectionStatus
-                        title="Client"
-                        iconVariant={isPaired ? 'success' : 'warning'}
-                        client={client}
-                        status={isPaired}
-                    />
-                )}
             </>
         );
     }

@@ -35,7 +35,7 @@ export function StatusBar() {
     const connectionMessage = useMemo(() => {
         if (wsStatus === WebSocket.OPEN) {
             if (clientStatus === 'PAIRED' && client.name) {
-                return <div className="ms-2 d-inline">{client.name}</div>;
+                return <div className="ms-2 d-inline fw-bold">{client.name?.toUpperCase()}</div>;
             }
 
             return <div className="ms-2 d-inline">Waiting for client...</div>;
