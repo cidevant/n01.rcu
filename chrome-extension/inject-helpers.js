@@ -7,7 +7,7 @@
  * @param {*} data Message from server
  * @param {*} ws WebSocket client reference for responding
  */
-const n01rcu_onWsMessage = function onWsMessage(data, ws) {
+const n01rcu_onWsMessage = function n01rcu_onWsMessage(data, ws) {
   try {
     switch (data.type) {
       case 'SET_INPUT_SCORE':
@@ -36,11 +36,11 @@ const n01rcu_onWsMessage = function onWsMessage(data, ws) {
  * @param {*} data input score action
  * @param {*} ws websocket
  */
-const n01rcu_inputScore = function inputScore(data, ws) {
+const n01rcu_inputScore = function n01rcu_inputScore(data, ws) {
   try {
     // enter score
     for (const value of `${data.payload}`) {
-       n01rcu_inputScore(value);
+       inputScore(value);
     }
 
     // submit score
@@ -53,7 +53,7 @@ const n01rcu_inputScore = function inputScore(data, ws) {
   }
 }
 
-const n01rcu_setFinishDart = function setFinishDart(data, ws) {
+const n01rcu_setFinishDart = function n01rcu_setFinishDart(data, ws) {
   if ($(`#${data['payload']}`).is(':visible')) {
     console.log('[n01.rcu.helpers] setFinishDart ', data);
 
@@ -70,7 +70,7 @@ const n01rcu_setFinishDart = function setFinishDart(data, ws) {
  *
  * @param {WebSocket} ws socket connection
  */
-const n01rcu_sendScoreLeft = function sendScoreLeft(ws, value) {
+const n01rcu_sendScoreLeft = function n01rcu_sendScoreLeft(ws, value) {
   try {
     const score = value ?? n01rcu_getPlayerLeftScore();
 
@@ -88,7 +88,7 @@ const n01rcu_sendScoreLeft = function sendScoreLeft(ws, value) {
  *
  * @param {boolean} [connected=true]
  */
-const n01rcu_changeExtensionIcon = function changeExtensionIcon(icon = 'default') {
+const n01rcu_changeExtensionIcon = function n01rcu_changeExtensionIcon(icon = 'default') {
   setTimeout(function () {
     document.dispatchEvent(
       new CustomEvent('n01rcu.Event', {
@@ -106,7 +106,7 @@ const n01rcu_changeExtensionIcon = function changeExtensionIcon(icon = 'default'
  *
  * @returns {Object} player info
  */
-const n01rcu_getPlayer = function getPlayer() {
+const n01rcu_getPlayer = function n01rcu_getPlayer() {
   try {
     return n01rcu_getLocalStorage('n01_net.onlineOptions');
   } catch (error) {
@@ -121,7 +121,7 @@ const n01rcu_getPlayer = function getPlayer() {
  *
  * @returns {number} index of player (0 or 1)
  */
-const n01rcu_getPlayerIndexInMatch = function getPlayerIndexInMatch() {
+const n01rcu_getPlayerIndexInMatch = function n01rcu_getPlayerIndexInMatch() {
   try {
     const match = n01rcu_getLocalStorage('n01_net.setData');
 
@@ -142,7 +142,7 @@ const n01rcu_getPlayerIndexInMatch = function getPlayerIndexInMatch() {
  *
  * @returns {number} left score
  */
-const n01rcu_getPlayerLeftScore = function getPlayerLeftScore() {
+const n01rcu_getPlayerLeftScore = function n01rcu_getPlayerLeftScore() {
   try {
     const playerIndex =n01rcu_getPlayerIndexInMatch();
 
@@ -170,7 +170,7 @@ const n01rcu_getPlayerLeftScore = function getPlayerLeftScore() {
  * @param {string} key localStorage key
  * @returns {Object} parsed object
  */
-const n01rcu_getLocalStorage = function getLocalStorage(key) {
+const n01rcu_getLocalStorage = function n01rcu_getLocalStorage(key) {
   try {
     return JSON.parse(localStorage[key]);
   } catch (error) {
@@ -180,7 +180,7 @@ const n01rcu_getLocalStorage = function getLocalStorage(key) {
   }
 }
 
-const n01rcu_setPaired = function setPaired(paired = false, ws) {
+const n01rcu_setPaired = function n01rcu_setPaired(paired = false, ws) {
    n01rcu_changeExtensionIcon(paired ? 'paired' : 'connected');
    n01rcu_sendScoreLeft(ws);
 }
@@ -191,7 +191,7 @@ const n01rcu_setPaired = function setPaired(paired = false, ws) {
  * @param {*} wrapperFunctions
  * @param {*} backupFunctions
  */
-const n01rcu_addFunctionsWrappers = function addFunctionsWrappers(wrapperFunctions, backupFunctions) {
+const n01rcu_addFunctionsWrappers = function n01rcu_addFunctionsWrappers(wrapperFunctions, backupFunctions) {
   console.log('[n01.rcu.helpers] wrap n01 functions');
 
   Object.keys(wrapperFunctions).forEach((fnName) => {
@@ -209,7 +209,7 @@ const n01rcu_addFunctionsWrappers = function addFunctionsWrappers(wrapperFunctio
  * @param {*} wrapperFunctions
  * @param {*} backupFunctions
  */
-const n01rcu_removeFunctionsWrappers = function removeFunctionsWrappers(wrapperFunctions, backupFunctions) {
+const n01rcu_removeFunctionsWrappers = function n01rcu_removeFunctionsWrappers(wrapperFunctions, backupFunctions) {
   console.log('[n01.rcu.helpers] unwrap n01 functions');
 
   Object.keys(wrapperFunctions).forEach((fnName) => {
