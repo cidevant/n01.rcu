@@ -35,6 +35,38 @@ function AccessCodeForm(props) {
     return (
         <Form>
             <Container className="d-grid gap-3">
+                <h4>Connection settings</h4>
+
+                <Row>
+                    <Col className="col-4 d-flex align-items-center">
+                        <Title>Access code</Title>
+                    </Col>
+                    <Col className="col-8">
+                        <AccessCodeInput
+                            disabled={isConnected}
+                            type="text"
+                            value={accessCode}
+                            maxLength={4}
+                            onChange={updateAccessCode}
+                        />
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col className="col-4 d-flex align-items-center">
+                        <Title>Server URL</Title>
+                    </Col>
+                    <Col className="col-8">
+                        <AccessCodeInput
+                            disabled={isConnected}
+                            type="text"
+                            placeholder="ws://localhost:3000/ws"
+                            value={serverUrl}
+                            onChange={updateServerUrl}
+                        />
+                    </Col>
+                </Row>
+
                 <h4>Connection status</h4>
                 <Row>
                     <Col className="col-4 d-flex align-items-center">
@@ -66,39 +98,6 @@ function AccessCodeForm(props) {
                                     : ''
                             }
                             value={isConnected ? clientStatus : ''}
-                        />
-                    </Col>
-                </Row>
-                <hr />
-
-                <h4>Connection settings</h4>
-
-                <Row>
-                    <Col className="col-4 d-flex align-items-center">
-                        <Title>Access code</Title>
-                    </Col>
-                    <Col className="col-8">
-                        <AccessCodeInput
-                            disabled={isConnected}
-                            type="text"
-                            value={accessCode}
-                            maxLength={4}
-                            onChange={updateAccessCode}
-                        />
-                    </Col>
-                </Row>
-
-                <Row>
-                    <Col className="col-4 d-flex align-items-center">
-                        <Title>Server URL</Title>
-                    </Col>
-                    <Col className="col-8">
-                        <AccessCodeInput
-                            disabled={isConnected}
-                            type="text"
-                            placeholder="ws://localhost:3000/ws"
-                            value={serverUrl}
-                            onChange={updateServerUrl}
                         />
                     </Col>
                 </Row>

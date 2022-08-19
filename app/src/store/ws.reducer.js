@@ -1,12 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ws } from '../utils/ws';
+import { config } from '../config';
 
 const initialState = {
     status: WebSocket.CLOSED,
     close: null,
     error: null,
     accessCode: localStorage.getItem('accessCode') || '',
-    serverUrl: localStorage.getItem('serverUrl') || '',
+    serverUrl: localStorage.getItem('serverUrl') || config.defaultServerUrl,
 };
 
 const slice = createSlice({
