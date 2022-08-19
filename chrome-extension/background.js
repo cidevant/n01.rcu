@@ -1,16 +1,5 @@
 /* eslint-disable no-undef */
 
-if (!window.nakka_n01_rcu) {
-  window.nakka_n01_rcu = {
-    state: {
-      currentIcon: 'default',
-      init: {
-        background: true,
-      },
-    },
-  };
-}
-
 chrome.runtime.onMessage.addListener(function (msg, _sender, _sendResponse) {
   console.log('[n01.obs.background] received action', JSON.stringify(msg));
 

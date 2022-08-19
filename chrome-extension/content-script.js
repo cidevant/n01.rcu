@@ -9,7 +9,6 @@
  */
 function n01obs__EventListener(event) {
   if (
-    event.source != window ||
     chrome == null ||
     chrome.runtime == null ||
     chrome.runtime.id == null
