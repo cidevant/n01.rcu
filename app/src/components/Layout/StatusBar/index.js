@@ -9,6 +9,7 @@ import { faHandshake } from '@fortawesome/fontawesome-free-solid';
 export function StatusBar() {
     const wsStatus = useSelector((state) => state.ws.status);
     const clientStatus = useSelector((state) => state.client.status);
+    const client = useSelector((state) => state.client.client);
     const [modalShow, setModalShow] = useState(true);
     const hideModal = useCallback(() => {
         setModalShow(false);
@@ -33,11 +34,15 @@ export function StatusBar() {
     }, [wsStatus]);
     const connectionMessage = useMemo(() => {
         if (wsStatus === WebSocket.OPEN) {
+            if (clientStatus === 'PAIRED' && client.name) {
+                return <div className="ms-2 d-inline">{client.name}</div>;
+            }
+
             return <div className="ms-2 d-inline">Waiting for client...</div>;
         }
 
         return '';
-    }, [wsStatus]);
+    }, [wsStatus, clientStatus, client]);
 
     function openModal() {
         setModalShow(true);

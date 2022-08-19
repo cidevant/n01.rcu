@@ -1,10 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
+import { Container, Col, Row, Form, Alert } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import Form from 'react-bootstrap/Form';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function AccessCodeForm(props) {
     const wsStatus = useSelector((state) => state.ws.status);
@@ -13,17 +11,7 @@ function AccessCodeForm(props) {
     const [accessCode, setAccessCode] = useState(useSelector((state) => state.ws.accessCode));
     const [serverUrl, setServerUrl] = useState(useSelector((state) => state.ws.serverUrl));
     const isConnected = wsStatus === WebSocket.OPEN;
-    const clientStatusText = useMemo(() => {
-        if (!isConnected) {
-            return '';
-        }
-
-        if (client && clientStatus === 'PAIRED') {
-            return client.name;
-        }
-
-        return clientStatus;
-    }, [isConnected, clientStatus, client]);
+    const isPaired = clientStatus === 'PAIRED';
 
     function updateAccessCode(event) {
         event.preventDefault();
@@ -44,17 +32,16 @@ function AccessCodeForm(props) {
         props.updateFormValues('serverUrl', event.target.value);
     }
 
-    return (
-        <Form>
-            <Container className="d-grid gap-3">
-                <h4>Connection settings</h4>
-
+    function connectionSettings() {
+        return (
+            <>
+                <h4>Settings</h4>
                 <Row>
                     <Col className="col-4 d-flex align-items-center">
                         <Title>Access code</Title>
                     </Col>
                     <Col className="col-8">
-                        <AccessCodeInput
+                        <Form.Control
                             disabled={isConnected}
                             type="text"
                             value={accessCode}
@@ -63,13 +50,12 @@ function AccessCodeForm(props) {
                         />
                     </Col>
                 </Row>
-
                 <Row>
                     <Col className="col-4 d-flex align-items-center">
                         <Title>Server URL</Title>
                     </Col>
                     <Col className="col-8">
-                        <AccessCodeInput
+                        <Form.Control
                             disabled={isConnected}
                             type="text"
                             placeholder="ws://localhost:3000/ws"
@@ -78,41 +64,37 @@ function AccessCodeForm(props) {
                         />
                     </Col>
                 </Row>
+            </>
+        );
+    }
 
-                <h4>Connection status</h4>
-                <Row>
-                    <Col className="col-4 d-flex align-items-center">
-                        <Title>Server</Title>
-                    </Col>
-                    <Col className="col-8">
-                        <AccessCodeInput
-                            disabled
-                            type="text"
-                            className={isConnected ? 'is-valid' : 'is-invalid'}
-                            value={isConnected ? 'CONNECTED' : 'DISCONNECTED'}
-                        />
-                    </Col>
-                </Row>
+    function connectionStatus() {
+        return (
+            <>
+                <ConnectionStatus
+                    title="Server"
+                    iconVariant={isConnected ? 'success' : 'danger'}
+                    server
+                    status={isConnected}
+                    text={isConnected ? 'CONNECTED' : 'DISCONNECTED'}
+                />
+                {isConnected && (
+                    <ConnectionStatus
+                        title="Client"
+                        iconVariant={isPaired ? 'success' : 'warning'}
+                        client={client}
+                        status={isPaired}
+                    />
+                )}
+            </>
+        );
+    }
 
-                <Row>
-                    <Col className="col-4 d-flex align-items-center">
-                        <Title>Client</Title>
-                    </Col>
-                    <Col className="col-8">
-                        <AccessCodeInput
-                            disabled
-                            type="text"
-                            className={
-                                isConnected
-                                    ? clientStatus === 'PAIRED'
-                                        ? 'is-valid'
-                                        : 'is-invalid'
-                                    : ''
-                            }
-                            value={clientStatusText}
-                        />
-                    </Col>
-                </Row>
+    return (
+        <Form>
+            <Container className="d-grid gap-3">
+                {connectionStatus()}
+                {connectionSettings()}
             </Container>
         </Form>
     );
@@ -120,6 +102,54 @@ function AccessCodeForm(props) {
 
 export default AccessCodeForm;
 
-const Title = styled.div``;
+const Title = styled.div`
+    color: #888;
+`;
 
-const AccessCodeInput = styled(Form.Control)``;
+function ConnectionStatus(props) {
+    function renderIcon() {
+        if (props.iconVariant) {
+            const classNames = `${props.iconVariant ? `text-${props.iconVariant}` : ''} me-2`;
+
+            return <FontAwesomeIcon icon="fa-solid fa-circle" className={classNames} />;
+        }
+    }
+
+    function getContent() {
+        if (props.server) {
+            return (
+                <span className="fw-bold">
+                    {props.status === true ? 'CONNECTED' : 'DISCONNECTED'}
+                </span>
+            );
+        }
+
+        return <ClientConnectionText status={props.status} client={props.client} />;
+    }
+
+    return (
+        <Row>
+            <Col className="col-4 d-flex">
+                <Title>{props.title}</Title>
+            </Col>
+            <Col className="col-8">
+                {renderIcon()}
+                {getContent()}
+            </Col>
+        </Row>
+    );
+}
+
+function ClientConnectionText({ status, client }) {
+    if (status === true && client != null) {
+        return (
+            <span>
+                <span className="fw-bold">{client.name?.toUpperCase?.()}</span>
+                <br />
+                <span className="text-black-50">(id: {client.id})</span>
+            </span>
+        );
+    }
+
+    return <span>WAITING FOR CLIENT</span>;
+}

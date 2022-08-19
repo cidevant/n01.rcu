@@ -23,6 +23,13 @@ export default function clientReducer(state, action) {
                 client: action.payload?.payload,
             };
             break;
+        case 'ws/onclose':
+            state = {
+                ...state,
+                status: 'UNPAIRED',
+                client: null,
+            };
+            break;
         case ACTIONS.UNPAIRED:
             state = { ...initialState };
             break;
