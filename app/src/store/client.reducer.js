@@ -20,7 +20,7 @@ export default function clientReducer(state, action) {
             state = {
                 ...state,
                 status: 'PAIRED',
-                client: action.payload,
+                client: action.payload?.payload,
             };
             break;
         case ACTIONS.UNPAIRED:
