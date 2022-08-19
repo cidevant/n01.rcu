@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Icon from '../../../assets/icons/numpad.png';
-import { Phantom, FixPositionWrapper } from './_shared';
+import { StickyPhantom, Sticky } from '../Sticky';
 
 export function NumPadIcon({ show }) {
     function onClick() {
@@ -11,15 +11,15 @@ export function NumPadIcon({ show }) {
 
     return (
         <>
-            <Phantom size={200} />
-            <FixPositionWrapper className="p-5 d-flex justify-content-end w-100">
+            <StickyPhantom size={200} />
+            <Sticky className="p-5 d-flex justify-content-end w-100">
                 <NumPadIconWrapper
                     className="d-flex align-items-center justify-content-center"
                     onClick={onClick}
                 >
                     <NumPadIconImage src={Icon} />
                 </NumPadIconWrapper>
-            </FixPositionWrapper>
+            </Sticky>
         </>
     );
 }

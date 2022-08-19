@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import { validInputValue } from '../../../utils/game';
 import { useDispatch, useSelector } from 'react-redux';
 import { sendInputScore } from '../../../store/game.reducer';
-import { Phantom, FixPositionWrapper } from './_shared';
+import { StickyPhantom, Sticky } from '../Sticky';
 import CloseNumPad from './CloseNumPad';
 import ScoreLeft from './ScoreLeft';
 
@@ -24,8 +24,8 @@ export function InputNumPad({ show }) {
 
     return (
         <>
-            <Phantom size={200} />
-            <FixPositionWrapper>
+            <StickyPhantom size={200} />
+            <Sticky bottom>
                 <StyledInput
                     type="number"
                     ref={ref}
@@ -38,7 +38,7 @@ export function InputNumPad({ show }) {
                 />
                 <CloseNumPad show={show} />
                 <ScoreLeft />
-            </FixPositionWrapper>
+            </Sticky>
         </>
     );
 }
