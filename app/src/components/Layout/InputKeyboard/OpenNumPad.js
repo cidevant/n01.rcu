@@ -12,7 +12,7 @@ export function NumPadIcon({ show }) {
     return (
         <>
             <StickyPhantom size={200} />
-            <Sticky className="p-5 d-flex justify-content-end w-100">
+            <Sticky bottom className="p-5 d-flex justify-content-end w-100">
                 <NumPadIconWrapper
                     className="d-flex align-items-center justify-content-center"
                     onClick={onClick}

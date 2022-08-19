@@ -6,7 +6,7 @@ import Network from './Network';
 export function StatusBar() {
     return (
         <>
-            <StickyPhantom size={140} />
+            <StickyPhantom size={150} />
             <StickyTop top className="d-flex align-items-center">
                 <div className="flex-grow-1">
                     <Network />
@@ -16,11 +16,14 @@ export function StatusBar() {
         </>
     );
 }
+
+export default StatusBar;
+
 const StickyTop = styled(Sticky)`
     background-color: #222;
-    min-height: 140px;
-    height: 140px;
+    min-height: 150px;
+    height: 150px;
     color: white;
-    padding: 0 20px;
+    padding: 0 0px;
     box-shadow: 0 3px 6px 2px rgba(0, 0, 0, 0.4);
 `;

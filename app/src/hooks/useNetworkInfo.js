@@ -7,5 +7,6 @@ export function useNetworkInfo() {
     const isConnected = wsStatus === WebSocket.OPEN;
     const isPaired = clientStatus === 'PAIRED';
 
-    return [isConnected, isPaired, client];
+    return [true, false, { name: 'Konstantin' }];
+    // return [isConnected, isPaired, client];
 }
