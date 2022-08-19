@@ -1,71 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { validInputValue } from '../../../utils/game';
+import { notGreaterThanLeftScore, validInputValue } from '../../../utils/game';
 import styled from 'styled-components';
 import Icon from '../../../assets/icons/numpad.png';
 import { sendInputScore } from '../../../store/game.reducer';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export function InputKeyboard() {
-    const [showInput, setShowInput] = useState(true);
+    const [showInput, setShowInput] = useState(false);
 
     return showInput ? <PhantomInput show={setShowInput} /> : <NumPadIcon show={setShowInput} />;
 }
 
-function NumPadIcon({ show }) {
-    function onClick() {
-        show(true);
-    }
-
-    return (
-        <FixPositionWrapper className="p-5 d-flex justify-content-end w-100">
-            <IconWrapper
-                className="d-flex align-items-center justify-content-center"
-                onClick={onClick}
-            >
-                <IconImage src={Icon} />
-            </IconWrapper>
-        </FixPositionWrapper>
-    );
-}
-
-function CloseKeyboardIcon({ show }) {
-    return (
-        <CloseIconWrapper className="d-flex align-items-center justify-content-center">
-            {/* <FontAwesomeIcon icon="fa-solid fa-xmark text-white" /> */}
-        </CloseIconWrapper>
-    );
-}
-
-const CloseIconWrapper = styled.div`
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    color: white;
-    background-color: red;
-    height: 100%;
-    width: 100px;
-`;
+export default InputKeyboard;
 
 function PhantomInput({ show }) {
     const dispatch = useDispatch();
     const ref = useRef(null);
-    const [inputValue, setInputValue] = useState();
     const leftScore = useSelector((state) => state.game.scoreLeft);
-
-    function onChange(e) {
-        e.preventDefault();
-
-        const { value } = e.target;
-
-        if (validInputValue(value, leftScore)) {
-            setInputValue(value);
-        }
-    }
 
     function onSubmit(e) {
         if (e.key === 'Enter') {
-            const value = inputValue;
+            const { value } = e.target;
 
             if (validInputValue(value, leftScore)) {
                 dispatch(sendInputScore(value));
@@ -79,7 +34,7 @@ function PhantomInput({ show }) {
 
     return (
         <>
-            <Phantom />
+            <Phantom size={200} />
             <FixPositionWrapper>
                 <StyledInput
                     type="number"
@@ -89,20 +44,72 @@ function PhantomInput({ show }) {
                     autoFocus
                     maxLength={3}
                     minLength={1}
-                    onChange={onChange}
                     onKeyDown={onSubmit}
                 />
                 <CloseKeyboardIcon show={show} />
+                <ScoreLeft />
             </FixPositionWrapper>
         </>
     );
 }
 
-export default InputKeyboard;
+function ScoreLeft() {
+    const leftScore = useSelector((state) => state.game.scoreLeft);
+
+    if (leftScore == null) {
+        return;
+    }
+
+    return (
+        <ScoreLeftWrapper className="d-flex align-items-center justify-content-end">
+            <div>
+                <ScoreLeftTitle>SCORE LEFT</ScoreLeftTitle>
+                <ScoreLeftValue>{notGreaterThanLeftScore}</ScoreLeftValue>
+            </div>
+        </ScoreLeftWrapper>
+    );
+}
+
+function CloseKeyboardIcon({ show }) {
+    function hide() {
+        show(false);
+    }
+
+    return (
+        <CloseIconWrapper
+            onClick={hide}
+            className="d-flex align-items-center justify-content-center"
+        >
+            <i className="bi bi-x-circle"></i>
+        </CloseIconWrapper>
+    );
+}
+
+function NumPadIcon({ show }) {
+    function onClick() {
+        setTimeout(() => {
+            show(true);
+        }, 200);
+    }
+
+    return (
+        <>
+            <Phantom size={200} />
+            <FixPositionWrapper className="p-5 d-flex justify-content-end w-100">
+                <NumPadIconWrapper
+                    className="d-flex align-items-center justify-content-center"
+                    onClick={onClick}
+                >
+                    <NumPadIconImage src={Icon} />
+                </NumPadIconWrapper>
+            </FixPositionWrapper>
+        </>
+    );
+}
 
 const Phantom = styled.div`
     display: block;
-    height: 200px;
+    height: ${({ size }) => `${size ?? 200}px`};
     width: 100%;
 `;
 
@@ -113,18 +120,27 @@ const FixPositionWrapper = styled.div`
     width: 100%;
 `;
 
-const IconWrapper = styled.div`
-    width: 200px;
-    height: 200px;
+const NumPadIconWrapper = styled.button`
+    width: 150px;
+    height: 150px;
     background-color: #222;
-    border-radius: 100px;
-    color: white;
+    border-radius: 75px;
+    box-shadow: 0px 15px 20px 0px rgba(0, 0, 0, 0.5);
+    border: 0;
+    color: #fff;
     cursor: pointer !important;
+    transition: transform ease-in-out 100ms;
+    outline: none;
+
+    &:active {
+        background-color: #161616;
+        transform: translate(5px, 10px);
+    }
 `;
 
-const IconImage = styled.img`
-    width: 100px;
-    height: 100px;
+const NumPadIconImage = styled.img`
+    width: 150px;
+    height: 150px;
 `;
 
 const StyledInput = styled.input`
@@ -150,4 +166,46 @@ const StyledInput = styled.input`
     &.error {
         background-color: red;
     }
+`;
+
+const CloseIconWrapper = styled.div`
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: red;
+    height: 100%;
+    width: 160px;
+    cursor: pointer !important;
+
+    & > i {
+        font-size: 140px;
+    }
+`;
+
+const ScoreLeftWrapper = styled.div`
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    width: 160px;
+    cursor: pointer !important;
+    margin-right: 30px;
+    min-width: 180px;
+`;
+
+const ScoreLeftTitle = styled.div`
+    color: white;
+    text-align: center;
+    background-color: #444;
+    top: 20px;
+    position: relative;
+    width: 100%;
+`;
+
+const ScoreLeftValue = styled.div`
+    color: white;
+    font-size: 100px;
+    color: #666;
+    width: 170px;
+    text-align: center;
 `;
