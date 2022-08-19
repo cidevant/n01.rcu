@@ -25,20 +25,17 @@ function Home() {
     }
 
     return (
-        <>
-            <div>HELLO</div>
-            <div>
-                <button onClick={sendScore} className="btn btn-primary">
-                    INPUT SCORE
-                </button>
-                <button onClick={setAccessCodeAndConnect} className="btn btn-primary">
-                    CONNECT
-                </button>
-                <button onClick={removeAndDisconnect} className="btn btn-primary">
-                    DISCONNECT
-                </button>
-            </div>
-        </>
+        <div>
+            <button onClick={sendScore} className="btn btn-primary">
+                SEND SCORE 20
+            </button>
+            <button onClick={setAccessCodeAndConnect} className="btn btn-primary">
+                CONNECT
+            </button>
+            <button onClick={removeAndDisconnect} className="btn btn-primary">
+                DISCONNECT
+            </button>
+        </div>
     );
 }
 
