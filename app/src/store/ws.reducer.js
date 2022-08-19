@@ -15,6 +15,8 @@ const slice = createSlice({
         connect(state, action) {
             state.status = WebSocket.CONNECTING;
             state.accessCode = action.payload;
+            state.close = null;
+            state.error = null;
             ws.connect(action.payload);
         },
         disconnect(state) {
