@@ -141,13 +141,13 @@ class SocketsManager {
           controllersMetaSafe.push(this.getMetaSafe(controllerSocket));
 
           this.send(controllerSocket, {
-            type: 'paired',
+            type: 'PAIRED',
             value: clientMetaSafe,
           });
         });
 
         this.send(clientSocket, {
-          type: 'paired',
+          type: 'PAIRED',
           value: controllersMetaSafe,
         });
 
