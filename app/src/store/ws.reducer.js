@@ -1,14 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ws } from '../utils/ws';
 
-export const WS_IN_PREFIX = 'WS:IN:'; // incoming message action prefix
-export const WS_OUT_PREFIX = 'WS:OUT:'; // sending message action prefix
-
 const initialState = {
-    accessCode: null,
-    connected: false,
+    status: WebSocket.CLOSED,
     close: null,
     error: null,
+    accessCode: null,
 };
 
 const slice = createSlice({
@@ -16,25 +13,29 @@ const slice = createSlice({
     initialState,
     reducers: {
         connect(state, action) {
-            ws.connect(action.payload);
-
+            state.status = WebSocket.CONNECTING;
             state.accessCode = action.payload;
+            ws.connect(action.payload);
+        },
+        disconnect(state) {
+            state.status = WebSocket.CLOSING;
+            ws.disconnect();
         },
         onopen(state) {
-            state.connected = true;
+            state.status = WebSocket.OPEN;
             state.close = null;
             state.error = null;
         },
         onclose(state, action) {
-            state.connected = false;
+            state.status = WebSocket.CLOSED;
             state.close = action.payload;
         },
         onerror(state, action) {
-            state.connected = false;
+            state.status = WebSocket.CLOSED;
             state.error = action.payload;
         },
     },
 });
 
-export const { connect, onopen, onclose, onerror } = slice.actions;
+export const { connect, disconnect, onopen, onclose, onerror } = slice.actions;
 export default slice.reducer;

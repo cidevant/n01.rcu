@@ -1,17 +1,13 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable no-undef */
 
-if (!window.n01rcu) {
-    window.n01rcu = {};
-}
-
 /**
- * Listens for "n01rcu.Event" event
+ * Listens for "n01obs.Event" event
  *
  * @param {*} event
  * @returns {*}
  */
- window.n01rcu.EventListener = function EventListener(event) {
+function n01obs__EventListener(event) {
   if (
     // event.source != window ||
     chrome == null ||
@@ -21,7 +17,7 @@ if (!window.n01rcu) {
     return;
   }
 
-  console.log('[n01.rcu.content-script] n01rcu.Event', JSON.stringify(event.detail));
+  console.log('[n01.obs.content-script] n01obs.Event', JSON.stringify(event.detail));
 
   chrome.runtime.sendMessage(event.detail);
 }
@@ -32,7 +28,7 @@ if (!window.n01rcu) {
  * @param {string} path script to load
  * @returns {Promise<any>} promise
  */
- window.n01rcu.scriptInjector = function scriptInjector(path) {
+function injector(path) {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
 
@@ -48,10 +44,10 @@ if (!window.n01rcu) {
 }
 
 // Chained script initialization
-window.n01rcu.scriptInjector('inject-helpers.js')
-  .then(() => window.n01rcu.scriptInjector('inject-websocket.js'))
-  .then(() => window.n01rcu.scriptInjector('inject-script.js'));
+injector('inject-helpers.js')
+  .then(() => injector('inject-websocket.js'))
+  .then(() => injector('inject-script.js'));
 
 // Communication with service worker
-document.removeEventListener('n01rcu.Event', window.n01rcu.EventListener);
-document.addEventListener('n01rcu.Event', window.n01rcu.EventListener, false);
+document.removeEventListener('n01obs.Event', n01obs__EventListener);
+document.addEventListener('n01obs.Event', n01obs__EventListener, false);

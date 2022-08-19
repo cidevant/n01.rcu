@@ -1,17 +1,17 @@
-import { WS_IN_PREFIX, WS_OUT_PREFIX } from './ws.reducer';
+import { WS_IN_PREFIX, WS_OUT_PREFIX } from '../utils/ws';
 
-export const ACTIONS = {
-    MATCH_START: `${WS_IN_PREFIX}MATCH_START`,
-    MATCH_END: `${WS_IN_PREFIX}MATCH_END`,
-    SET_SCORE_LEFT: `${WS_IN_PREFIX}SET_SCORE_LEFT`,
-    GET_FINISH_DART: `${WS_IN_PREFIX}GET_FINISH_DART`,
-    SET_FINISH_DART: `${WS_OUT_PREFIX}SET_FINISH_DART`,
-    INPUT_SCORE: `${WS_OUT_PREFIX}INPUT_SCORE`,
+const ACTIONS = {
+    MATCH_START: `${WS_IN_PREFIX}:MATCH_START`,
+    MATCH_END: `${WS_IN_PREFIX}:MATCH_END`,
+    SET_SCORE_LEFT: `${WS_IN_PREFIX}:SET_SCORE_LEFT`,
+    GET_FINISH_DART: `${WS_IN_PREFIX}:GET_FINISH_DART`,
+    SET_FINISH_DART: `${WS_OUT_PREFIX}:CLIENT:SET_FINISH_DART`,
+    SET_INPUT_SCORE: `${WS_OUT_PREFIX}:CLIENT:SET_INPUT_SCORE`,
 };
 
 export function sendInputScore(payload) {
     return {
-        type: ACTIONS.INPUT_SCORE,
+        type: ACTIONS.SET_INPUT_SCORE,
         payload,
     };
 }
@@ -43,12 +43,7 @@ export default function gameReducer(state, action) {
             };
             break;
         case ACTIONS.MATCH_END:
-            state = {
-                ...state,
-                match: null,
-                scoreLeft: null,
-                finishDart: null,
-            };
+            state = { ...initialState };
             break;
         case ACTIONS.SET_SCORE_LEFT:
             state = {
@@ -68,7 +63,7 @@ export default function gameReducer(state, action) {
                 finishDart: null,
             };
             break;
-        case ACTIONS.INPUT_SCORE:
+        case ACTIONS.SET_INPUT_SCORE:
             state = {
                 ...state,
                 lastScore: action.payload,

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { ws } from '../../utils/ws';
-import { connect, onopen, onclose, onerror, WS_IN_PREFIX } from '../../store/ws.reducer';
+import { ws, WS_IN_PREFIX } from '../../utils/ws';
+import { connect, disconnect, onopen, onclose, onerror } from '../../store/ws.reducer';
 
 export function WebSocket({ children }) {
     const accessCode = localStorage.getItem('accessCode');
@@ -17,7 +17,7 @@ export function WebSocket({ children }) {
                 }
 
                 dispatch({
-                    type: `${WS_IN_PREFIX}${type}`,
+                    type: `${WS_IN_PREFIX}:${type}`,
                     payload,
                 });
             } catch (error) {
@@ -46,7 +46,7 @@ export function WebSocket({ children }) {
 
         return () => {
             if (ws.open) {
-                ws.disconnect();
+                dispatch(disconnect());
             }
         };
     }, [dispatch, accessCode]);

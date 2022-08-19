@@ -93,8 +93,8 @@ function sendScore(score, request) {
 
   if (pairedControllers.length === 1) {
     sockets.send(pairedControllers[0], {
-      type: 'SET_INPUT_SCORE',
-      payload: score,
+      type: 'inputScore',
+      value: score,
     });
   } else if (pairedControllers.length > 1) {
     console.error(

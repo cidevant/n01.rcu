@@ -98,7 +98,7 @@ class SocketsManager {
 
         controllers.forEach((controllerSocket) => {
           this.send(controllerSocket, {
-            type: 'UNPAIRED',
+            type: 'unpaired',
           });
         });
       } else {
@@ -111,7 +111,7 @@ class SocketsManager {
           console.log(chalk.yellowBright('[sockets][onClose][unpair] no controllers'), socketInfo);
 
           this.send(clientSocket, {
-            type: 'UNPAIRED',
+            type: 'unpaired',
           });
         }
       }
@@ -141,14 +141,14 @@ class SocketsManager {
           controllersMetaSafe.push(this.getMetaSafe(controllerSocket));
 
           this.send(controllerSocket, {
-            type: 'PAIRED',
-            payload: clientMetaSafe,
+            type: 'paired',
+            value: clientMetaSafe,
           });
         });
 
         this.send(clientSocket, {
-          type: 'PAIRED',
-          payload: controllersMetaSafe,
+          type: 'paired',
+          value: controllersMetaSafe,
         });
 
         console.log(chalk.greenBright('[sockets][pair]'), this.getSerializedInfo(socket));

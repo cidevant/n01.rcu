@@ -1,5 +1,5 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
+export const WS_IN_PREFIX = 'WS:IN'; // incoming message action prefix
+export const WS_OUT_PREFIX = 'WS:OUT'; // sending message action prefix
 
 class WebsocketClient {
     constructor(url) {

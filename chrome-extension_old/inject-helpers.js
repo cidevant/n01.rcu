@@ -1,36 +1,32 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 
-if (!window.n01rcu?.helpers) {
-    window.n01rcu.helpers = {};
-}
-
 /**
  * Process commands from websocket server
  *
  * @param {*} data Message from server
  * @param {*} ws WebSocket client reference for responding
  */
-window.n01rcu.helpers.onWsMessage = function onWsMessage(data, ws) {
+function n01obs__onWsMessage(data, ws) {
   try {
     switch (data.type) {
-      case 'SET_INPUT_SCORE':
-        window.n01rcu.helpers.inputScore(data, ws);
+      case 'INPUT_SCORE':
+        n01obs__inputScore(data, ws);
         break;
       case 'SET_FINISH_DART':
-        window.n01rcu.helpers.setFinishDart(data, ws);
+        n01obs__setFinishDart(data, ws);
         break;
       case 'PAIRED':
-        window.n01rcu.helpers.setPaired(true, ws);
+        n01obs__setPaired(true, ws);
         break;
       case 'UNPAIRED':
-        window.n01rcu.helpers.setPaired(false, ws);
+        n01obs__setPaired(false, ws);
         break;
       default:
         break;
     }
   } catch (error) {
-    console.log('[n01.rcu.helpers] onWsMessage error: ', error);
+    console.log('[n01.obs.inject-helpers] onWsMessage error: ', error);
   }
 }
 
@@ -40,31 +36,31 @@ window.n01rcu.helpers.onWsMessage = function onWsMessage(data, ws) {
  * @param {*} data input score action
  * @param {*} ws websocket
  */
-window.n01rcu.helpers.inputScore = function inputScore(data, ws) {
+function n01obs__inputScore(data, ws) {
   try {
     // enter score
-    for (const value of `${data.payload}`) {
-        window.n01rcu.helpers.inputScore(value);
+    for (const value of `${data.value}`) {
+      inputScore(value);
     }
 
     // submit score
     $('.score_input').click();
 
     // respond with score left
-    window.n01rcu.helpers.sendScoreLeft(ws);
+    n01obs__sendScoreLeft(ws);
   } catch (error) {
-    console.log('[n01.rcu.helpers] inputScore error: ', error);
+    console.log('[n01.obs.inject-helpers] inputScore error: ', error);
   }
 }
 
-window.n01rcu.helpers.setFinishDart = function setFinishDart(data, ws) {
-  if ($(`#${data['payload']}`).is(':visible')) {
-    console.log('[n01.rcu.helpers] setFinishDart ', data);
+function n01obs__setFinishDart(data, ws) {
+  if ($(`#${data['value']}`).is(':visible')) {
+    console.log('[n01.obs.inject-helpers] setFinishDart ', data);
 
-    $(`#${data['payload']}`).click();
+    $(`#${data['value']}`).click();
   } else {
     console.log(
-      `[n01.rcu.helpers] setFinishDart error: ${data['payload']} not found or is not visible`
+      `[n01.obs.inject-helpers] setFinishDart error: ${data['value']} not found or is not visible`
     );
   }
 }
@@ -74,16 +70,16 @@ window.n01rcu.helpers.setFinishDart = function setFinishDart(data, ws) {
  *
  * @param {WebSocket} ws socket connection
  */
-window.n01rcu.helpers.sendScoreLeft = function sendScoreLeft(ws, value) {
+function n01obs__sendScoreLeft(ws, value) {
   try {
-    const score = value ?? window.n01rcu.helpers.getPlayerLeftScore();
+    const score = value ?? n01obs__getPlayerLeftScore();
 
     ws.send({
-      type: 'CONTROLLERS:SET_SCORE_LEFT',
-      payload: score === -1 ? '-' : score,
+      type: 'SCORE_LEFT',
+      value: score === -1 ? '-' : score,
     });
   } catch (error) {
-    console.log('[n01.rcu.helpers] sendScoreLeft error', error);
+    console.log('[n01.obs.inject-helpers] sendScoreLeft error: ', error);
   }
 }
 
@@ -92,10 +88,10 @@ window.n01rcu.helpers.sendScoreLeft = function sendScoreLeft(ws, value) {
  *
  * @param {boolean} [connected=true]
  */
-window.n01rcu.helpers.changeExtensionIcon = function changeExtensionIcon(icon = 'default') {
+function n01obs__changeExtensionIcon(icon = 'default') {
   setTimeout(function () {
     document.dispatchEvent(
-      new CustomEvent('n01rcu.Event', {
+      new CustomEvent('n01obs.Event', {
         detail: {
           type: 'SET_ICON',
           icon,
@@ -110,11 +106,11 @@ window.n01rcu.helpers.changeExtensionIcon = function changeExtensionIcon(icon = 
  *
  * @returns {Object} player info
  */
-window.n01rcu.helpers.getPlayer = function getPlayer() {
+function n01obs__getPlayer() {
   try {
-    return window.n01rcu.helpers.getLocalStorage('n01_net.onlineOptions');
+    return n01obs__getLocalStorage('n01_net.onlineOptions');
   } catch (error) {
-    console.log('[n01.rcu.helpers] getPlayer error: ', error);
+    console.log('[n01.obs.inject-helpers] getPlayer error: ', error);
 
     return {};
   }
@@ -125,9 +121,9 @@ window.n01rcu.helpers.getPlayer = function getPlayer() {
  *
  * @returns {number} index of player (0 or 1)
  */
-window.n01rcu.helpers.getPlayerIndexInMatch = function getPlayerIndexInMatch() {
+function n01obs__getPlayerIndexInMatch() {
   try {
-    const match = window.n01rcu.helpers.getLocalStorage('n01_net.setData');
+    const match = n01obs__getLocalStorage('n01_net.setData');
 
     if (match && Array.isArray(match.statsData)) {
       return match.statsData.findIndex((p) => p.me === 1);
@@ -135,7 +131,7 @@ window.n01rcu.helpers.getPlayerIndexInMatch = function getPlayerIndexInMatch() {
       throw 'No match data found';
     }
   } catch (error) {
-    console.log('[n01.rcu.helpers] getPlayerIndexInMatch error: ', error);
+    console.log('[n01.obs.inject-helpers] getPlayerIndexInMatch error: ', error);
 
     return -1;
   }
@@ -146,9 +142,9 @@ window.n01rcu.helpers.getPlayerIndexInMatch = function getPlayerIndexInMatch() {
  *
  * @returns {number} left score
  */
- window.n01rcu.helpers.getPlayerLeftScore = function getPlayerLeftScore() {
+function n01obs__getPlayerLeftScore() {
   try {
-    const playerIndex = window.n01rcu.helpers.getPlayerIndexInMatch();
+    const playerIndex = n01obs__getPlayerIndexInMatch();
 
     if (playerIndex > -1) {
       const rounds = currentLegData()?.playerData?.[playerIndex];
@@ -162,7 +158,7 @@ window.n01rcu.helpers.getPlayerIndexInMatch = function getPlayerIndexInMatch() {
 
     throw 'bad getPlayerIndexInMatch index';
   } catch (error) {
-    console.log('[n01.rcu.helpers] getPlayerLeftScore error: ', error);
+    console.log('[n01.obs.inject-helpers] getPlayerLeftScore error: ', error);
 
     return -1;
   }
@@ -174,19 +170,19 @@ window.n01rcu.helpers.getPlayerIndexInMatch = function getPlayerIndexInMatch() {
  * @param {string} key localStorage key
  * @returns {Object} parsed object
  */
- window.n01rcu.helpers.getLocalStorage = function getLocalStorage(key) {
+function n01obs__getLocalStorage(key) {
   try {
     return JSON.parse(localStorage[key]);
   } catch (error) {
-    console.log('[n01.rcu.helpers] getLocalStorage error: ', error);
+    console.log('[n01.obs.inject-helpers] getLocalStorage error: ', error);
 
     return {};
   }
 }
 
-window.n01rcu.helpers.setPaired = function setPaired(paired = false, ws) {
-    window.n01rcu.helpers.changeExtensionIcon(paired ? 'paired' : 'connected');
-    window.n01rcu.helpers.sendScoreLeft(ws);
+function n01obs__setPaired(paired = false, ws) {
+  n01obs__changeExtensionIcon(paired ? 'paired' : 'connected');
+  n01obs__sendScoreLeft(ws);
 }
 
 /**
@@ -195,8 +191,8 @@ window.n01rcu.helpers.setPaired = function setPaired(paired = false, ws) {
  * @param {*} wrapperFunctions
  * @param {*} backupFunctions
  */
- window.n01rcu.helpers.addFunctionsWrappers = function addFunctionsWrappers(wrapperFunctions, backupFunctions) {
-  console.log('[n01.rcu.helpers] wrap n01 functions');
+function n01obs__addFunctionsWrappers(wrapperFunctions, backupFunctions) {
+  console.log('[n01.obs.inject-helpers] wrap n01 functions');
 
   Object.keys(wrapperFunctions).forEach((fnName) => {
     backupFunctions[fnName] = window[fnName];
@@ -213,8 +209,8 @@ window.n01rcu.helpers.setPaired = function setPaired(paired = false, ws) {
  * @param {*} wrapperFunctions
  * @param {*} backupFunctions
  */
- window.n01rcu.helpers.removeFunctionsWrappers = function removeFunctionsWrappers(wrapperFunctions, backupFunctions) {
-  console.log('[n01.rcu.helpers] unwrap n01 functions');
+function n01obs__removeFunctionsWrappers(wrapperFunctions, backupFunctions) {
+  console.log('[n01.obs.inject-helpers] unwrap n01 functions');
 
   Object.keys(wrapperFunctions).forEach((fnName) => {
     window[fnName] = backupFunctions[fnName];

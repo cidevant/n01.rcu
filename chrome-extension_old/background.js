@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
 
 chrome.runtime.onMessage.addListener(function (msg, _sender, _sendResponse) {
-  console.log('[n01.rcu.background] received message', JSON.stringify(msg));
+  console.log('[n01.obs.background] received message', JSON.stringify(msg));
 
   switch (msg.type) {
     case 'SET_ICON':
-      setIcon(msg);
+      updateMessage(msg);
       break;
 
     default:
@@ -13,9 +13,9 @@ chrome.runtime.onMessage.addListener(function (msg, _sender, _sendResponse) {
   }
 });
 
-function setIcon(msg) {
+function updateMessage(msg) {
   if (msg != null && typeof msg === 'object') {
-    console.log(`[n01.rcu.background] changing icon to ${msg.icon}`);
+    console.log(`[n01.obs.background] changing icon to ${msg.icon}`);
 
     chrome.action.setIcon({
       path: {

@@ -1,15 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 
-window.n01rcu.ws = new window.n01rcu.WebSocketClient();
-
+const n01obs__client = new n01obs__WebSocketClient();
 const backupFunctions = {};
 const wrapperFunctions = {
   //start of new leg
   initScore: function () {
-    console.log('[n01.rcu.inject-script] wrapper initScore');
+    console.log('[n01.obs.inject-script] wrapper initScore');
 
-    window.n01rcu.helpers.sendScoreLeft(window.n01rcu.ws);
+    n01obs__sendScoreLeft(n01obs__client);
   },
   // enter outs
   finishMenuOpen: function () {
@@ -22,7 +21,7 @@ const wrapperFunctions = {
       return acc;
     }, []);
 
-    console.log('[n01.rcu.inject-script] wrapper finishMenuOpen', outs);
+    console.log('[n01.obs.inject-script] wrapper finishMenuOpen', outs);
 
     setTimeout(() => {
       // if only one possibility - send without confirmation
@@ -30,16 +29,16 @@ const wrapperFunctions = {
         $(`#${outs[0]}`).click();
       } else {
         // let user choose
-        window.n01rcu.ws.send({
-          type: 'CONTROLLERS:GET_FINISH_DART',
-          payload: outs,
+        n01obs__client.send({
+          type: 'GET_FINISH_DART',
+          value: outs,
         });
       }
     }, 500);
   },
   // leg finished by you, dialog message: "Game shot 3rd dart (23 darts)", buttons: [ok]
   finishMsgOpen: function () {
-    console.log('[n01.rcu.inject-script] wrapper finishMsgOpen');
+    console.log('[n01.obs.inject-script] wrapper finishMsgOpen');
 
     setTimeout(() => {
       $('#msg_ok').click(); // press OK
@@ -47,7 +46,7 @@ const wrapperFunctions = {
   },
   // leg finished by opponent, dialog message: "Game shot 3rd dart (23 darts)", buttons: [ok]
   netFinishMsgOpen: function () {
-    console.log('[n01.rcu.inject-script] wrapper netFinishMsgOpen');
+    console.log('[n01.obs.inject-script] wrapper netFinishMsgOpen');
 
     setTimeout(() => {
       $('#msg_net_ok').click(); // press OK
@@ -55,7 +54,7 @@ const wrapperFunctions = {
   },
   // match finished, dialog message: "Winner is PlayerX", buttons: [ok]
   endMatchMsgOpen: function () {
-    console.log('[n01.rcu.inject-script] wrapper endMatchMsgOpen');
+    console.log('[n01.obs.inject-script] wrapper endMatchMsgOpen');
 
     $('#msg_net_ok').click(); // press OK
     
@@ -66,12 +65,13 @@ const wrapperFunctions = {
 };
 
 window.onload = () => {
-  window.n01rcu.helpers.addFunctionsWrappers(wrapperFunctions, backupFunctions);
-  window.n01rcu.ws.connect();
+  n01obs__addFunctionsWrappers(wrapperFunctions, backupFunctions);
+  n01obs__client.connect();
 };
 
 window.onbeforeunload = () => {
-  window.n01rcu.helpers.changeExtensionIcon('default');
-  window.n01rcu.helpers.removeFunctionsWrappers(wrapperFunctions, backupFunctions);
-  window.n01rcu.ws.disconnect();
+  n01obs__changeExtensionIcon('default');
+  n01obs__sendScoreLeft(n01obs__client, -1);
+  n01obs__client.disconnect();
+  n01obs__removeFunctionsWrappers(wrapperFunctions, backupFunctions);
 };

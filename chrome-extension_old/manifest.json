@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Nakka n01.online - remote controller client",
+  "name": "n01.obs",
   "version": "1.0.0",
   "background": {
     "service_worker": "background.js"
