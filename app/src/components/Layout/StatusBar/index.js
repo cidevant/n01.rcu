@@ -5,14 +5,19 @@ import { useSelector } from 'react-redux';
 
 export function StatusBar() {
     const wsStatus = useSelector((state) => state.ws.status);
+    const clientStatus = useSelector((state) => state.client.status);
 
-    function getStatusBarWsStatus(status) {
-        if (status === WebSocket.CLOSED) {
+    function getStatusBarWsStatus(ws, client) {
+        if (ws === WebSocket.CLOSED) {
             return <StatusClosed />;
         }
 
-        if (status === WebSocket.OPEN) {
-            return <StatusOpen />;
+        if (ws === WebSocket.OPEN) {
+            if (client === 'PAIRED') {
+                return <StatusPaired />;
+            }
+
+            return <StatusUnpaired />;
         }
     }
 
@@ -20,7 +25,7 @@ export function StatusBar() {
         <>
             <Navbar sticky="top" bg="dark" variant="dark">
                 <Container fluid>
-                    <Navbar.Brand>{getStatusBarWsStatus(wsStatus)}</Navbar.Brand>
+                    <Navbar.Brand>{getStatusBarWsStatus(wsStatus, clientStatus)}</Navbar.Brand>
                     <Nav className="ms-auto fs-3">
                         <Nav.Link href="#home">
                             <i className="bi bi-three-dots" />
@@ -33,14 +38,14 @@ export function StatusBar() {
 }
 
 function StatusClosed() {
-    return <div>Closed</div>;
+    return <div>DISCONNECTED</div>;
 }
 
-function StatusOpen() {
-    return <div>Connected</div>;
+function StatusPaired() {
+    return <div>PAIRED</div>;
 }
 
-function StatusWaitingClient(params) {
+function StatusUnpaired() {
     return (
         <>
             <Spinner className="p-2" animation="border" size="sm" />

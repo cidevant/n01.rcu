@@ -80,13 +80,13 @@ class WebsocketClient {
     };
 
     __onOpen = () => {
-        console.log('[ws.client] connected');
+        console.log('[ws.client] connection opened');
 
         this.onopen();
     };
 
     __onClose = (code, reason) => {
-        console.log('[ws.client] closed connection');
+        console.log('[ws.client] connection closed ');
 
         this.onclose(code, reason);
     };
