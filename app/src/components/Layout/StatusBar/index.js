@@ -2,14 +2,14 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { Nav, Navbar, Container, Button } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
 import { useSelector } from 'react-redux';
-import ConnectionSettingsModal from './ConnectionSettingsModal';
+import Modal from './Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHandshake } from '@fortawesome/fontawesome-free-solid';
 
 export function StatusBar() {
     const wsStatus = useSelector((state) => state.ws.status);
     const clientStatus = useSelector((state) => state.client.status);
-    const [modalShow, setModalShow] = useState(false);
+    const [modalShow, setModalShow] = useState(true);
     const hideModal = useCallback(() => {
         setModalShow(false);
     }, []);
@@ -52,7 +52,7 @@ export function StatusBar() {
                             {buttonIcon}
                         </Button>
                         {connectionMessage}
-                        <ConnectionSettingsModal show={modalShow} onHide={hideModal} />
+                        <Modal show={modalShow} onHide={hideModal} />
                     </Navbar.Brand>
                     <Nav className="ms-auto">
                         <Nav.Link href="#home">

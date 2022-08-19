@@ -2,22 +2,34 @@ export const WS_IN_PREFIX = 'WS:IN'; // incoming message action prefix
 export const WS_OUT_PREFIX = 'WS:OUT'; // sending message action prefix
 
 class WebsocketClient {
-    constructor(url) {
-        this.__url = url;
-        this.__accessCode = null;
-    }
+    connect = (accessCode, url) => {
+        const isValidAccessCode = this.__isValidAccessCode(accessCode);
+        const isValidUrl = this.__isValidUrl(url);
 
-    connect = (accessCode) => {
-        if (accessCode !== this.__accessCode) {
-            this.__accessCode = accessCode;
+        if (!this.open && isValidAccessCode && isValidUrl) {
+            const uuid = localStorage.getItem('uuid');
+            const name = this.__getName();
+            const params = `?client=false&id=${uuid}&name=${name}&accessCode=${accessCode}`;
+
+            this.__socket = new WebSocket(`${url}${params}`);
+            this.__socket.onopen = this.__onOpen;
+            this.__socket.onclose = this.__onClose;
+            this.__socket.onerror = this.__onError;
+            this.__socket.onmessage = this.__onMessage;
+        } else {
+            const reasons = [];
 
             if (this.open) {
-                this.disconnect();
+                reasons.push('already connected');
+            }
+            if (!isValidAccessCode) {
+                reasons.push('invalid accessCode');
+            }
+            if (!isValidUrl) {
+                reasons.push('invalid server url');
             }
 
-            this.__connect(accessCode);
-        } else if (!this.open) {
-            this.__connect(accessCode);
+            console.error('[ws.client][connect][error]', reasons);
         }
 
         return this;
@@ -48,18 +60,12 @@ class WebsocketClient {
         }
     };
 
-    __connect = (accessCode) => {
-        if (!this.open) {
-            const uuid = localStorage.getItem('uuid');
-            const name = this.__getName();
-            const params = `?client=false&id=${uuid}&name=${name}&accessCode=${accessCode}`;
+    __isValidAccessCode = (input) => {
+        return input?.length === 4;
+    };
 
-            this.__socket = new WebSocket(`${this.__url}${params}`);
-            this.__socket.onopen = this.__onOpen;
-            this.__socket.onclose = this.__onClose;
-            this.__socket.onerror = this.__onError;
-            this.__socket.onmessage = this.__onMessage;
-        }
+    __isValidUrl = (input) => {
+        return input?.startsWith('ws') && input?.endsWith('/ws');
     };
 
     /**
@@ -106,7 +112,7 @@ class WebsocketClient {
     };
 
     get open() {
-        return this.__socket && this.__socket.readyState === WebSocket.OPEN;
+        return this.__socket != null && this.__socket.readyState === WebSocket.OPEN;
     }
 
     onopen() {}
@@ -115,5 +121,5 @@ class WebsocketClient {
     onmessage() {}
 }
 
-export const ws = new WebsocketClient('ws://localhost:3000/ws');
+export const ws = new WebsocketClient();
 export default ws;

@@ -7,7 +7,7 @@ const ACTIONS = {
 
 const initialState = {
     status: 'UNPAIRED',
-    controllers: null,
+    client: null,
 };
 
 export default function clientReducer(state, action) {
@@ -20,7 +20,7 @@ export default function clientReducer(state, action) {
             state = {
                 ...state,
                 status: 'PAIRED',
-                controllers: action.payload,
+                client: action.payload,
             };
             break;
         case ACTIONS.UNPAIRED:

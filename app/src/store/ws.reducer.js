@@ -5,19 +5,19 @@ const initialState = {
     status: WebSocket.CLOSED,
     close: null,
     error: null,
-    accessCode: null,
+    accessCode: localStorage.getItem('accessCode') || '',
+    serverUrl: localStorage.getItem('serverUrl') || '',
 };
 
 const slice = createSlice({
     name: 'ws',
     initialState,
     reducers: {
-        connect(state, action) {
+        connect(state) {
             state.status = WebSocket.CONNECTING;
-            state.accessCode = action.payload;
             state.close = null;
             state.error = null;
-            ws.connect(action.payload);
+            ws.connect(state.accessCode, state.serverUrl);
         },
         disconnect(state) {
             state.status = WebSocket.CLOSING;
@@ -36,8 +36,17 @@ const slice = createSlice({
             state.status = WebSocket.CLOSED;
             state.error = action.payload;
         },
+        setAccessCode(state, action) {
+            state.accessCode = action.payload;
+            localStorage.setItem('accessCode', action.payload);
+        },
+        setServerUrl(state, action) {
+            state.serverUrl = action.payload;
+            localStorage.setItem('serverUrl', action.payload);
+        },
     },
 });
 
-export const { connect, disconnect, onopen, onclose, onerror } = slice.actions;
+export const { connect, disconnect, onopen, onclose, onerror, setAccessCode, setServerUrl } =
+    slice.actions;
 export default slice.reducer;

@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ws, WS_IN_PREFIX } from '../../utils/ws';
 import { connect, disconnect, onopen, onclose, onerror } from '../../store/ws.reducer';
 
 export function WebSocket({ children }) {
-    const accessCode = localStorage.getItem('accessCode');
     const dispatch = useDispatch();
+    const accessCode = useSelector((state) => state.ws.accessCode);
+    const serverUrl = useSelector((state) => state.ws.serverUrl);
 
+    // Setup websocket client
     useEffect(() => {
         ws.onmessage = (message) => {
             try {
@@ -39,9 +41,12 @@ export function WebSocket({ children }) {
         ws.onerror = (error) => {
             dispatch(onerror(error));
         };
+    }, [dispatch]);
 
-        if (accessCode) {
-            dispatch(connect(accessCode));
+    // Try connecting only once at the beginning
+    useEffect(() => {
+        if (!ws.open && ws.__isValidAccessCode(accessCode) && ws.__isValidUrl(serverUrl)) {
+            dispatch(connect(accessCode, serverUrl));
         }
 
         return () => {
@@ -49,7 +54,7 @@ export function WebSocket({ children }) {
                 dispatch(disconnect());
             }
         };
-    }, [dispatch, accessCode]);
+    }, []);
 
     return <>{children}</>;
 }
