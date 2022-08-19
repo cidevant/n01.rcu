@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { sendInputScore } from '../store/game.reducer';
-import { connect } from '../store/ws.reducer';
+import { connect, disconnect } from '../store/ws.reducer';
 
 function Home() {
     const dispatch = useDispatch();
@@ -18,6 +18,12 @@ function Home() {
         dispatch(connect(accessCode));
     }
 
+    function removeAndDisconnect() {
+        localStorage.removeItem('accessCode');
+
+        dispatch(disconnect());
+    }
+
     return (
         <>
             <div>HELLO</div>
@@ -27,6 +33,9 @@ function Home() {
                 </button>
                 <button onClick={setAccessCodeAndConnect} className="btn btn-primary">
                     CONNECT
+                </button>
+                <button onClick={removeAndDisconnect} className="btn btn-primary">
+                    DISCONNECT
                 </button>
             </div>
         </>
