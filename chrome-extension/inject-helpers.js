@@ -11,7 +11,7 @@ const n01rcu_onWsMessage = function n01rcu_onWsMessage(data, ws) {
   try {
     switch (data.type) {
       case 'SET_INPUT_SCORE':
-       n01rcu_inputScore(data, ws);
+       n01rcu_setInputScore(data, ws);
         break;
       case 'SET_FINISH_DART':
        n01rcu_setFinishDart(data, ws);
@@ -36,7 +36,7 @@ const n01rcu_onWsMessage = function n01rcu_onWsMessage(data, ws) {
  * @param {*} data input score action
  * @param {*} ws websocket
  */
-const n01rcu_inputScore = function n01rcu_inputScore(data, ws) {
+const n01rcu_setInputScore = function n01rcu_setInputScore(data, ws) {
   try {
     // enter score
     for (const value of `${data.payload}`) {
