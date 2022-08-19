@@ -1,20 +1,27 @@
-/* eslint-disable no-unreachable */
-import React, { useState, useMemo } from 'react';
-import Modal from './Modal';
-import Spinner from 'react-bootstrap/Spinner';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHandshake } from '@fortawesome/fontawesome-free-solid';
-import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { NetworkOffcanvas } from './NetworkOffcanvas';
 import { useNetworkInfo } from '../../../hooks/useNetworkInfo';
+import React, { useState, useMemo } from 'react';
+import Spinner from 'react-bootstrap/Spinner';
+import styled from 'styled-components';
 
 function Network() {
     const [modalShow, setModalShow] = useState(false);
 
-    function openModal() {
+    function onShow() {
         setModalShow(true);
     }
+    function onClose() {
+        setModalShow(false);
+    }
 
-    return <NetworkButton open={openModal} />;
+    return (
+        <>
+            <NetworkButton open={onShow} />
+            <NetworkOffcanvas show={modalShow} close={onClose} />
+        </>
+    );
 }
 
 export default Network;
