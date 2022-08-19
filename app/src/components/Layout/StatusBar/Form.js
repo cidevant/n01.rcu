@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -8,10 +8,22 @@ import styled from 'styled-components';
 
 function AccessCodeForm(props) {
     const wsStatus = useSelector((state) => state.ws.status);
+    const client = useSelector((state) => state.client.client);
     const clientStatus = useSelector((state) => state.client.status);
     const [accessCode, setAccessCode] = useState(useSelector((state) => state.ws.accessCode));
     const [serverUrl, setServerUrl] = useState(useSelector((state) => state.ws.serverUrl));
     const isConnected = wsStatus === WebSocket.OPEN;
+    const clientStatusText = useMemo(() => {
+        if (!isConnected) {
+            return '';
+        }
+
+        if (client && clientStatus === 'PAIRED') {
+            return client.name;
+        }
+
+        return clientStatus;
+    }, [isConnected, clientStatus, client]);
 
     function updateAccessCode(event) {
         event.preventDefault();
@@ -97,7 +109,7 @@ function AccessCodeForm(props) {
                                         : 'is-invalid'
                                     : ''
                             }
-                            value={isConnected ? clientStatus : ''}
+                            value={clientStatusText}
                         />
                     </Col>
                 </Row>

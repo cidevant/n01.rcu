@@ -6,7 +6,7 @@
  *
  * @class n01obs__WebSocketClient
  */
-window.n01rcu.WebSocketClient = class WebSocketClient {
+class n01rcu_WebSocketClient {
   constructor() {
     this.__url = 'ws://localhost:3000/ws';
   }
@@ -15,7 +15,7 @@ window.n01rcu.WebSocketClient = class WebSocketClient {
     if (this.open) {
       	console.log('[n01.rcu.ws.client] connect error: already connected');
     } else {
-        const player = window.n01rcu.helpers.getPlayer();
+        const player = n01rcu_getPlayer();
         const params = `?client=true&id=${player.sid}&name=${player.playerName}&accessCode=TEST`;
 
 		console.log(
@@ -38,7 +38,7 @@ window.n01rcu.WebSocketClient = class WebSocketClient {
     } else {
       console.log('[n01.rcu.ws.client] disconnect error: no connection to server');
 
-      window.n01rcu.helpers.changeExtensionIcon('default');
+     n01rcu_changeExtensionIcon('default');
     }
   };
 
@@ -67,25 +67,25 @@ window.n01rcu.WebSocketClient = class WebSocketClient {
   __onMessage = (event) => {
     console.log('[n01.rcu.ws.client] received message', event.data);
 
-    window.n01rcu.helpers.onWsMessage(JSON.parse(event.data), this);
+   n01rcu_onWsMessage(JSON.parse(event.data), this);
   };
 
   __onOpen = () => {
     console.log('[n01.rcu.ws.client] connected');
 
-    window.n01rcu.helpers.changeExtensionIcon('connected');
+   n01rcu_changeExtensionIcon('connected');
   };
 
   __onClose = () => {
     console.log('[n01.rcu.ws.client] closed connection');
 
-    window.n01rcu.helpers.changeExtensionIcon('default');
+   n01rcu_changeExtensionIcon('default');
   };
 
   __onError = () => {
     console.log('[n01.rcu.ws.client] connection failed');
 
-    window.n01rcu.helpers.changeExtensionIcon('failed');
+   n01rcu_changeExtensionIcon('failed');
   };
 
   get open() {

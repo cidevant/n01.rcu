@@ -1,15 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 
-window.n01rcu.ws = new window.n01rcu.WebSocketClient();
-
-const backupFunctions = {};
-const wrapperFunctions = {
+const n01rcu_ws = new n01rcu_WebSocketClient();
+const n01rcu_backupFunctions = {};
+const n01rcu_wrapperFunctions = {
   //start of new leg
   initScore: function () {
     console.log('[n01.rcu.inject-script] wrapper initScore');
 
-    window.n01rcu.helpers.sendScoreLeft(window.n01rcu.ws);
+   n01rcu_sendScoreLeft(n01rcu_ws);
   },
   // enter outs
   finishMenuOpen: function () {
@@ -30,7 +29,7 @@ const wrapperFunctions = {
         $(`#${outs[0]}`).click();
       } else {
         // let user choose
-        window.n01rcu.ws.send({
+        n01rcu_ws.send({
           type: 'CONTROLLERS:GET_FINISH_DART',
           payload: outs,
         });
@@ -66,12 +65,12 @@ const wrapperFunctions = {
 };
 
 window.onload = () => {
-  window.n01rcu.helpers.addFunctionsWrappers(wrapperFunctions, backupFunctions);
-  window.n01rcu.ws.connect();
+    n01rcu_addFunctionsWrappers(n01rcu_wrapperFunctions, n01rcu_backupFunctions);
+    n01rcu_ws.connect();
 };
 
 window.onbeforeunload = () => {
-  window.n01rcu.helpers.changeExtensionIcon('default');
-  window.n01rcu.helpers.removeFunctionsWrappers(wrapperFunctions, backupFunctions);
-  window.n01rcu.ws.disconnect();
+    n01rcu_changeExtensionIcon('default');
+    n01rcu_removeFunctionsWrappers(n01rcu_wrapperFunctions, n01rcu_backupFunctions);
+    n01rcu_ws.disconnect();
 };

@@ -1,30 +1,26 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 
-if (!window.n01rcu?.helpers) {
-    window.n01rcu.helpers = {};
-}
-
 /**
  * Process commands from websocket server
  *
  * @param {*} data Message from server
  * @param {*} ws WebSocket client reference for responding
  */
-window.n01rcu.helpers.onWsMessage = function onWsMessage(data, ws) {
+const n01rcu_onWsMessage = function onWsMessage(data, ws) {
   try {
     switch (data.type) {
       case 'SET_INPUT_SCORE':
-        window.n01rcu.helpers.inputScore(data, ws);
+       n01rcu_inputScore(data, ws);
         break;
       case 'SET_FINISH_DART':
-        window.n01rcu.helpers.setFinishDart(data, ws);
+       n01rcu_setFinishDart(data, ws);
         break;
       case 'PAIRED':
-        window.n01rcu.helpers.setPaired(true, ws);
+       n01rcu_setPaired(true, ws);
         break;
       case 'UNPAIRED':
-        window.n01rcu.helpers.setPaired(false, ws);
+       n01rcu_setPaired(false, ws);
         break;
       default:
         break;
@@ -40,24 +36,24 @@ window.n01rcu.helpers.onWsMessage = function onWsMessage(data, ws) {
  * @param {*} data input score action
  * @param {*} ws websocket
  */
-window.n01rcu.helpers.inputScore = function inputScore(data, ws) {
+const n01rcu_inputScore = function inputScore(data, ws) {
   try {
     // enter score
     for (const value of `${data.payload}`) {
-        window.n01rcu.helpers.inputScore(value);
+       n01rcu_inputScore(value);
     }
 
     // submit score
     $('.score_input').click();
 
     // respond with score left
-    window.n01rcu.helpers.sendScoreLeft(ws);
+   n01rcu_sendScoreLeft(ws);
   } catch (error) {
     console.log('[n01.rcu.helpers] inputScore error: ', error);
   }
 }
 
-window.n01rcu.helpers.setFinishDart = function setFinishDart(data, ws) {
+const n01rcu_setFinishDart = function setFinishDart(data, ws) {
   if ($(`#${data['payload']}`).is(':visible')) {
     console.log('[n01.rcu.helpers] setFinishDart ', data);
 
@@ -74,9 +70,9 @@ window.n01rcu.helpers.setFinishDart = function setFinishDart(data, ws) {
  *
  * @param {WebSocket} ws socket connection
  */
-window.n01rcu.helpers.sendScoreLeft = function sendScoreLeft(ws, value) {
+const n01rcu_sendScoreLeft = function sendScoreLeft(ws, value) {
   try {
-    const score = value ?? window.n01rcu.helpers.getPlayerLeftScore();
+    const score = value ?? n01rcu_getPlayerLeftScore();
 
     ws.send({
       type: 'CONTROLLERS:SET_SCORE_LEFT',
@@ -92,7 +88,7 @@ window.n01rcu.helpers.sendScoreLeft = function sendScoreLeft(ws, value) {
  *
  * @param {boolean} [connected=true]
  */
-window.n01rcu.helpers.changeExtensionIcon = function changeExtensionIcon(icon = 'default') {
+const n01rcu_changeExtensionIcon = function changeExtensionIcon(icon = 'default') {
   setTimeout(function () {
     document.dispatchEvent(
       new CustomEvent('n01rcu.Event', {
@@ -110,9 +106,9 @@ window.n01rcu.helpers.changeExtensionIcon = function changeExtensionIcon(icon = 
  *
  * @returns {Object} player info
  */
-window.n01rcu.helpers.getPlayer = function getPlayer() {
+const n01rcu_getPlayer = function getPlayer() {
   try {
-    return window.n01rcu.helpers.getLocalStorage('n01_net.onlineOptions');
+    return n01rcu_getLocalStorage('n01_net.onlineOptions');
   } catch (error) {
     console.log('[n01.rcu.helpers] getPlayer error: ', error);
 
@@ -125,9 +121,9 @@ window.n01rcu.helpers.getPlayer = function getPlayer() {
  *
  * @returns {number} index of player (0 or 1)
  */
-window.n01rcu.helpers.getPlayerIndexInMatch = function getPlayerIndexInMatch() {
+const n01rcu_getPlayerIndexInMatch = function getPlayerIndexInMatch() {
   try {
-    const match = window.n01rcu.helpers.getLocalStorage('n01_net.setData');
+    const match = n01rcu_getLocalStorage('n01_net.setData');
 
     if (match && Array.isArray(match.statsData)) {
       return match.statsData.findIndex((p) => p.me === 1);
@@ -146,9 +142,9 @@ window.n01rcu.helpers.getPlayerIndexInMatch = function getPlayerIndexInMatch() {
  *
  * @returns {number} left score
  */
- window.n01rcu.helpers.getPlayerLeftScore = function getPlayerLeftScore() {
+const n01rcu_getPlayerLeftScore = function getPlayerLeftScore() {
   try {
-    const playerIndex = window.n01rcu.helpers.getPlayerIndexInMatch();
+    const playerIndex =n01rcu_getPlayerIndexInMatch();
 
     if (playerIndex > -1) {
       const rounds = currentLegData()?.playerData?.[playerIndex];
@@ -174,7 +170,7 @@ window.n01rcu.helpers.getPlayerIndexInMatch = function getPlayerIndexInMatch() {
  * @param {string} key localStorage key
  * @returns {Object} parsed object
  */
- window.n01rcu.helpers.getLocalStorage = function getLocalStorage(key) {
+const n01rcu_getLocalStorage = function getLocalStorage(key) {
   try {
     return JSON.parse(localStorage[key]);
   } catch (error) {
@@ -184,9 +180,9 @@ window.n01rcu.helpers.getPlayerIndexInMatch = function getPlayerIndexInMatch() {
   }
 }
 
-window.n01rcu.helpers.setPaired = function setPaired(paired = false, ws) {
-    window.n01rcu.helpers.changeExtensionIcon(paired ? 'paired' : 'connected');
-    window.n01rcu.helpers.sendScoreLeft(ws);
+const n01rcu_setPaired = function setPaired(paired = false, ws) {
+   n01rcu_changeExtensionIcon(paired ? 'paired' : 'connected');
+   n01rcu_sendScoreLeft(ws);
 }
 
 /**
@@ -195,7 +191,7 @@ window.n01rcu.helpers.setPaired = function setPaired(paired = false, ws) {
  * @param {*} wrapperFunctions
  * @param {*} backupFunctions
  */
- window.n01rcu.helpers.addFunctionsWrappers = function addFunctionsWrappers(wrapperFunctions, backupFunctions) {
+const n01rcu_addFunctionsWrappers = function addFunctionsWrappers(wrapperFunctions, backupFunctions) {
   console.log('[n01.rcu.helpers] wrap n01 functions');
 
   Object.keys(wrapperFunctions).forEach((fnName) => {
@@ -213,7 +209,7 @@ window.n01rcu.helpers.setPaired = function setPaired(paired = false, ws) {
  * @param {*} wrapperFunctions
  * @param {*} backupFunctions
  */
- window.n01rcu.helpers.removeFunctionsWrappers = function removeFunctionsWrappers(wrapperFunctions, backupFunctions) {
+const n01rcu_removeFunctionsWrappers = function removeFunctionsWrappers(wrapperFunctions, backupFunctions) {
   console.log('[n01.rcu.helpers] unwrap n01 functions');
 
   Object.keys(wrapperFunctions).forEach((fnName) => {
