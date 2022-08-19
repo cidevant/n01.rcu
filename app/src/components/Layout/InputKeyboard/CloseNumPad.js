@@ -22,6 +22,7 @@ const CloseIconWrapper = styled.div`
     position: absolute;
     bottom: 0;
     left: 0;
+    margin-left: 10px;
     color: red;
     height: 100%;
     width: 160px;

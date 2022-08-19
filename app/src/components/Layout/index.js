@@ -1,13 +1,15 @@
-import React from 'react';
 import { StatusBar } from './StatusBar';
 import { InputKeyboard } from './InputKeyboard';
+import { useNetworkInfo } from '../../hooks/useNetworkInfo';
 
 export function Layout(props) {
+    const [isConnected, isPaired] = useNetworkInfo();
+
     return (
         <>
-            <StatusBar />
+            <StatusBar isConnected={isConnected} isPaired={isPaired} />
             {props.children}
-            <InputKeyboard />
+            {isConnected && isPaired && <InputKeyboard />}
         </>
     );
 }

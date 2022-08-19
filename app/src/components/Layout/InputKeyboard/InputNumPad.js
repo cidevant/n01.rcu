@@ -13,16 +13,12 @@ export function InputNumPad({ show }) {
     const leftScore = useSelector((state) => state.game.scoreLeft);
 
     function onSubmit(e) {
-        if (e.key === 'Enter') {
-            const { value } = e.target;
+        const { value } = e.target;
 
-            if (validInputValue(value, leftScore)) {
-                dispatch(sendInputScore(value));
-                ref.current.blur();
-                e.target.value = '';
-            } else {
-                console.error('===================> ', value);
-            }
+        if (e.key === 'Enter' && validInputValue(value, leftScore)) {
+            dispatch(sendInputScore(value));
+            ref.current.blur();
+            e.target.value = '';
         }
     }
 
@@ -53,19 +49,19 @@ const StyledInput = styled.input`
     border: 0;
     width: 100%;
     height: 100%;
-    background-color: #222;
+    background-color: #111;
     font-size: 120px;
     padding: 20px 0;
     text-align: center;
     color: white;
 
-    *::-webkit-outer-spin-button,
-    *::-webkit-inner-spin-button {
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
         -webkit-appearance: none;
         margin: 0;
     }
 
-    *[type='number'] {
+    &[type='number'] {
         -moz-appearance: textfield;
     }
 

@@ -25,10 +25,9 @@ const ScoreLeftWrapper = styled.div`
     bottom: 0;
     right: 0;
     height: 100%;
-    width: 160px;
     cursor: pointer !important;
-    margin-right: 30px;
-    min-width: 180px;
+    margin-right: 20px;
+    min-width: 176px;
 `;
 
 const ScoreLeftTitle = styled.div`
@@ -44,6 +43,6 @@ const ScoreLeftValue = styled.div`
     color: white;
     font-size: 100px;
     color: #666;
-    width: 170px;
+    /* width: 180px; */
     text-align: center;
 `;
