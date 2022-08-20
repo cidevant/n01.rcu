@@ -34,18 +34,17 @@ function AccessCodeForm(props) {
         props.updateFormValues('serverUrl', event.target.value);
     }
 
-    function connectionStatus() {
-        return (
-            <div className="d-flex flex-row">
-                <ServerConnection status={isConnected} />
-                <ClientConnection serverStatus={isConnected} status={isPaired} client={client} />
-            </div>
-        );
-    }
-
-    function connectionSettings() {
-        return (
-            <>
+    return (
+        <Form>
+            <div className="d-grid">
+                <div className="d-flex flex-row">
+                    <ServerConnection status={isConnected} />
+                    <ClientConnection
+                        serverStatus={isConnected}
+                        status={isPaired}
+                        client={client}
+                    />
+                </div>
                 <FormInputWrapper className="mt-4">
                     <TitleForm>ACCESS CODE</TitleForm>
                     <FormInput
@@ -66,15 +65,6 @@ function AccessCodeForm(props) {
                         onChange={updateServerUrl}
                     />
                 </FormInputWrapper>
-            </>
-        );
-    }
-
-    return (
-        <Form>
-            <div className="d-grid">
-                {connectionStatus()}
-                {connectionSettings()}
             </div>
         </Form>
     );
@@ -84,54 +74,50 @@ export default AccessCodeForm;
 
 function ServerConnection(props) {
     const isConnected = props.status === true;
-
-    function getIcon() {
+    const icon = useMemo(() => {
         if (!isConnected) {
             return <FontAwesomeIcon icon="fa-solid fa-circle" className="me-2 text-danger" />;
         }
 
         return <FontAwesomeIcon icon="fa-solid fa-circle" className="me-2 text-success" />;
-    }
+    }, [isConnected]);
 
     return (
         <StatusWrapper>
-            {getIcon()}
+            {icon}
             {isConnected ? 'CONNECTED TO SERVER' : 'SERVER DISCONNECTED'}
         </StatusWrapper>
     );
 }
 
-function ClientConnection(props) {
-    const isPaired = props.status === 'PAIRED';
-
-    function getText() {
-        if (!props.serverStatus) {
+function ClientConnection({ status, client, serverStatus }) {
+    const text = useMemo(() => {
+        if (!serverStatus) {
             return '';
         }
 
-        if (isPaired && props.client) {
-            return props.client.name;
+        if (status && client.name) {
+            return client?.name?.toUpperCase?.();
         }
 
         return 'WAITING FOR CLIENT';
-    }
-
-    function getIcon() {
-        if (!props.serverStatus) {
+    }, [serverStatus, status, client.name]);
+    const icon = useMemo(() => {
+        if (!serverStatus) {
             return '';
         }
 
-        if (isPaired && props.client) {
+        if (status) {
             return <FontAwesomeIcon className="me-2 text-success" icon={faHandshake} />;
         }
 
         return <Spinner className="me-2" animation="border" size="sm" />;
-    }
+    }, [status, serverStatus]);
 
     return (
         <StatusWrapper borderLeft>
-            {getIcon()}
-            {getText()}
+            {icon}
+            {text}
         </StatusWrapper>
     );
 }

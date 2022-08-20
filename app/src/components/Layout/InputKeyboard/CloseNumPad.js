@@ -28,6 +28,6 @@ const CloseIconWrapper = styled.div`
     width: 160px;
 
     & > i {
-        font-size: 140px;
+        font-size: 120px;
     }
 `;
