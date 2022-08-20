@@ -3,36 +3,30 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import styled from 'styled-components';
 import Button from 'react-bootstrap/Button';
 
-export function CheckoutsModal({ show, close, scoreLeft, checkouts }) {
+export function ScenesModal({ show, close }) {
     return (
         <Offcanvas placement="end" show={show} onHide={close}>
             <ButtonWrapper className="d-grid gap-2">
-                <Button size="lg" onClick={close} variant="secondary">
-                    "{scoreLeft}" CHECKOUTS
+                <Button size="lg" onClick={close} variant="info">
+                    SCENES
                 </Button>
             </ButtonWrapper>
-            <Checkouts checkouts={checkouts} />
+            <ScenesList />
         </Offcanvas>
     );
 }
 
-function Checkouts({ checkouts }) {
+function ScenesList() {
     return (
         <ContentWrapper>
-            {checkouts.map((checkout) => {
-                return (
-                    <CheckoutsRow className="d-flex gap-5">
-                        {checkout.map((dart) => {
-                            return <CheckoutDart key={dart}>{dart}</CheckoutDart>;
-                        })}
-                    </CheckoutsRow>
-                );
-            })}
+            <CheckoutsRow className="d-flex gap-5">
+                <CheckoutDart>BULL</CheckoutDart>
+            </CheckoutsRow>
         </ContentWrapper>
     );
 }
 
-export default CheckoutsModal;
+export default ScenesModal;
 
 const ButtonWrapper = styled.div`
     height: 150px;

@@ -7,6 +7,10 @@ import ReactDOM from 'react-dom/client';
 import registerServiceWorker from './registerServiceWorker';
 import reportWebVitals from './reportWebVitals';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+
+library.add(fas);
 
 // Get UUID
 function getUUID() {

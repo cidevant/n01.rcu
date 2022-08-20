@@ -12,6 +12,7 @@ const scores = [
     [95, 98, 83],
     [30, 39, 22],
     [40, 80, 140],
+    ['-', 0, '-'],
 ];
 
 function Game() {
@@ -54,9 +55,11 @@ function Game() {
                                 {row.map((num, indx2) => {
                                     return (
                                         <TableCell key={indx2}>
-                                            <Button id={num} {...longPressHandlers}>
-                                                {num}
-                                            </Button>
+                                            {!isNaN(num) && (
+                                                <Button id={num} {...longPressHandlers}>
+                                                    {num}
+                                                </Button>
+                                            )}
                                         </TableCell>
                                     );
                                 })}

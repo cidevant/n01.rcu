@@ -1,37 +1,32 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { validInputValue } from '../../../utils/game';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { sendInputScore } from '../../../store/game.reducer';
 import { StickyPhantom, Sticky } from '../Sticky';
 import ScoreLeft from './ScoreLeft';
-import useScroll from '../../../hooks/useScroll';
-import Checkouts from './Checkouts';
+import Scenes from './Scenes';
+import { useGameInfo } from '../../../hooks/useGameInfo';
 
 export function InputKeyboard() {
     const dispatch = useDispatch();
     const ref = useRef(null);
-    const leftScore = useSelector((state) => state.game.scoreLeft);
-    const scrolled = useScroll();
+    const { scoreLeft } = useGameInfo();
 
     function onSubmit(e) {
         const { value } = e.target;
 
-        if (e.key === 'Enter' && validInputValue(value, leftScore)) {
+        if (e.key === 'Enter' && validInputValue(value, scoreLeft)) {
             dispatch(sendInputScore(value));
             e.target.value = '';
         }
     }
 
-    useEffect(() => {
-        ref.current.blur();
-    }, [scrolled]);
-
     return (
         <>
             <StickyPhantom size={180} />
             <Sticky bottom>
-                <Checkouts />
+                <Scenes />
                 <StyledInput
                     type="number"
                     ref={ref}
