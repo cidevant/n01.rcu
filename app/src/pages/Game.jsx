@@ -16,16 +16,7 @@ const scores = [
 
 function Game() {
     const navigate = useNavigate();
-    const [isConnected, isPaired] = useNetworkInfo();
-    const { match, dispatchInputScore } = useGameInfo();
-
-    // Navigate to Home page, when game finished
-    useEffect(() => {
-        if (match == null || !isConnected || !isPaired) {
-            navigate('/');
-        }
-    }, [match, navigate, isConnected, isPaired]);
-
+    const { gameStarted, dispatchInputScore } = useGameInfo();
     const longPressHandlers = useLongPress(
         (e) => {
             e.target.classList.add('ok');
@@ -33,6 +24,13 @@ function Game() {
         },
         (e) => e.target.classList.remove('ok')
     );
+
+    // Navigate to Home page, when game finished
+    useEffect(() => {
+        if (!gameStarted) {
+            navigate('/');
+        }
+    }, [navigate, gameStarted]);
 
     return (
         <Table>

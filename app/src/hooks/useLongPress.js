@@ -1,8 +1,19 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 
 export default function useLongPress(callback = () => {}, releaseCallback = () => {}, ms = 300) {
-    const [startLongPress, setStartLongPress] = useState(false);
     const ref = useRef();
+    const [startLongPress, setStartLongPress] = useState(false);
+    const start = useCallback((e) => {
+        ref.current = e;
+        setStartLongPress(true);
+    }, []);
+    const stop = useCallback(
+        (e) => {
+            releaseCallback?.(e);
+            setStartLongPress(false);
+        },
+        [releaseCallback]
+    );
 
     useEffect(() => {
         let timerId;
@@ -20,16 +31,6 @@ export default function useLongPress(callback = () => {}, releaseCallback = () =
             clearTimeout(timerId);
         };
     }, [callback, ms, startLongPress]);
-
-    const start = useCallback((e) => {
-        ref.current = e;
-        setStartLongPress(true);
-    }, []);
-
-    const stop = useCallback((e) => {
-        releaseCallback?.(e);
-        setStartLongPress(false);
-    }, []);
 
     return {
         onMouseDown: start,

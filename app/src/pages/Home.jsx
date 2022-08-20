@@ -1,21 +1,19 @@
 import React, { useEffect } from 'react';
 import { useGameInfo } from '../hooks/useGameInfo';
 import { useNavigate } from 'react-router-dom';
-import { useNetworkInfo } from '../hooks/useNetworkInfo';
 
 function Home() {
-    const { match } = useGameInfo();
     const navigate = useNavigate();
-    const [isConnected, isPaired] = useNetworkInfo();
+    const { gameStarted } = useGameInfo();
 
     // Navigate to Game page, when game started
     useEffect(() => {
-        if (match != null && isConnected && isPaired) {
+        if (gameStarted) {
             navigate('/game');
         }
-    }, [match, navigate, isConnected, isPaired]);
+    }, [navigate, gameStarted]);
 
-    return <div>HOME AGE</div>;
+    return <div>HOME PAGE</div>;
 }
 
 export default Home;
