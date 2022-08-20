@@ -1,12 +1,12 @@
 import React, { useState, useMemo } from 'react';
-import { FinishDartsModal } from './FinishDartsModal';
+import { CheckoutsModal } from './CheckoutsModal';
 import { Button } from './index';
 import dartsIcon from '../../../../assets/icons/darts_board.png';
 import styled from 'styled-components';
 import { useGameInfo } from '../../../../hooks/useGameInfo';
 import { getCheckouts } from '../../../../utils/game';
 
-export function FinishDarts() {
+export function Checkouts() {
     const [modalShow, setModalShow] = useState(false);
     const { scoreLeft } = useGameInfo();
     const checkouts = useMemo(() => getCheckouts(scoreLeft), [scoreLeft]);
@@ -23,8 +23,8 @@ export function FinishDarts() {
 
     return (
         <>
-            <FinishDartsButton anyCheckout={anyCheckout} open={onShow} />
-            <FinishDartsModal
+            <CheckoutsButton anyCheckout={anyCheckout} open={onShow} />
+            <CheckoutsModal
                 show={modalShow}
                 close={onClose}
                 scoreLeft={scoreLeft}
@@ -34,9 +34,9 @@ export function FinishDarts() {
     );
 }
 
-export default FinishDarts;
+export default Checkouts;
 
-function FinishDartsButton({ open, anyCheckout }) {
+function CheckoutsButton({ open, anyCheckout }) {
     const color = anyCheckout ? '#00FFFF' : '#ccc';
 
     return (

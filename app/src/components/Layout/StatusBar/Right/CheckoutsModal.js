@@ -3,7 +3,7 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import styled from 'styled-components';
 import Button from 'react-bootstrap/Button';
 
-export function FinishDartsModal({ show, close, scoreLeft, checkouts }) {
+export function CheckoutsModal({ show, close, scoreLeft, checkouts }) {
     return (
         <Offcanvas placement="end" show={show} onHide={close}>
             <ButtonWrapper className="d-grid gap-2">
@@ -32,7 +32,7 @@ function Checkouts({ checkouts }) {
     );
 }
 
-export default FinishDartsModal;
+export default CheckoutsModal;
 
 const ButtonWrapper = styled.div`
     height: 150px;

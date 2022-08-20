@@ -4,23 +4,21 @@ import { useNetworkInfo } from '../../../../hooks/useNetworkInfo';
 import { CornerButton } from '../CornerButton';
 import { useGameInfo } from '../../../../hooks/useGameInfo';
 import { Filter } from './Filter';
-import { FinishDarts } from './FinishDarts';
+import { Checkouts } from './Checkouts';
 
 export function RightButtons() {
     const [isConnected, isPaired] = useNetworkInfo();
     const { gameStarted } = useGameInfo();
 
     if (gameStarted) {
-        return <FinishDarts />;
+        return <Checkouts />;
     }
 
     if (isConnected && isPaired && !gameStarted) {
         return <Filter />;
     }
 
-    return <FinishDarts />;
-
-    // return null;
+    return null;
 }
 
 export default RightButtons;
