@@ -35,6 +35,7 @@ function AccessCodeForm(props) {
     function connectionStatus() {
         return (
             <>
+                <h4 className="mt-1">CONNECTION STATUS</h4>
                 <ConnectionStatus
                     title="Server"
                     iconVariant={isConnected ? 'success' : 'danger'}
@@ -57,7 +58,7 @@ function AccessCodeForm(props) {
     function connectionSettings() {
         return (
             <>
-                <h4 className="mt-1">Settings</h4>
+                <h4 className="mt-1">SETTINGS</h4>
                 <Row>
                     <Col className="col-4 d-flex align-items-center">
                         <Title>Access code</Title>
