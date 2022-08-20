@@ -39,7 +39,7 @@ export default function gameReducer(state, action) {
         case ACTIONS.MATCH_START:
             state = {
                 ...state,
-                match: action.payload,
+                match: action.payload['payload'],
             };
             break;
         case ACTIONS.MATCH_END:
@@ -48,13 +48,13 @@ export default function gameReducer(state, action) {
         case ACTIONS.SET_SCORE_LEFT:
             state = {
                 ...state,
-                scoreLeft: action.payload,
+                scoreLeft: action.payload['payload'],
             };
             break;
         case ACTIONS.GET_FINISH_DART:
             state = {
                 ...state,
-                finishDart: action.payload,
+                finishDart: action.payload['payload'],
             };
             break;
         case ACTIONS.SET_FINISH_DART:

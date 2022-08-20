@@ -252,7 +252,7 @@ const n01rcu_startMatchUpdater = function n01rcu_startMatchUpdater(ws) {
                         // 
                     }
 
-                    n01rcu_matchUpdaterLastMessage = matchResult
+                    n01rcu_matchUpdaterLastMessage = matchResultString
                 }
             }, 5000);
         }
