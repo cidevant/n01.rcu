@@ -22,7 +22,7 @@ export function useGameInfo() {
     }
 
     return {
-        gameStarted,
+        gameStarted: true,
         opponent,
         scoreLeft,
         finishDarts,
