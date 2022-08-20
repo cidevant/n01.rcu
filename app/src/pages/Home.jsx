@@ -1,9 +1,9 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
-
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { useGameInfo } from '../hooks/useGameInfo';
 import { sendInputScore } from '../store/game.reducer';
+import { validInputValue } from '../utils/game';
 
 const scores = [
     [26, 58, 43],
@@ -11,23 +11,26 @@ const scores = [
     [85, 100, 81],
     [95, 98, 83],
 
-    [26, 58, 43],
-    [45, 60, 41],
-    [85, 100, 81],
-    [95, 98, 83],
-    [26, 58, 43],
-    [45, 60, 41],
-    [85, 100, 81],
-    [95, 98, 83],
+    // [26, 58, 43],
+    // [45, 60, 41],
+    // [85, 100, 81],
+    // [95, 98, 83],
+    // [26, 58, 43],
+    // [45, 60, 41],
+    // [85, 100, 81],
+    // [95, 98, 83],
 ];
 
 function Home() {
     const dispatch = useDispatch();
+    const { scoreLeft } = useGameInfo();
 
-    function sendScore(score) {
-        return () => {
-            dispatch(sendInputScore(score));
-        };
+    function sendScore(event) {
+        const val = event.target.id;
+
+        if (validInputValue(val, scoreLeft)) {
+            dispatch(sendInputScore(val));
+        }
     }
 
     return (
@@ -39,7 +42,9 @@ function Home() {
                             {row.map((num, indx2) => {
                                 return (
                                     <TableCell key={indx2}>
-                                        <Button onclick={sendScore(num)}>{num}</Button>
+                                        <Button id={num} onClick={sendScore}>
+                                            {num}
+                                        </Button>
                                     </TableCell>
                                 );
                             })}
@@ -82,9 +87,12 @@ const Button = styled.button`
     -moz-user-select: none;
     -ms-user-select: none;
     font-weight: bolder;
+    border: 4px solid #222;
+    box-shadow: 2px 2px 6px 4px rgba(0, 0, 0, 0.7);
 
-    *:active {
+    &:active {
         opacity: 0.8;
         background-color: #999;
+        box-shadow: none;
     }
 `;

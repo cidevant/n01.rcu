@@ -45,11 +45,15 @@ const handlers = {
 export function handleActions(_message, ws) {
   const message = _message.toString();
 
-  console.log(chalk.blueBright('[ws.server][action]'), message, sockets.getSerializedInfo(ws));
-
   try {
     const jsonMessage = JSON.parse(message);
     const serverHandler = handlers.server[jsonMessage['type']];
+
+    console.log(
+      chalk.blueBright('[ws.server][action]'),
+      jsonMessage['type'],
+      sockets.getSerializedInfo(ws)
+    );
 
     if (serverHandler) {
       serverHandler(jsonMessage, ws);

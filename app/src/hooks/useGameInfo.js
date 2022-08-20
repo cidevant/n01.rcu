@@ -5,5 +5,11 @@ export function useGameInfo() {
     const gameStarted = match != null;
     const opponent = {};
 
-    return [gameStarted, opponent, scoreLeft, finishDart];
+    return {
+        gameStarted,
+        opponent,
+        scoreLeft,
+        finishDart,
+        match,
+    };
 }

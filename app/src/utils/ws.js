@@ -52,7 +52,7 @@ class WebsocketClient {
         const msg = JSON.stringify(data);
 
         if (this.open) {
-            console.log('[ws.client] send message', msg);
+            console.log('[ws.client] send message', msg['type']);
 
             this.__socket.send(msg);
         } else {
@@ -74,10 +74,10 @@ class WebsocketClient {
      * @param {*} evt message event
      */
     __onMessage = (event) => {
-        console.log('[ws.client] incoming message', event.data);
-
         try {
             const message = JSON.parse(event.data);
+
+            console.log('[ws.client] incoming message', message['type']);
 
             this.onmessage(message);
         } catch (error) {

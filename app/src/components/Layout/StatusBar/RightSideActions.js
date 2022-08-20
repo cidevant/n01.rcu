@@ -1,4 +1,4 @@
-import { faHandshake } from '@fortawesome/fontawesome-free-solid';
+// import { faHandshake } from '@fortawesome/fontawesome-free-solid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { RightSideActionsOffcanvas } from './RightSideActionsOffcanvas';
 import { useNetworkInfo } from '../../../hooks/useNetworkInfo';
