@@ -6,7 +6,7 @@ import { Layout } from './components/Layout';
 import store from './store';
 
 import Home from './pages/Home';
-import Settings from './pages/Settings';
+import Settings from './pages/Game';
 
 export default function App() {
     return (
