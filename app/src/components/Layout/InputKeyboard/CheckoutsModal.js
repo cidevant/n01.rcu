@@ -23,7 +23,7 @@ function Checkouts({ checkouts }) {
                 return (
                     <CheckoutsRow className="d-flex gap-5">
                         {checkout.map((dart) => {
-                            return <CheckoutDart>{dart}</CheckoutDart>;
+                            return <CheckoutDart key={dart}>{dart}</CheckoutDart>;
                         })}
                     </CheckoutsRow>
                 );

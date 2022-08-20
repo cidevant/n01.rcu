@@ -3,8 +3,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { LeftButtons } from './Left';
 import { RightButtons } from './Right';
+import { useGameInfo } from '../../../hooks/useGameInfo';
 
 export function StatusBar() {
+    const { gameStarted } = useGameInfo();
+
+    if (gameStarted) {
+        return null;
+    }
+
     return (
         <>
             <StickyPhantom size={150} />

@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useGameInfo } from '../../../hooks/useGameInfo';
 
 export function ScoreLeft() {
-    const leftScore = useSelector((state) => state.game.scoreLeft);
+    const { scoreLeft } = useGameInfo();
 
-    if (leftScore == null) {
+    if (scoreLeft == null) {
         return;
     }
 
@@ -12,7 +12,7 @@ export function ScoreLeft() {
         <ScoreLeftWrapper className="d-flex align-items-center justify-content-end">
             <div>
                 <ScoreLeftTitle>SCORE LEFT</ScoreLeftTitle>
-                <ScoreLeftValue>{leftScore}</ScoreLeftValue>
+                <ScoreLeftValue>{scoreLeft}</ScoreLeftValue>
             </div>
         </ScoreLeftWrapper>
     );
