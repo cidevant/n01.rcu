@@ -6,7 +6,7 @@ import { Layout } from './components/Layout';
 import store from './store';
 
 import Home from './pages/Home';
-import Settings from './pages/Game';
+import Game from './pages/Game';
 
 export default function App() {
     return (
@@ -15,7 +15,7 @@ export default function App() {
                 <Layout>
                     <Routes>
                         <Route path="/" element={<Home />} />
-                        <Route path="/settings" element={<Settings />} />
+                        <Route path="/game" element={<Game />} />
                     </Routes>
                 </Layout>
             </WebSocket>

@@ -2,7 +2,6 @@ import { configureStore } from '@reduxjs/toolkit';
 
 // middlewares
 import { wsMiddleware } from './ws.middleware';
-import { gameMiddleware } from './game.middleware';
 
 // reducers
 import ws from './ws.reducer';
@@ -16,6 +15,6 @@ export const store = configureStore({
         game,
         client,
     },
-    middleware: (defaultMiddleware) => defaultMiddleware().concat([wsMiddleware, gameMiddleware]),
+    middleware: (defaultMiddleware) => defaultMiddleware().concat([wsMiddleware]),
 });
 export default store;

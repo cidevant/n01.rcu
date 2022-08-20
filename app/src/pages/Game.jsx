@@ -1,9 +1,7 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useGameInfo } from '../hooks/useGameInfo';
-import { sendInputScore } from '../store/game.reducer';
-import { validInputValue } from '../utils/game';
+import { useNavigate } from 'react-router-dom';
 
 const scores = [
     [26, 58, 43],
@@ -15,15 +13,18 @@ const scores = [
 ];
 
 function Game() {
-    const dispatch = useDispatch();
-    const { scoreLeft } = useGameInfo();
+    const { match, dispatchInputScore } = useGameInfo();
+    const navigate = useNavigate();
 
-    function sendScore(event) {
-        const val = event.target.id;
-
-        if (validInputValue(val, scoreLeft)) {
-            dispatch(sendInputScore(val));
+    // Navigate to Home page, when game finished
+    useEffect(() => {
+        if (match == null) {
+            navigate('/');
         }
+    }, [match, navigate]);
+
+    function setInputScore(event) {
+        dispatchInputScore(event.target.id);
     }
 
     return (
@@ -35,7 +36,7 @@ function Game() {
                             {row.map((num, indx2) => {
                                 return (
                                     <TableCell key={indx2}>
-                                        <Button id={num} onClick={sendScore}>
+                                        <Button id={num} onClick={setInputScore}>
                                             {num}
                                         </Button>
                                     </TableCell>
