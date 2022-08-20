@@ -1,30 +1,34 @@
+import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import React, { useRef } from 'react';
 import { validInputValue } from '../../../utils/game';
 import { useDispatch, useSelector } from 'react-redux';
 import { sendInputScore } from '../../../store/game.reducer';
 import { StickyPhantom, Sticky } from '../Sticky';
-import CloseNumPad from './CloseNumPad';
 import ScoreLeft from './ScoreLeft';
+import useScroll from '../../../hooks/useScroll';
 
-export function InputNumPad({ show }) {
+export function InputNumPad() {
     const dispatch = useDispatch();
     const ref = useRef(null);
     const leftScore = useSelector((state) => state.game.scoreLeft);
+    const scrolled = useScroll();
 
     function onSubmit(e) {
         const { value } = e.target;
 
         if (e.key === 'Enter' && validInputValue(value, leftScore)) {
             dispatch(sendInputScore(value));
-            // ref.current.blur();
             e.target.value = '';
         }
     }
 
+    useEffect(() => {
+        ref.current.blur();
+    }, [scrolled]);
+
     return (
         <>
-            <StickyPhantom size={200} />
+            <StickyPhantom size={180} />
             <Sticky bottom>
                 <StyledInput
                     type="number"
@@ -36,7 +40,6 @@ export function InputNumPad({ show }) {
                     minLength={1}
                     onKeyDown={onSubmit}
                 />
-                <CloseNumPad show={show} />
                 <ScoreLeft />
             </Sticky>
         </>

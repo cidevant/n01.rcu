@@ -1,17 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import InputNumPad from './InputNumPad';
-import OpenNumPad from './OpenNumPad';
-import { useNetworkInfo } from '../../../hooks/useNetworkInfo';
+import { useGameInfo } from '../../../hooks/useGameInfo';
 
 export function InputKeyboard() {
-    const [isConnected, isPaired] = useNetworkInfo();
-    const [showInput, setShowInput] = useState(false);
+    const { gameStarted } = useGameInfo();
 
-    if (!isConnected || !isPaired) {
-        return;
+    if (!gameStarted) {
+        return null;
     }
 
-    return showInput ? <InputNumPad show={setShowInput} /> : <OpenNumPad show={setShowInput} />;
+    return <InputNumPad />;
 }
 
 export default InputKeyboard;

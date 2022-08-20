@@ -1,15 +1,11 @@
 import { useState, useEffect } from 'react';
 
-export default function useHideOnScroll(heightToHideFrom = 200) {
-    const [visibility, setIsVisible] = useState(true);
+export default function useScroll() {
+    const [scrollTop, setScrollTop] = useState(0);
     const listenToScroll = () => {
         const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
 
-        if (winScroll > heightToHideFrom) {
-            visibility && setIsVisible(false);
-        } else {
-            setIsVisible(true);
-        }
+        setScrollTop(winScroll);
     };
 
     useEffect(() => {
@@ -18,5 +14,5 @@ export default function useHideOnScroll(heightToHideFrom = 200) {
         return () => window.removeEventListener('scroll', listenToScroll);
     }, []);
 
-    return [visibility];
+    return [scrollTop];
 }
