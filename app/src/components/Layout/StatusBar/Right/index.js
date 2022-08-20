@@ -5,13 +5,19 @@ import { CornerButton } from '../CornerButton';
 import { useGameInfo } from '../../../../hooks/useGameInfo';
 import { Filter } from './Filter';
 import { Checkouts } from './Checkouts';
+import { ScoreZero } from './ScoreZero';
 
 export function RightButtons() {
     const [isConnected, isPaired] = useNetworkInfo();
     const { gameStarted } = useGameInfo();
 
     if (gameStarted) {
-        return <Checkouts />;
+        return (
+            <div className="d-flex">
+                <ScoreZero />
+                <Checkouts />
+            </div>
+        );
     }
 
     if (isConnected && isPaired && !gameStarted) {

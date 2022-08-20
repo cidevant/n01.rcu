@@ -104,12 +104,6 @@ const Button = styled.button`
     border: 4px solid #222;
     box-shadow: 2px 2px 6px 4px rgba(0, 0, 0, 0.7);
 
-    &:active {
-        opacity: 0.8;
-        background-color: #999;
-        box-shadow: none;
-    }
-
     &.ok {
         background-color: green;
     }

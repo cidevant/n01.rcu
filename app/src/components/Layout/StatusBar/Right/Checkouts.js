@@ -41,7 +41,7 @@ function CheckoutsButton({ open, anyCheckout }) {
 
     return (
         <div className="d-flex align-items-center">
-            <div className="ms-4">
+            <div>
                 <Button color={color} onClick={open}>
                     <IconImage src={dartsIcon} alt="darts finish" />
                 </Button>

@@ -21,12 +21,6 @@ export const CornerButton = styled.button`
         opacity: 0.8;
         background-color: #999;
     }
-
-    /* &:disabled {
-        & > * {
-            color: #000;
-        }
-    } */
 `;
 
 export default CornerButton;
