@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useGameInfo } from '../hooks/useGameInfo';
 import { useNavigate } from 'react-router-dom';
 import { useNetworkInfo } from '../hooks/useNetworkInfo';
+import useLongPress from '../hooks/useLongPress';
 
 const scores = [
     [26, 58, 43],
@@ -25,9 +26,9 @@ function Game() {
         }
     }, [match, navigate, isConnected, isPaired]);
 
-    function setInputScore(event) {
-        dispatchInputScore(event.target.id);
-    }
+    const bind = useLongPress((e) => {
+        dispatchInputScore(parseInt(e.target.id, 10));
+    });
 
     return (
         <Table>
@@ -38,7 +39,7 @@ function Game() {
                             {row.map((num, indx2) => {
                                 return (
                                     <TableCell key={indx2}>
-                                        <Button id={num} onClick={setInputScore}>
+                                        <Button id={num} {...bind}>
                                             {num}
                                         </Button>
                                     </TableCell>
@@ -90,5 +91,9 @@ const Button = styled.button`
         opacity: 0.8;
         background-color: #999;
         box-shadow: none;
+    }
+
+    &.ok {
+        background-color: green;
     }
 `;

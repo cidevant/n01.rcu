@@ -52,7 +52,7 @@ class WebsocketClient {
         const msg = JSON.stringify(data);
 
         if (this.open) {
-            console.log('[ws.client] send message', msg['type']);
+            console.log('[ws.client] send message', data['type']);
 
             this.__socket.send(msg);
         } else {
