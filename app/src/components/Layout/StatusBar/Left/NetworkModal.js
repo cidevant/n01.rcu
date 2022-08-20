@@ -1,6 +1,6 @@
-import { connect, disconnect, setAccessCode, setServerUrl } from '../../../store/ws.reducer';
+import { connect, disconnect, setAccessCode, setServerUrl } from '../../../../store/ws.reducer';
 import { useSelector, useDispatch } from 'react-redux';
-import { ws } from '../../../utils/ws';
+import { ws } from '../../../../utils/ws';
 import Button from 'react-bootstrap/Button';
 import Form from './Form';
 import Offcanvas from 'react-bootstrap/Offcanvas';
@@ -8,7 +8,7 @@ import React, { useMemo, useCallback } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export function NetworkOffcanvas({ show, close }) {
+export function NetworkModal({ show, close }) {
     const dispatch = useDispatch();
     const accessCode = useSelector((state) => state.ws.accessCode);
     const serverUrl = useSelector((state) => state.ws.serverUrl);
@@ -59,7 +59,7 @@ export function NetworkOffcanvas({ show, close }) {
     );
 }
 
-export default NetworkOffcanvas;
+export default NetworkModal;
 
 const ButtonWrapper = styled.div`
     height: 150px;

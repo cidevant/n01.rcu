@@ -1,8 +1,8 @@
 import { Sticky, StickyPhantom } from '../Sticky';
 import React from 'react';
 import styled from 'styled-components';
-import Network from './Network';
-import RightSideActions from './RightSideActions';
+import { LeftButtons } from './Left';
+import { RightButtons } from './Right';
 
 export function StatusBar() {
     return (
@@ -10,10 +10,10 @@ export function StatusBar() {
             <StickyPhantom size={150} />
             <StickyTop top className="d-flex align-items-center">
                 <div className="flex-grow-1">
-                    <Network />
+                    <LeftButtons />
                 </div>
                 <div>
-                    <RightSideActions />
+                    <RightButtons />
                 </div>
             </StickyTop>
         </>

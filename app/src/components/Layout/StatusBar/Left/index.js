@@ -1,13 +1,13 @@
 import { faHandshake } from '@fortawesome/fontawesome-free-solid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { NetworkOffcanvas } from './NetworkOffcanvas';
-import { useNetworkInfo } from '../../../hooks/useNetworkInfo';
+import { NetworkModal } from './NetworkModal';
 import React, { useState, useMemo } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import styled from 'styled-components';
-import { CornerButton } from './CornerButton';
+import { CornerButton } from '../CornerButton';
+import { useNetworkInfo } from '../../../../hooks/useNetworkInfo';
 
-export function Network() {
+export function LeftButtons() {
     const [modalShow, setModalShow] = useState(false);
 
     function onShow() {
@@ -20,12 +20,12 @@ export function Network() {
     return (
         <>
             <NetworkButton open={onShow} />
-            <NetworkOffcanvas show={modalShow} close={onClose} />
+            <NetworkModal show={modalShow} close={onClose} />
         </>
     );
 }
 
-export default Network;
+export default LeftButtons;
 
 function NetworkButton({ open }) {
     const [isConnected, isPaired, client] = useNetworkInfo();

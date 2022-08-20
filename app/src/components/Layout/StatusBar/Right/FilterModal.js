@@ -1,7 +1,7 @@
 import React from 'react';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 
-export function RightSideActionsOffcanvas({ show, close }) {
+export function FilterModal({ show, close }) {
     return (
         <Offcanvas placement="end" show={show} onHide={close}>
             <Offcanvas.Header closeButton>
@@ -15,4 +15,4 @@ export function RightSideActionsOffcanvas({ show, close }) {
     );
 }
 
-export default RightSideActionsOffcanvas;
+export default FilterModal;
