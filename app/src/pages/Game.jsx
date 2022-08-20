@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useGameInfo } from '../hooks/useGameInfo';
 import { useNavigate } from 'react-router-dom';
+import { useNetworkInfo } from '../hooks/useNetworkInfo';
 
 const scores = [
     [26, 58, 43],
@@ -13,15 +14,16 @@ const scores = [
 ];
 
 function Game() {
-    const { match, dispatchInputScore } = useGameInfo();
     const navigate = useNavigate();
+    const [isConnected, isPaired] = useNetworkInfo();
+    const { match, dispatchInputScore } = useGameInfo();
 
     // Navigate to Home page, when game finished
     useEffect(() => {
-        if (match == null) {
+        if (match == null || !isConnected || !isPaired) {
             navigate('/');
         }
-    }, [match, navigate]);
+    }, [match, navigate, isConnected, isPaired]);
 
     function setInputScore(event) {
         dispatchInputScore(event.target.id);

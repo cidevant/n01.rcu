@@ -96,12 +96,12 @@ function ClientConnection({ status, client, serverStatus }) {
             return '';
         }
 
-        if (status && client.name) {
+        if (status && client?.name) {
             return client?.name?.toUpperCase?.();
         }
 
         return 'WAITING FOR CLIENT';
-    }, [serverStatus, status, client.name]);
+    }, [serverStatus, status, client?.name]);
     const icon = useMemo(() => {
         if (!serverStatus) {
             return '';
