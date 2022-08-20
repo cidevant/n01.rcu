@@ -30,7 +30,7 @@ const n01rcu_wrapperFunctions = {
             } else {
                 // let user choose
                 n01rcu_ws.send({
-                    type: 'CONTROLLERS:GET_FINISH_DART',
+                    type: 'CONTROLLERS:GET_FINISH_DARTS',
                     payload: outs,
                 });
             }

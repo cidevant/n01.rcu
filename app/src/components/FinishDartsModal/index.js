@@ -1,0 +1,79 @@
+import React from 'react';
+import Modal from 'react-bootstrap/Modal';
+import styled from 'styled-components';
+import { useGameInfo } from '../../hooks/useGameInfo';
+
+const i18n = {
+    finish_first: '1ST DART',
+    finish_second: '2ND DART',
+    finish_third: '3RD DART',
+};
+
+export function FinishDartsModal({ show, close }) {
+    const { finishDarts, dispatchSetFinishDarts } = useGameInfo();
+    const anyFinishDart = finishDarts?.length > 0;
+
+    if (!anyFinishDart) {
+        return null;
+    }
+
+    function setFinishDarts(e) {
+        const value = e.target.id;
+
+        dispatchSetFinishDarts(value);
+        close();
+    }
+
+    return (
+        <Modal show={show} fullscreen backdrop="static" onHide={close}>
+            <Header className="d-flex align-items-center justify-content-center">
+                FINISH DARTS
+            </Header>
+            <Content>
+                {finishDarts.map((dart) => {
+                    return (
+                        <OptionWrapper>
+                            <Option
+                                onClick={setFinishDarts}
+                                id={dart}
+                                variant="info"
+                                className="d-flex align-items-center justify-content-center"
+                            >
+                                {i18n[dart] ?? '-'}
+                            </Option>
+                        </OptionWrapper>
+                    );
+                })}
+            </Content>
+        </Modal>
+    );
+}
+
+export default FinishDartsModal;
+
+const Header = styled.div`
+    height: 150px;
+    background-color: #3fc864;
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+    font-size: 100px;
+`;
+
+const Content = styled.div`
+    height: 100%;
+    padding: 20px;
+`;
+
+const OptionWrapper = styled.div`
+    height: 25%;
+`;
+
+const Option = styled.div`
+    font-size: 120px;
+    height: 100%;
+    margin: 20px;
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border: 2px solid #badbcc;
+`;

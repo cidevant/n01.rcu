@@ -4,8 +4,8 @@ const ACTIONS = {
     MATCH_START: `${WS_IN_PREFIX}:MATCH_START`,
     MATCH_END: `${WS_IN_PREFIX}:MATCH_END`,
     SET_SCORE_LEFT: `${WS_IN_PREFIX}:SET_SCORE_LEFT`,
-    GET_FINISH_DART: `${WS_IN_PREFIX}:GET_FINISH_DART`,
-    SET_FINISH_DART: `${WS_OUT_PREFIX}:CLIENT:SET_FINISH_DART`,
+    GET_FINISH_DARTS: `${WS_IN_PREFIX}:GET_FINISH_DARTS`,
+    SET_FINISH_DARTS: `${WS_OUT_PREFIX}:CLIENT:SET_FINISH_DARTS`,
     SET_INPUT_SCORE: `${WS_OUT_PREFIX}:CLIENT:SET_INPUT_SCORE`,
 };
 
@@ -16,9 +16,9 @@ export function sendInputScore(payload) {
     };
 }
 
-export function sendFinishDart(payload) {
+export function setFinishDarts(payload) {
     return {
-        type: ACTIONS.SET_FINISH_DART,
+        type: ACTIONS.SET_FINISH_DARTS,
         payload,
     };
 }
@@ -26,7 +26,7 @@ export function sendFinishDart(payload) {
 const initialState = {
     match: null,
     scoreLeft: null,
-    finishDart: null,
+    finishDarts: null,
     lastScore: null,
 };
 
@@ -51,16 +51,16 @@ export default function gameReducer(state, action) {
                 scoreLeft: action.payload['payload'],
             };
             break;
-        case ACTIONS.GET_FINISH_DART:
+        case ACTIONS.GET_FINISH_DARTS:
             state = {
                 ...state,
-                finishDart: action.payload['payload'],
+                finishDarts: action.payload['payload'],
             };
             break;
-        case ACTIONS.SET_FINISH_DART:
+        case ACTIONS.SET_FINISH_DARTS:
             state = {
                 ...state,
-                finishDart: null,
+                finishDarts: null,
             };
             break;
         case ACTIONS.SET_INPUT_SCORE:

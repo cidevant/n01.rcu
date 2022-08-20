@@ -17,7 +17,7 @@ export function InputNumPad({ show }) {
 
         if (e.key === 'Enter' && validInputValue(value, leftScore)) {
             dispatch(sendInputScore(value));
-            ref.current.blur();
+            // ref.current.blur();
             e.target.value = '';
         }
     }

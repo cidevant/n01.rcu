@@ -13,7 +13,7 @@ const n01rcu_onWsMessage = function n01rcu_onWsMessage(data, ws) {
             case 'SET_INPUT_SCORE':
                 n01rcu_setInputScore(data, ws);
                 break;
-            case 'SET_FINISH_DART':
+            case 'SET_FINISH_DARTS':
                 n01rcu_setFinishDart(data, ws);
                 break;
             case 'PAIRED':
