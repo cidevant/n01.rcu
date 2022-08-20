@@ -17,6 +17,7 @@ const n01rcu_onWsMessage = function n01rcu_onWsMessage(data, ws) {
                 n01rcu_setFinishDart(data, ws);
                 break;
             case 'PAIRED':
+                n01rcu_sendMatchStarted(ws);
                 n01rcu_setPaired(true, ws);
                 break;
             case 'UNPAIRED':
@@ -192,6 +193,22 @@ const n01rcu_setPaired = function n01rcu_setPaired(paired = false, ws) {
     }
 }
 
+
+const n01rcu_sendMatchStarted = function n01rcu_sendMatchStarted(ws) {
+    let result = false;
+    
+    if (window.location.pathname === '/n01/online/n01.php') {
+        result = ws.send({
+            type: 'CONTROLLERS:MATCH_START',
+            payload: n01rcu_getLocalStorage('n01_net.setData')
+        });
+    }
+
+    return result;
+}
+
+
+
 /**
  * Wraps n01 function to get notified when function is called
  *
@@ -227,10 +244,7 @@ const n01rcu_startMatchUpdater = function n01rcu_startMatchUpdater(ws) {
     if (ws.open && window.location.pathname === '/n01/online/n01.php') {
         console.log('[n01.rcu.helpers] startMatchUpdater');
 
-        const result = ws.send({
-            type: 'CONTROLLERS:MATCH_START',
-            payload: n01rcu_getLocalStorage('n01_net.setData')
-        });
+        const result = n01rcu_sendMatchStarted(ws);
 
         if (n01rcu_matchUpdater !== null) {
             clearInterval(n01rcu_matchUpdater);
@@ -238,7 +252,6 @@ const n01rcu_startMatchUpdater = function n01rcu_startMatchUpdater(ws) {
         }
 
         if (result) {
- 
             n01rcu_matchUpdater = setInterval(() => {
                 const matchResultString = n01rcu_getLocalStorage('n01_net.setData', false);
 
