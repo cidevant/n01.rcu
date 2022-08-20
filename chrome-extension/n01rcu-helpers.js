@@ -254,8 +254,6 @@ const n01rcu_startMatchUpdater = function n01rcu_startMatchUpdater(ws) {
 
                     n01rcu_matchUpdaterLastMessage = matchResult
                 }
-    
-                
             }, 5000);
         }
     }
@@ -268,5 +266,6 @@ const n01rcu_stopMatchUpdater = function n01rcu_stopMatchUpdater(ws) {
 
         clearInterval(n01rcu_matchUpdater);
         n01rcu_matchUpdater = null;
+        n01rcu_matchUpdaterLastMessage = null;
     }
 }
