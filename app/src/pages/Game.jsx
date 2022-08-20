@@ -26,9 +26,10 @@ function Game() {
         }
     }, [match, navigate, isConnected, isPaired]);
 
-    const bind = useLongPress((e) => {
-        dispatchInputScore(parseInt(e.target.id, 10));
-    });
+    const bind = useLongPress(
+        (e) => dispatchInputScore(parseInt(e.target.id, 10)),
+        (e) => e.target.classList.remove('ok')
+    );
 
     return (
         <Table>

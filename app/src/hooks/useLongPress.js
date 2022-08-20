@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 
-export default function useLongPress(callback = () => {}, ms = 300) {
+export default function useLongPress(callback = () => {}, releaseCallback = () => {}, ms = 300) {
     const [startLongPress, setStartLongPress] = useState(false);
     const ref = useRef();
 
@@ -28,7 +28,7 @@ export default function useLongPress(callback = () => {}, ms = 300) {
     }, []);
 
     const stop = useCallback((e) => {
-        e.target.classList.remove('ok');
+        releaseCallback?.(e);
         setStartLongPress(false);
     }, []);
 
