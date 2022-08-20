@@ -10,7 +10,6 @@
  */
 n01rcu_EventListener = function EventListener(event) {
   if (
-    // event.source != window ||
     chrome == null ||
     chrome.runtime == null ||
     chrome.runtime.id == null
@@ -47,7 +46,7 @@ n01rcu_scriptInjector = function scriptInjector(path) {
 // Chained script initialization
 n01rcu_scriptInjector('inject-helpers.js')
   .then(() =>n01rcu_scriptInjector('inject-websocket.js'))
-  .then(() =>n01rcu_scriptInjector('inject-script.js'));
+  .then(() =>n01rcu_scriptInjector('inject-action-listener.js'));
 
 // Communication with service worker
 document.removeEventListener('n01rcu.Event',n01rcu_EventListener);

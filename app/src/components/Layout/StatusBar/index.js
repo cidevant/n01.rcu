@@ -2,6 +2,7 @@ import { Sticky, StickyPhantom } from '../Sticky';
 import React from 'react';
 import styled from 'styled-components';
 import Network from './Network';
+import RightSideActions from './RightSideActions';
 
 export function StatusBar() {
     return (
@@ -11,7 +12,9 @@ export function StatusBar() {
                 <div className="flex-grow-1">
                     <Network />
                 </div>
-                <div>RIGHT</div>
+                <div>
+                    <RightSideActions />
+                </div>
             </StickyTop>
         </>
     );

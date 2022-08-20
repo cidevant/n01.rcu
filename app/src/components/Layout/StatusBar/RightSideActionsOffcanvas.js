@@ -1,9 +1,9 @@
 import React from 'react';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 
-export function NetworkOffcanvas({ show, close }) {
+export function RightSideActionsOffcanvas({ show, close }) {
     return (
-        <Offcanvas placement="start" show={show} onHide={close}>
+        <Offcanvas placement="end" show={show} onHide={close}>
             <Offcanvas.Header closeButton>
                 <Offcanvas.Title>Offcanvas</Offcanvas.Title>
             </Offcanvas.Header>
@@ -15,4 +15,4 @@ export function NetworkOffcanvas({ show, close }) {
     );
 }
 
-export default NetworkOffcanvas;
+export default RightSideActionsOffcanvas;

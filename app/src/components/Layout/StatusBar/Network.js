@@ -5,8 +5,9 @@ import { useNetworkInfo } from '../../../hooks/useNetworkInfo';
 import React, { useState, useMemo } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import styled from 'styled-components';
+import { CornerButton } from './CornerButton';
 
-function Network() {
+export function Network() {
     const [modalShow, setModalShow] = useState(false);
 
     function onShow() {
@@ -65,28 +66,13 @@ function NetworkButton({ open }) {
     );
 }
 
-const Button = styled.button`
-    color: white;
-    background-color: ${({ color }) => color};
-    display: block;
-    text-align: center;
-    border: 0;
-    opacity: 1;
-    user-select: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    font-weight: bolder;
-    width: 150px;
-    outline: none;
-    height: 150px;
+const Title = styled.div`
+    font-size: 40px;
+    font-weight: bold;
+    color: ${(props) => props.textColor};
+`;
 
-    *:active {
-        opacity: 0.8;
-        background-color: #999;
-    }
-
+const Button = styled(CornerButton)`
     & > i {
         font-size: 100px;
     }
@@ -96,10 +82,4 @@ const Button = styled.button`
         height: 80px;
         border-width: 10px;
     }
-`;
-
-const Title = styled.div`
-    font-size: 40px;
-    font-weight: bold;
-    color: ${(props) => props.textColor};
 `;

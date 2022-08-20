@@ -16,7 +16,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://nakka.com/n01/online/n01.php"
+        "https://nakka.com/n01/online/*"
       ],
       "js": [
         "content-script.js"
@@ -29,7 +29,7 @@
       "resources": [
         "inject-helpers.js",
         "inject-websocket.js",
-        "inject-script.js"
+        "inject-action-listener.js"
       ],
       "matches": [
         "<all_urls>"
