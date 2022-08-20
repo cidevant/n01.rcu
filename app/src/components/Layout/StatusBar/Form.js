@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { Container, Col, Row, Form, Alert } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Spinner from 'react-bootstrap/Spinner';
+import { faHandshake } from '@fortawesome/fontawesome-free-solid';
 
 function AccessCodeForm(props) {
     const wsStatus = useSelector((state) => state.ws.status);
@@ -34,123 +36,132 @@ function AccessCodeForm(props) {
 
     function connectionStatus() {
         return (
-            <>
-                <h4 className="mt-1">CONNECTION STATUS</h4>
-                <ConnectionStatus
-                    title="Server"
-                    iconVariant={isConnected ? 'success' : 'danger'}
-                    server
-                    status={isConnected}
-                    text={isConnected ? 'CONNECTED' : 'DISCONNECTED'}
-                />
-                {isConnected && (
-                    <ConnectionStatus
-                        title="Client"
-                        iconVariant={isPaired ? 'success' : 'warning'}
-                        client={client}
-                        status={isPaired}
-                    />
-                )}
-            </>
+            <div className="d-flex flex-row">
+                <ServerConnection status={isConnected} />
+                <ClientConnection serverStatus={isConnected} status={isPaired} client={client} />
+            </div>
         );
     }
 
     function connectionSettings() {
         return (
             <>
-                <h4 className="mt-1">SETTINGS</h4>
-                <Row>
-                    <Col className="col-4 d-flex align-items-center">
-                        <Title>Access code</Title>
-                    </Col>
-                    <Col className="col-8">
-                        <Form.Control
-                            disabled={isConnected}
-                            type="text"
-                            value={accessCode}
-                            maxLength={4}
-                            onChange={updateAccessCode}
-                        />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col className="col-4 d-flex align-items-center">
-                        <Title>Server URL</Title>
-                    </Col>
-                    <Col className="col-8">
-                        <Form.Control
-                            disabled={isConnected}
-                            type="text"
-                            placeholder="ws://localhost:3000/ws"
-                            value={serverUrl}
-                            onChange={updateServerUrl}
-                        />
-                    </Col>
-                </Row>
+                <FormInputWrapper className="mt-4">
+                    <TitleForm>ACCESS CODE</TitleForm>
+                    <FormInput
+                        disabled={isConnected}
+                        type="text"
+                        value={accessCode}
+                        maxLength={4}
+                        onChange={updateAccessCode}
+                    />
+                </FormInputWrapper>
+                <FormInputWrapper className="mt-4">
+                    <TitleForm>SERVER URL</TitleForm>
+                    <FormInput
+                        disabled={isConnected}
+                        type="text"
+                        placeholder="ws://localhost:3000/ws"
+                        value={serverUrl}
+                        onChange={updateServerUrl}
+                    />
+                </FormInputWrapper>
             </>
         );
     }
 
     return (
         <Form>
-            <Container className="d-grid gap-3">
+            <div className="d-grid">
                 {connectionStatus()}
                 {connectionSettings()}
-            </Container>
+            </div>
         </Form>
     );
 }
 
 export default AccessCodeForm;
 
-const Title = styled.div`
-    color: #888;
-`;
+function ServerConnection(props) {
+    const isConnected = props.status === true;
 
-function ConnectionStatus(props) {
-    function renderIcon() {
-        if (props.iconVariant) {
-            const classNames = `${props.iconVariant ? `text-${props.iconVariant}` : ''} me-2`;
-
-            return <FontAwesomeIcon icon="fa-solid fa-circle" className={classNames} />;
-        }
-    }
-
-    function getContent() {
-        if (props.server) {
-            return (
-                <span className="fw-bold">
-                    {props.status === true ? 'CONNECTED' : 'DISCONNECTED'}
-                </span>
-            );
+    function getIcon() {
+        if (!isConnected) {
+            return <FontAwesomeIcon icon="fa-solid fa-circle" className="me-2 text-danger" />;
         }
 
-        return <ClientConnectionText status={props.status} client={props.client} />;
+        return <FontAwesomeIcon icon="fa-solid fa-circle" className="me-2 text-success" />;
     }
 
     return (
-        <Row>
-            <Col className="col-4 d-flex">
-                <Title>{props.title}</Title>
-            </Col>
-            <Col className="col-8">
-                {renderIcon()}
-                {getContent()}
-            </Col>
-        </Row>
+        <StatusWrapper>
+            {getIcon()}
+            {isConnected ? 'CONNECTED TO SERVER' : 'SERVER DISCONNECTED'}
+        </StatusWrapper>
     );
 }
 
-function ClientConnectionText({ status, client }) {
-    if (status === true && client != null) {
-        return (
-            <span>
-                <span className="fw-bold">{client.name?.toUpperCase?.()}</span>
-                <br />
-                <span className="text-black-50">(id: {client.id})</span>
-            </span>
-        );
+function ClientConnection(props) {
+    const isPaired = props.status === 'PAIRED';
+
+    function getText() {
+        if (!props.serverStatus) {
+            return '';
+        }
+
+        if (isPaired && props.client) {
+            return props.client.name;
+        }
+
+        return 'WAITING FOR CLIENT';
     }
 
-    return <span>WAITING FOR CLIENT</span>;
+    function getIcon() {
+        if (!props.serverStatus) {
+            return '';
+        }
+
+        if (isPaired && props.client) {
+            return <FontAwesomeIcon className="me-2 text-success" icon={faHandshake} />;
+        }
+
+        return <Spinner className="me-2" animation="border" size="sm" />;
+    }
+
+    return (
+        <StatusWrapper borderLeft>
+            {getIcon()}
+            {getText()}
+        </StatusWrapper>
+    );
 }
+
+const StatusWrapper = styled.div`
+    ${({ borderLeft }) => borderLeft && 'border-left: 1px solid #999;'}
+    width: 50%;
+    padding: 15px;
+    background-color: #eee;
+    color: #777;
+    border-bottom: 1px solid #999;
+    font-weight: bold;
+    text-align: center;
+    font-size: 18px;
+    z-index: 1;
+`;
+
+const FormInputWrapper = styled.div`
+    padding: 0 20px;
+`;
+
+const TitleForm = styled.div`
+    color: #888;
+    font-size: 40px;
+`;
+
+const FormInput = styled(Form.Control)`
+    font-size: 40px;
+    border-width: 4px;
+    height: 120px;
+    border-radius: 0;
+    outline: none;
+`;

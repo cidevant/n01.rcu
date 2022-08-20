@@ -1,11 +1,12 @@
-import React, { useMemo, useCallback } from 'react';
-import Offcanvas from 'react-bootstrap/Offcanvas';
-import Button from 'react-bootstrap/Button';
-import { useSelector, useDispatch } from 'react-redux';
-import Form from './Form';
 import { connect, disconnect, setAccessCode, setServerUrl } from '../../../store/ws.reducer';
+import { useSelector, useDispatch } from 'react-redux';
 import { ws } from '../../../utils/ws';
+import Button from 'react-bootstrap/Button';
+import Form from './Form';
+import Offcanvas from 'react-bootstrap/Offcanvas';
+import React, { useMemo, useCallback } from 'react';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export function NetworkOffcanvas({ show, close }) {
     const dispatch = useDispatch();
@@ -26,6 +27,7 @@ export function NetworkOffcanvas({ show, close }) {
         if (wsStatus === WebSocket.OPEN) {
             return (
                 <Button variant="danger" size="lg" onClick={dispatchDisconnect}>
+                    <FontAwesomeIcon icon="fa-solid fa-power-off" className="me-4" />
                     DISCONNECT
                 </Button>
             );
@@ -33,6 +35,7 @@ export function NetworkOffcanvas({ show, close }) {
 
         return (
             <Button disabled={disabled} onClick={dispatchConnect}>
+                <FontAwesomeIcon icon="fa-solid fa-link" className="me-4" />
                 CONNECT
             </Button>
         );
@@ -51,9 +54,7 @@ export function NetworkOffcanvas({ show, close }) {
     return (
         <Offcanvas placement="start" show={show} onHide={close}>
             <ButtonWrapper className="d-grid gap-2">{connectDisconnectButton}</ButtonWrapper>
-            <Offcanvas.Body>
-                <Form updateFormValues={updateFormValues} />
-            </Offcanvas.Body>
+            <Form updateFormValues={updateFormValues} />
         </Offcanvas>
     );
 }
@@ -62,6 +63,8 @@ export default NetworkOffcanvas;
 
 const ButtonWrapper = styled.div`
     height: 150px;
+    box-shadow: 0 3px 6px 2px rgba(0, 0, 0, 0.4);
+    z-index: 10;
 
     & > button {
         border-radius: 0;
