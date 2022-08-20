@@ -1,14 +1,13 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable no-undef */
 
-
 /**
  * Listens for "n01rcu.Event" event
  *
  * @param {*} event
  * @returns {*}
  */
-n01rcu_EventListener = function EventListener(event) {
+const n01rcu_EventListener = function EventListener(event) {
   if (
     chrome == null ||
     chrome.runtime == null ||
@@ -28,7 +27,7 @@ n01rcu_EventListener = function EventListener(event) {
  * @param {string} path script to load
  * @returns {Promise<any>} promise
  */
-n01rcu_scriptInjector = function scriptInjector(path) {
+const n01rcu_scriptInjector = function n01rcu_scriptInjector(path) {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
 
@@ -44,9 +43,9 @@ n01rcu_scriptInjector = function scriptInjector(path) {
 }
 
 // Chained script initialization
-n01rcu_scriptInjector('inject-helpers.js')
-  .then(() =>n01rcu_scriptInjector('inject-websocket.js'))
-  .then(() =>n01rcu_scriptInjector('inject-action-listener.js'));
+n01rcu_scriptInjector('n01rcu-helpers.js')
+  .then(() => n01rcu_scriptInjector('n01rcu-websocket.js'))
+  .then(() => n01rcu_scriptInjector('n01rcu-action-listener.js'));
 
 // Communication with service worker
 document.removeEventListener('n01rcu.Event',n01rcu_EventListener);

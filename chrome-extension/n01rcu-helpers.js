@@ -144,7 +144,7 @@ const n01rcu_getPlayerIndexInMatch = function n01rcu_getPlayerIndexInMatch() {
  */
 const n01rcu_getPlayerLeftScore = function n01rcu_getPlayerLeftScore() {
   try {
-    const playerIndex =n01rcu_getPlayerIndexInMatch();
+    const playerIndex = n01rcu_getPlayerIndexInMatch();
 
     if (playerIndex > -1) {
       const rounds = currentLegData()?.playerData?.[playerIndex];
@@ -182,7 +182,10 @@ const n01rcu_getLocalStorage = function n01rcu_getLocalStorage(key) {
 
 const n01rcu_setPaired = function n01rcu_setPaired(paired = false, ws) {
    n01rcu_changeExtensionIcon(paired ? 'paired' : 'connected');
-   n01rcu_sendScoreLeft(ws);
+
+   if (window.location.pathname === '/n01/online/n01.php') {
+       n01rcu_sendScoreLeft(ws);
+   }
 }
 
 /**
@@ -192,15 +195,13 @@ const n01rcu_setPaired = function n01rcu_setPaired(paired = false, ws) {
  * @param {*} backupFunctions
  */
 const n01rcu_addFunctionsWrappers = function n01rcu_addFunctionsWrappers(wrapperFunctions, backupFunctions) {
-  console.log('[n01.rcu.helpers] wrap n01 functions');
-
-  Object.keys(wrapperFunctions).forEach((fnName) => {
-    backupFunctions[fnName] = window[fnName];
-    window[fnName] = function () {
-      backupFunctions[fnName].apply(window, arguments);
-      wrapperFunctions[fnName].apply(window, arguments);
-    };
-  });
+    Object.keys(wrapperFunctions).forEach((fnName) => {
+        backupFunctions[fnName] = window[fnName];
+        window[fnName] = function () {
+            backupFunctions[fnName].apply(window, arguments);
+            wrapperFunctions[fnName].apply(window, arguments);
+        };
+    });
 }
 
 /**
@@ -210,9 +211,44 @@ const n01rcu_addFunctionsWrappers = function n01rcu_addFunctionsWrappers(wrapper
  * @param {*} backupFunctions
  */
 const n01rcu_removeFunctionsWrappers = function n01rcu_removeFunctionsWrappers(wrapperFunctions, backupFunctions) {
-  console.log('[n01.rcu.helpers] unwrap n01 functions');
-
   Object.keys(wrapperFunctions).forEach((fnName) => {
     window[fnName] = backupFunctions[fnName];
   });
 }
+
+let n01rcu_matchUpdater;
+
+const n01rcu_startMatchUpdater = function n01rcu_startMatchUpdater(ws) {
+    if (ws.open && window.location.pathname === '/n01/online/n01.php') {
+        console.log('[n01.rcu.helpers] startMatchUpdater');
+
+        const result = ws.send({
+            type: 'CONTROLLERS:MATCH_START',
+            payload: n01rcu_getLocalStorage('n01_net.setData')
+        });
+        
+        if (n01rcu_matchUpdater !== null) {
+            clearInterval(n01rcu_matchUpdater);
+            n01rcu_matchUpdater = null;
+        }
+
+        if (result) {
+            n01rcu_matchUpdater = setInterval(() => {
+                ws.send({
+                    type: 'CONTROLLERS:UPDATE_MATCH',
+                    payload: n01rcu_getLocalStorage('n01_net.setData')
+                });
+            }, 5000);
+        }
+    }
+ }
+
+
+const n01rcu_stopMatchUpdater = function n01rcu_stopMatchUpdater(ws) {
+    if (n01rcu_matchUpdater !== null) {
+        console.log('[n01.rcu.helpers] stopMatchUpdater');
+
+        clearInterval(n01rcu_matchUpdater);
+        n01rcu_matchUpdater = null;
+    }
+ }
