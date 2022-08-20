@@ -23,7 +23,7 @@ class SocketsManager {
         connectionInfo
       );
 
-      return false;
+      return [false, 3000, 'missing accessCode'];
     }
 
     if (connectionInfo.client === 'true') {
@@ -37,11 +37,11 @@ class SocketsManager {
           connectionInfo
         );
 
-        return false;
+        return [false, 3000, 'client already exists'];
       }
     }
 
-    return true;
+    return [true];
   }
 
   /**
@@ -54,9 +54,10 @@ class SocketsManager {
   onConnect(socket, request) {
     const [, params] = request.url.split('?') ?? [];
     const connectionInfo = queryString.parse(params);
+    const [valid, code, validationError] = this.validateSocketConnectionInfo(connectionInfo);
 
-    if (!this.validateSocketConnectionInfo(connectionInfo)) {
-      socket.close();
+    if (!valid) {
+      socket.close(code, validationError);
     }
 
     this.sockets.set(socket, {
