@@ -9,7 +9,6 @@ export default function useLongPress(callback = () => {}, releaseCallback = () =
 
         if (startLongPress && ref.current != null) {
             timerId = setTimeout(() => {
-                ref.current.target.classList.add('ok');
                 callback(ref.current);
                 ref.current = null;
             }, ms);

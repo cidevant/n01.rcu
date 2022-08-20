@@ -26,8 +26,11 @@ function Game() {
         }
     }, [match, navigate, isConnected, isPaired]);
 
-    const bind = useLongPress(
-        (e) => dispatchInputScore(parseInt(e.target.id, 10)),
+    const longPressHandlers = useLongPress(
+        (e) => {
+            e.target.classList.add('ok');
+            dispatchInputScore(parseInt(e.target.id, 10));
+        },
         (e) => e.target.classList.remove('ok')
     );
 
@@ -40,7 +43,7 @@ function Game() {
                             {row.map((num, indx2) => {
                                 return (
                                     <TableCell key={indx2}>
-                                        <Button id={num} {...bind}>
+                                        <Button id={num} {...longPressHandlers}>
                                             {num}
                                         </Button>
                                     </TableCell>
