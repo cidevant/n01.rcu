@@ -65,6 +65,7 @@ const n01rcu_wrapperFunctions = {
     },
 };
 
+// When window loaded
 window.onload = () => {
     if (n01rcu_shouldConnect()) {
         setTimeout(() => {
@@ -77,9 +78,10 @@ window.onload = () => {
     }
 };
 
+// Before window close
 window.onbeforeunload = () => {
+    n01rcu_ws.disconnect(1000, 'window unload');
     n01rcu_stopMatchUpdater();
     n01rcu_changeExtensionIcon('default');
     n01rcu_removeFunctionsWrappers(n01rcu_wrapperFunctions, n01rcu_backupFunctions);
-    n01rcu_ws.disconnect(1000, 'window unload');
 };

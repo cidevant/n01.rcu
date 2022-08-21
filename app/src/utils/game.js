@@ -10,6 +10,13 @@ export function notGreaterThanLeftScore(value, leftScore) {
     return leftScore > 0 && value <= leftScore;
 }
 
+/**
+ * Returns list of checkouts
+ *
+ * @export
+ * @param {*} score
+ * @returns {Array<Array<string>>} list of checkouts
+ */
 export function getCheckouts(score) {
     const result = [];
 
@@ -57,19 +64,19 @@ const checkouts = [
         73: ['T19', 'D8'],
         70: ['T18', 'D8'],
         67: ['T17', 'D8'],
-        64: ['T16', 'D8	'],
-        61: ['T15', 'D8	'],
+        64: ['T16', 'D8'],
+        61: ['T15', 'D8'],
         58: ['18', 'D20'],
         55: ['15', 'D20'],
         52: ['12', 'D20'],
         49: ['9', 'D20'],
         46: ['14', 'D16'],
         43: ['11', 'D16'],
-        39: ['7', 'D16	'],
-        33: ['1', 'D16	'],
+        39: ['7', 'D16'],
+        33: ['1', 'D16'],
         27: ['11', 'D8'],
         21: ['5', 'D8'],
-        15: ['7', 'D4	'],
+        15: ['7', 'D4'],
         9: ['1', 'D4'],
         3: ['1', 'D1'],
     },

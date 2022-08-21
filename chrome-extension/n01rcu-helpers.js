@@ -17,19 +17,18 @@ const n01rcu_onWsMessage = function n01rcu_onWsMessage(data, ws) {
                 n01rcu_setFinishDart(data, ws);
                 break;
             case 'PAIRED':
-                n01rcu_sendMatchStarted(ws);
                 n01rcu_setPaired(true, ws);
                 break;
             case 'UNPAIRED':
                 n01rcu_setPaired(false, ws);
                 break;
-            case 'SEARCH_SCROLL_BOTTOM':
+            case 'SEARCH_PAGE_SCROLL_BOTTOM':
                 n01rcu_searchScrollBottom();
                 break;
-            case 'SEARCH_FILTER_BY_SCORE':
-                n01rcu_searchFilterByScore(data, ws);
+            case 'SEARCH_PAGE_FILTER_BY_AVERAGE':
+                n01rcu_searchFilterByAverageAndHide(data, ws);
                 break;
-            case 'SEARCH_START_GAME':
+            case 'SEARCH_PAGE_START_GAME':
                 n01rcu_searchStartGame(data, ws);
             default:
                 break;
@@ -40,67 +39,109 @@ const n01rcu_onWsMessage = function n01rcu_onWsMessage(data, ws) {
 }
 
 /**
- * Starts game with opponent
+ * Returns list of user which satisfies search condition
  *
- * @param {*} data
- * @param {*} ws
+ * @param {?number} from Average score from
+ * @param {?number} to Average score to
+ * @returns {Array<object>} list of users
  */
-const n01rcu_searchStartGame = function n01rcu_searchStartGame(data, ws) {
-    const userEl = $(`.user_list_item[id="${data['payload']}"]`);
-    const playButton = userEl.find('input[type="button"][value="Play"]');
+const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to) {
+    let notMeSelector = '';
 
-    if (playButton) {
-        playButton.click();
+    const me = n01rcu_getPlayer();
+    const returnValue = {
+        passedFilter: [],
+        notPassedFilter: []
+    };
+    const isValid = (value) => {
+        if (isNaN(value) || (isNaN(from) && isNaN(to))) {
+            return true;
+        }
+
+        if (isNaN(from) && !isNaN(to)) {
+            return value <= to;
+        }
+
+        if (!isNaN(from) && isNaN(to)) {
+            return value >= from;
+        }
+
+        return value >= from && value <= to;
+    };
+
+    // Hide myself
+    if (me && me.pid) {
+        notMeSelector = `[id!="${me.pid}"]`;
     }
-}
+
+    // Filter by avg score value
+    $(`.user_list_item${notMeSelector}`).each((_index, user) => {
+        const userEl = $(user);
+        const avgValue = parseFloat(userEl.find('.avg_text').text().replace(' (', '').replace(')', ''));
+        const average = isNaN(avgValue) ? null : avgValue;
+        const playerId = userEl.attr('id');
+
+        if (n01rcu_isValidPlayerId(playerId)) {
+            // Filter by params
+            if (!isNaN(from) || !isNaN(to)) {
+                if (isValid(avgValue)) {
+                    returnValue.passedFilter.push({
+                        id: playerId,
+                        name: userEl.find('.user_list_name_text').text(),
+                        average,
+                    });
+                } else {
+                    returnValue.notPassedFilter.push({
+                        id: playerId,
+                        name: userEl.find('.user_list_name_text').text(),
+                        average,
+                    });
+                }
+            } else {
+                // Add all
+                returnValue.passedFilter.push({
+                    id: playerId,
+                    name: userEl.find('.user_list_name_text').text(),
+                    average,
+                });
+            }
+        }
+    });
+
+    return returnValue;
+};
 
 /**
  * Filters opponents by avg score
  *
- * @param {*} data
- * @param {*} ws
+ * @param {*} data filter conditions: from, to
+ * @param {*} ws websocket connection
  */
-const n01rcu_searchFilterByScore = function n01rcu_searchFilterByScore(data, ws) {
-    // Hide myself
-    let notMeSelector = '';
-
-    const { from = 30, to = 100 } = data['payload'];
+const n01rcu_searchFilterByAverageAndHide = function n01rcu_searchFilterByAverageAndHide(data, ws) {
+    const search = n01rcu_getSearchResults(data?.payload?.from, data?.payload?.to)
     const me = n01rcu_getPlayer();
-    const result = [];
 
+    // Hide myself
     if (me && me.pid) {
-        notMeSelector = `[id!="${me.pid}"]`;
-
         $(`.user_list_item[id="${me.pid}"]`).hide();
     }
-
-    // Filter by avg score value
-    $(`.user_list_item:visible${notMeSelector}`).each((_index, user) => {
-        const userEl = $(user);
-        const avgText = userEl.find('.avg_text').text();
-        const avgValue = parseFloat(avgText.replace(' (', '').replace(')', ''));
-
-        if (!isNaN(avgValue)) {
-            if (avgValue >= from && avgValue <= to) {
-                result.push({
-                    id: userEl.attr('id'),
-                    name: userEl.find('.user_list_name_text').text(),
-                });
-            } else {
-                userEl.hide();
-            }
-        } else {
-            result.push({
-                id: userEl.attr('id'),
-                name: userEl.find('.user_list_name_text').text(),
-            });
-        }
+    
+    // Hide all who not passed filter
+    search.notPassedFilter.forEach((user) => {
+        $(`.user_list_item[id="${user.id}"]`).hide();
     });
 
-    ws.send({
-        type: 'CONTROLLERS:SEARCH_FILTER_BY_SCORE_RESULT',
-        payload: result,
+    // Show all who passed
+    search.passedFilter.forEach((user) => {
+        $(`.user_list_item[id="${user.id}"]`).show();
     });
+
+    if (ws) {
+        ws.send({
+            type: 'CONTROLLERS:SEARCH_FILTER_BY_AVERAGE_RESULT',
+            payload: search.passedFilter,
+        });
+    }
 };
 
 /**
@@ -113,6 +154,44 @@ const n01rcu_searchScrollBottom = function n01rcu_searchScrollBottom() {
     $('#article').css('padding-bottom', 0);
     $('#article').css('margin-bottom', 0);
     scroll_bottom();
+}
+
+/**
+ * Starts game with opponent
+ *
+ * @param {*} data
+ * @param {*} ws
+ */
+const n01rcu_searchStartGame = function n01rcu_searchStartGame(data, ws) {
+    const userEl = $(`.user_list_item[id="${data['payload']}"]`);
+    const playButton = userEl.find('input[type="button"][value="Play"]:visible');
+
+    if (playButton) {
+        playButton.click();
+    } else {
+        console.log('[n01.rcu.helpers][searchStartGame][error] cant start game with player', data['payload']);
+    }
+}
+
+/**
+ * Sends `ON_SEARCH_PAGE`
+ *
+ * @param {*} ws
+ * @returns {*} 
+ */
+ const n01rcu_sendOnSearchPage = function n01rcu_sendOnSearchPage(ws) {
+    const pageType = n01rcu_detectPageType();
+
+    let result = false;
+
+    if (pageType === 'search') {
+        result = ws.send({
+            type: 'CONTROLLERS:ON_SEARCH_PAGE',
+            payload: n01rcu_getSearchResults()
+        });
+    }
+
+    return result;
 }
 
 /**
@@ -282,12 +361,18 @@ const n01rcu_getLocalStorage = function n01rcu_getLocalStorage(key, shouldParseJ
  * @param {*} ws
  */
 const n01rcu_setPaired = function n01rcu_setPaired(paired = false, ws) {
-    const pageType = n01rcu_detectPageType();
-    
     n01rcu_changeExtensionIcon(paired ? 'paired' : 'connected');
-    
-    if (pageType === 'game') {
-        n01rcu_sendScoreLeft(ws);
+
+    switch (n01rcu_detectPageType()) {
+        case 'search':
+            n01rcu_sendOnSearchPage(ws);
+            break;
+        case 'game':
+            n01rcu_sendMatchStarted(ws);
+            n01rcu_sendScoreLeft(ws);
+            break;
+        default:
+            break;
     }
 }
 
@@ -299,9 +384,9 @@ const n01rcu_setPaired = function n01rcu_setPaired(paired = false, ws) {
  */
 const n01rcu_sendMatchStarted = function n01rcu_sendMatchStarted(ws) {
     const pageType = n01rcu_detectPageType();
-    
+
     let result = false;
-    
+
     if (pageType === 'game') {
         result = ws.send({
             type: 'CONTROLLERS:MATCH_START',
@@ -370,7 +455,7 @@ const n01rcu_startMatchUpdater = function n01rcu_startMatchUpdater(ws) {
                         ws.send({
                             type: 'CONTROLLERS:UPDATE_MATCH',
                             payload: JSON.parse(matchResultString),
-                        });    
+                        });
                     } catch (error) {
                         console.log('[n01.rcu.helpers][error] startMatchUpdater', error);
                     }
@@ -432,4 +517,25 @@ const n01rcu_shouldConnect = function n01rcu_shouldConnect() {
     }
 
     return false;
+}
+
+
+/**
+ * Validates player id
+ *
+ * @param {string} id player id
+ * @returns {boolean} is valid?
+ */
+const n01rcu_isValidPlayerId = function n01rcu_isValidPlayerId(id) {
+    if (!id || id?.length !== 22) {
+        return false;
+    }
+
+    const splitId = `${id}`.split('_');
+
+    if (splitId.length !== 2) {
+        return false;
+    }
+
+    return splitId[0].length === 8 && splitId[1].length === 13 ;
 }
