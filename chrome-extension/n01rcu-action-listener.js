@@ -82,8 +82,5 @@ window.onbeforeunload = () => {
     n01rcu_stopMatchUpdater();
     n01rcu_changeExtensionIcon('default');
     n01rcu_removeFunctionsWrappers(n01rcu_wrapperFunctions, n01rcu_backupFunctions);
-
-    if (n01rcu_ws.open) {
-        n01rcu_ws.disconnect(1001, 'window unload');
-    }
+    n01rcu_ws.disconnect(1000, 'window unload');
 };

@@ -36,9 +36,33 @@ class SocketsManager {
       );
 
       if (existingClients.length > 0) {
+        let replace = false;
+
+        existingClients.forEach((client) => {
+          const meta = this.getMeta(client);
+
+          if (meta.id === connectionInfo.id) {
+            console.error(
+              '[sockets][validateSocketConnectionInfo] replace existing client',
+              JSON.stringify(connectionInfo)
+            );
+
+            replace = true;
+
+            client.close(3005, 'new client connected');
+            this.onClose(client);
+          }
+        });
+
+        if (replace) {
+          return {
+            valid: true,
+          };
+        }
+
         console.error(
           chalk.red('[sockets][validateSocketConnectionInfo][error] client already exists'),
-          connectionInfo
+          JSON.stringify(connectionInfo)
         );
 
         return {

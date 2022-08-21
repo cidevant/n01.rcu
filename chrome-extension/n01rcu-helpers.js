@@ -23,12 +23,30 @@ const n01rcu_onWsMessage = function n01rcu_onWsMessage(data, ws) {
             case 'UNPAIRED':
                 n01rcu_setPaired(false, ws);
                 break;
+            case 'SEARCH_SCROLL_BOTTOM':
+                n01rcu_searchScrollBottom();
+                break;
+            case 'SEARCH_FILTER_BY_SCORE':
+                // n01rcu_searchFilterByScore();
+                break;
             default:
                 break;
         }
     } catch (error) {
         console.log('[n01.rcu.helpers] onWsMessage error: ', error);
     }
+}
+
+/**
+ * Scrolls down on search page
+ *
+ */
+const n01rcu_searchScrollBottom = function n01rcu_searchScrollBottom() {
+    $("#schedule_button").hide();
+    $("#menu_button").hide();
+    $('#article').css('padding-bottom', 0);
+    $('#article').css('margin-bottom', 0);
+    scroll_bottom();
 }
 
 /**
@@ -54,6 +72,12 @@ const n01rcu_setInputScore = function n01rcu_setInputScore(data, ws) {
     }
 }
 
+/**
+ * Submits finish darts
+ *
+ * @param {*} data
+ * @param {*} ws
+ */
 const n01rcu_setFinishDart = function n01rcu_setFinishDart(data, ws) {
     if ($(`#${data['payload']}`).is(':visible')) {
         console.log('[n01.rcu.helpers] setFinishDart ', data);
@@ -185,19 +209,34 @@ const n01rcu_getLocalStorage = function n01rcu_getLocalStorage(key, shouldParseJ
     }
 }
 
+/**
+ * Received 'PAIRED' message
+ *
+ * @param {boolean} [paired=false]
+ * @param {*} ws
+ */
 const n01rcu_setPaired = function n01rcu_setPaired(paired = false, ws) {
+    const pageType = n01rcu_detectPageType();
+    
     n01rcu_changeExtensionIcon(paired ? 'paired' : 'connected');
-
-    if (window.location.pathname === '/n01/online/n01.php') {
+    
+    if (pageType === 'game') {
         n01rcu_sendScoreLeft(ws);
     }
 }
 
-
+/**
+ * Sends `MATCH_STARTED` event to controllers
+ *
+ * @param {*} ws
+ * @returns {*} 
+ */
 const n01rcu_sendMatchStarted = function n01rcu_sendMatchStarted(ws) {
+    const pageType = n01rcu_detectPageType();
+    
     let result = false;
     
-    if (window.location.pathname === '/n01/online/n01.php') {
+    if (pageType === 'game') {
         result = ws.send({
             type: 'CONTROLLERS:MATCH_START',
             payload: n01rcu_getLocalStorage('n01_net.setData')
@@ -206,8 +245,6 @@ const n01rcu_sendMatchStarted = function n01rcu_sendMatchStarted(ws) {
 
     return result;
 }
-
-
 
 /**
  * Wraps n01 function to get notified when function is called
@@ -246,7 +283,9 @@ let n01rcu_matchUpdaterLastMessage;
  * @param {*} ws
  */
 const n01rcu_startMatchUpdater = function n01rcu_startMatchUpdater(ws) {
-    if (ws.open && window.location.pathname === '/n01/online/n01.php') {
+    const pageType = n01rcu_detectPageType();
+
+    if (ws.open && pageType === 'game') {
         console.log('[n01.rcu.helpers] startMatchUpdater');
 
         const result = n01rcu_sendMatchStarted(ws);
@@ -267,7 +306,7 @@ const n01rcu_startMatchUpdater = function n01rcu_startMatchUpdater(ws) {
                             payload: JSON.parse(matchResultString),
                         });    
                     } catch (error) {
-                        // 
+                        console.log('[n01.rcu.helpers][error] startMatchUpdater', error);
                     }
 
                     n01rcu_matchUpdaterLastMessage = matchResultString
@@ -276,7 +315,6 @@ const n01rcu_startMatchUpdater = function n01rcu_startMatchUpdater(ws) {
         }
     }
 }
-
 
 /**
  * Stops reporting match updates
@@ -292,7 +330,6 @@ const n01rcu_stopMatchUpdater = function n01rcu_stopMatchUpdater(ws) {
         n01rcu_matchUpdaterLastMessage = null;
     }
 }
-
 
 /**
  * Detects type of page
@@ -313,7 +350,11 @@ const n01rcu_detectPageType = function n01rcu_detectPageType() {
     return null;
 }
 
-
+/**
+ * Checks if we should connect to websocket server
+ *
+ * @returns {*} 
+ */
 const n01rcu_shouldConnect = function n01rcu_shouldConnect() {
     const type = n01rcu_detectPageType();
 
@@ -323,8 +364,6 @@ const n01rcu_shouldConnect = function n01rcu_shouldConnect() {
         case 'game':
             return true;
     }
-
-    console.log('[n01.rcu.n01rcu-helpers][shouldConnect] page not recognized', window.location.pathname)
 
     return false;
 }
