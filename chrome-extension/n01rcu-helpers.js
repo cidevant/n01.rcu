@@ -29,11 +29,28 @@ const n01rcu_onWsMessage = function n01rcu_onWsMessage(data, ws) {
             case 'SEARCH_FILTER_BY_SCORE':
                 n01rcu_searchFilterByScore(data, ws);
                 break;
+            case 'SEARCH_START_GAME':
+                n01rcu_searchStartGame(data, ws);
             default:
                 break;
         }
     } catch (error) {
         console.log('[n01.rcu.helpers] onWsMessage error: ', error);
+    }
+}
+
+/**
+ * Starts game with opponent
+ *
+ * @param {*} data
+ * @param {*} ws
+ */
+const n01rcu_searchStartGame = function n01rcu_searchStartGame(data, ws) {
+    const userEl = $(`.user_list_item[id="${data['payload']}"]`);
+    const playButton = userEl.find('input[type="button"][value="Play"]');
+
+    if (playButton) {
+        playButton.click();
     }
 }
 
