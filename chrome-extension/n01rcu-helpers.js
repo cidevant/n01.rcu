@@ -27,7 +27,7 @@ const n01rcu_onWsMessage = function n01rcu_onWsMessage(data, ws) {
                 n01rcu_searchScrollBottom();
                 break;
             case 'SEARCH_FILTER_BY_SCORE':
-                // n01rcu_searchFilterByScore();
+                n01rcu_searchFilterByScore(data, ws);
                 break;
             default:
                 break;
@@ -36,6 +36,55 @@ const n01rcu_onWsMessage = function n01rcu_onWsMessage(data, ws) {
         console.log('[n01.rcu.helpers] onWsMessage error: ', error);
     }
 }
+
+/**
+ * Filters opponents by avg score
+ *
+ * @param {*} data
+ * @param {*} ws
+ */
+const n01rcu_searchFilterByScore = function n01rcu_searchFilterByScore(data, ws) {
+    // Hide myself
+    let notMeSelector = '';
+
+    const { from = 30, to = 100 } = data['payload'];
+    const me = n01rcu_getPlayer();
+    const result = [];
+
+    if (me && me.pid) {
+        notMeSelector = `[id!="${me.pid}"]`;
+
+        $(`.user_list_item[id="${me.pid}"]`).hide();
+    }
+
+    // Filter by avg score value
+    $(`.user_list_item:visible${notMeSelector}`).each((_index, user) => {
+        const userEl = $(user);
+        const avgText = userEl.find('.avg_text').text();
+        const avgValue = parseFloat(avgText.replace(' (', '').replace(')', ''));
+
+        if (!isNaN(avgValue)) {
+            if (avgValue >= from && avgValue <= to) {
+                result.push({
+                    id: userEl.attr('id'),
+                    name: userEl.find('.user_list_name_text').text(),
+                });
+            } else {
+                userEl.hide();
+            }
+        } else {
+            result.push({
+                id: userEl.attr('id'),
+                name: userEl.find('.user_list_name_text').text(),
+            });
+        }
+    });
+
+    ws.send({
+        type: 'CONTROLLERS:SEARCH_FILTER_BY_SCORE_RESULT',
+        payload: result,
+    });
+};
 
 /**
  * Scrolls down on search page

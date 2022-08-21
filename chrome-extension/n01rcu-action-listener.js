@@ -65,7 +65,6 @@ const n01rcu_wrapperFunctions = {
     },
 };
 
-
 window.onload = () => {
     if (n01rcu_shouldConnect()) {
         setTimeout(() => {
@@ -75,7 +74,7 @@ window.onload = () => {
             };
             n01rcu_ws.connect();
         });
-    } 
+    }
 };
 
 window.onbeforeunload = () => {
