@@ -35,11 +35,11 @@ class n01rcu_WebSocketClient {
         }
     };
 
-    disconnect = () => {
+    disconnect = (code, reason) => {
         if (this.open) {
             console.log('[n01.rcu.ws.client] disconnecting');
 
-            this.__socket.close();
+            this.__socket.close(code, reason);
         } else {
             console.log('[n01.rcu.ws.client] disconnect error: no connection to server');
 
@@ -87,10 +87,10 @@ class n01rcu_WebSocketClient {
         n01rcu_changeExtensionIcon('connected');
     };
 
-    __onClose = () => {
-        console.log('[n01.rcu.ws.client] closed connection');
-
-        this.onclose?.();
+    __onClose = (event) => {
+        console.log('[n01.rcu.ws.client] closed connection', event?.code, event?.reason);
+        
+        this.onclose?.(event);
         n01rcu_changeExtensionIcon('default');
     };
 

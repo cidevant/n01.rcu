@@ -65,19 +65,50 @@ const n01rcu_wrapperFunctions = {
     },
 };
 
+const n01rcu_shouldConnect = function n01rcu_shouldConnect() {
+    const path = window.location.pathname;
+
+    if (path === '/n01/online/n01.php') {
+        console.log('[n01.rcu.n01rcu-action-listeners][shouldConnect] match started -> requesting connect')
+        
+        return true;
+    }
+
+    if (path === '/n01/online/') {
+        if (join === true) {
+            console.log('[n01.rcu.n01rcu-action-listeners][shouldConnect] search match -> requesting connect')
+        
+            return true;
+        }
+
+        console.log('[n01.rcu.n01rcu-action-listeners][shouldConnect] not searching match -> no need to connect')
+
+        return false;
+    }
+
+    console.log('[n01.rcu.n01rcu-action-listeners][shouldConnect] bad path -> no need to connect', path)
+
+    return false;
+}
+
 window.onload = () => {
-    setTimeout(() => {
-        n01rcu_ws.onopen = () => {
-            n01rcu_addFunctionsWrappers(n01rcu_wrapperFunctions, n01rcu_backupFunctions)
-            n01rcu_startMatchUpdater(n01rcu_ws);
-        };
-        n01rcu_ws.connect();
-    });
+    if (n01rcu_shouldConnect()) {
+        setTimeout(() => {
+            n01rcu_ws.onopen = () => {
+                n01rcu_addFunctionsWrappers(n01rcu_wrapperFunctions, n01rcu_backupFunctions)
+                n01rcu_startMatchUpdater(n01rcu_ws);
+            };
+            n01rcu_ws.connect();
+        });
+    } 
 };
 
 window.onbeforeunload = () => {
     n01rcu_stopMatchUpdater();
     n01rcu_changeExtensionIcon('default');
     n01rcu_removeFunctionsWrappers(n01rcu_wrapperFunctions, n01rcu_backupFunctions);
-    n01rcu_ws.disconnect();
+
+    if (n01rcu_ws.open) {
+        n01rcu_ws.disconnect(1001, 'window unload');
+    }
 };
