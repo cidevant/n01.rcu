@@ -25,7 +25,7 @@ const n01rcu_onWsMessage = function n01rcu_onWsMessage(data, ws) {
             case 'SEARCH_PAGE_SCROLL_BOTTOM':
                 n01rcu_searchScrollBottom();
                 break;
-            case 'SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT':
+            case 'SEARCH_PAGE_FILTER_BY_AVERAGE':
                 n01rcu_searchFilterByAverageAndHide(data, ws);
                 break;
             case 'SEARCH_PAGE_START_GAME':
@@ -138,7 +138,7 @@ const n01rcu_searchFilterByAverageAndHide = function n01rcu_searchFilterByAverag
 
     if (ws) {
         ws.send({
-            type: 'CONTROLLERS:SEARCH_FILTER_BY_AVERAGE_RESULT',
+            type: 'CONTROLLERS:SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT',
             payload: search.passedFilter,
         });
     }

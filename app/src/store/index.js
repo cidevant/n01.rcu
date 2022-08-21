@@ -7,6 +7,7 @@ import { wsMiddleware } from './ws.middleware';
 import ws from './ws.reducer';
 import game from './game.reducer';
 import client from './client.reducer';
+import home from './home.reducer';
 
 // store
 export const store = configureStore({
@@ -14,6 +15,7 @@ export const store = configureStore({
         ws,
         game,
         client,
+        home,
     },
     middleware: (defaultMiddleware) => defaultMiddleware().concat([wsMiddleware]),
 });

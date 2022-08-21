@@ -34,8 +34,12 @@ export function sendStartGame(payload) {
 
 const initialState = {
     onSearchPage: false,
-    players: null,
-    filter: null,
+    lastGamePlayerId: null,
+    players: [],
+    filter: {
+        from: 0,
+        to: 180,
+    },
 };
 
 export default function homeReducer(state, action) {
@@ -59,16 +63,22 @@ export default function homeReducer(state, action) {
             break;
 
         // Filter
-        case ACTIONS.SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT:
+        case ACTIONS.SEARCH_PAGE_FILTER_BY_AVERAGE: // out
+            state = {
+                ...state,
+                filter: action.payload,
+            };
+            break;
+        case ACTIONS.SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT: // in
             state = {
                 ...state,
                 players: action.payload['payload'],
             };
             break;
-        case ACTIONS.SEARCH_PAGE_FILTER_BY_AVERAGE:
+        case ACTIONS.SEARCH_PAGE_START_GAME: // out
             state = {
                 ...state,
-                filter: action.payload['payload'],
+                lastGamePlayerId: action.payload,
             };
             break;
     }

@@ -41,3 +41,5 @@ export function useGameInfo() {
         dispatchSetFinishDarts,
     };
 }
+
+export default useGameInfo;
