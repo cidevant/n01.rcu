@@ -81,7 +81,7 @@ class WebsocketClient {
 
             this.onmessage(message);
         } catch (error) {
-            console.error('[ws.client] cant parse message', event.data);
+            console.error('[ws.client] message error', error, event.data);
         }
     };
 

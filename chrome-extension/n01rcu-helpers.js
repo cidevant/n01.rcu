@@ -83,26 +83,36 @@ const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to) {
         const avgValue = parseFloat(userEl.find('.avg_text').text().replace(' (', '').replace(')', ''));
         const average = isNaN(avgValue) ? null : avgValue;
         const playerId = userEl.attr('id');
+        const isSearching = userEl.find('input[type="button"][value="Play"].play_button').is(':visible');
 
         if (n01rcu_isValidPlayerId(playerId)) {
-            // Filter by params
-            if (!isNaN(from) || !isNaN(to)) {
-                if (isValid(avgValue)) {
-                    returnValue.passedFilter.push({
-                        id: playerId,
-                        name: userEl.find('.user_list_name_text').text(),
-                        average,
-                    });
+            if (isSearching) {
+                // Filter by params
+                if (!isNaN(from) || !isNaN(to)) {
+                    if (isValid(avgValue)) {
+                        returnValue.passedFilter.push({
+                            id: playerId,
+                            name: userEl.find('.user_list_name_text').text(),
+                            average,
+                        });
+                    } else {
+                        returnValue.notPassedFilter.push({
+                            id: playerId,
+                            name: userEl.find('.user_list_name_text').text(),
+                            average,
+                        });
+                    }
                 } else {
-                    returnValue.notPassedFilter.push({
+                    // Add all
+                    returnValue.passedFilter.push({
                         id: playerId,
                         name: userEl.find('.user_list_name_text').text(),
                         average,
                     });
                 }
             } else {
-                // Add all
-                returnValue.passedFilter.push({
+                // Hide all not playing
+                returnValue.notPassedFilter.push({
                     id: playerId,
                     name: userEl.find('.user_list_name_text').text(),
                     average,
@@ -139,7 +149,7 @@ const n01rcu_searchFilterByAverageAndHide = function n01rcu_searchFilterByAverag
         search.passedFilter.forEach((user) => {
             $(`.user_list_item[id="${user.id}"]`).show();
         });
-    
+
         ws.send({
             type: 'CONTROLLERS:SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT',
             payload: search.passedFilter,
@@ -167,10 +177,11 @@ const n01rcu_searchScrollBottom = function n01rcu_searchScrollBottom() {
  */
 const n01rcu_searchStartGame = function n01rcu_searchStartGame(data, ws) {
     const userEl = $(`.user_list_item[id="${data['payload']}"]`);
-    const playButton = userEl.find('input[type="button"][value="Play"]:visible');
+    const playButton = userEl.find('input[type="button"][value="Play"].play_button');
 
-    if (playButton) {
-        playButton.click();
+    if (playButton.is(':visible')) {
+        console.error("STARTNG MATCH WITH", data['payload'])
+        // playButton.click();
     } else {
         console.log('[n01.rcu.helpers][searchStartGame][error] cant start game with player', data['payload']);
     }

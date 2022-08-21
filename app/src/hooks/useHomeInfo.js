@@ -1,6 +1,11 @@
 import { useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { sendScrollBottom, sendFilterByAverage, sendStartGame } from '../store/home.reducer';
+import {
+    sendScrollBottom,
+    sendFilterByAverage,
+    sendStartGame,
+    setFilterByAverage,
+} from '../store/home.reducer';
 import { useNetworkInfo } from './useNetworkInfo';
 import { useGameInfo } from './useGameInfo';
 
@@ -19,8 +24,12 @@ export function useHomeInfo() {
         [isConnected, isPaired, info.onSearchPage, gameStarted, info.joinedSearch]
     );
 
-    function dispatchFilter(filter) {
-        dispatch(sendFilterByAverage(filter ? filter : info.filter));
+    function dispatchFilter() {
+        dispatch(sendFilterByAverage(info.filter));
+    }
+
+    function dispatchSetFilter(filter) {
+        dispatch(setFilterByAverage(filter));
     }
 
     function dispatchScrollBottom() {
@@ -33,10 +42,11 @@ export function useHomeInfo() {
 
     return {
         searchAvailable,
-        players: info.players,
+        players: [...info.players],
         filter: info.filter,
         joinedSearch: info.joinedSearch,
         lastGamePlayerId: info.lastGamePlayerId,
+        dispatchSetFilter,
         dispatchFilter,
         dispatchScrollBottom,
         dispatchStartGame,

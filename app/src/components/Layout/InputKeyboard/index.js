@@ -35,7 +35,6 @@ export function InputKeyboard() {
             <Sticky bottom>
                 <Scenes />
                 <StyledInput
-                    autoFocus
                     type="number"
                     onKeyDown={onSubmit}
                     min={0}
