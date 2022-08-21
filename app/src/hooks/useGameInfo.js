@@ -21,6 +21,16 @@ export function useGameInfo() {
         dispatch(setFinishDarts(id));
     }
 
+    // return {
+    //     gameStarted: true,
+    //     opponent,
+    //     scoreLeft: 33,
+    //     finishDarts,
+    //     match: {},
+    //     dispatchInputScore,
+    //     dispatchSetFinishDarts,
+    // };
+
     return {
         gameStarted,
         opponent,
