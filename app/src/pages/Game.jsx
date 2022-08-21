@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import styled from 'styled-components';
 import { useGameInfo } from '../hooks/useGameInfo';
 import { useNavigate } from 'react-router-dom';
 import useLongPress from '../hooks/useLongPress';
 import { FinishDartsModal } from '../components/FinishDartsModal';
 
+const zeroRow = ['-', 0, '-'];
+const highlightedScores = [60, 100, 140];
 const scores = [
     [26, 58, 43],
     [45, 60, 41],
@@ -12,13 +14,12 @@ const scores = [
     [95, 98, 83],
     [30, 39, 22],
     [40, 80, 140],
-    ['-', 0, '-'],
 ];
 
 function Game() {
     const navigate = useNavigate();
     const [showFinishDarts, setShowFinishDarts] = useState(false);
-    const { gameStarted, dispatchInputScore, finishDarts } = useGameInfo();
+    const { gameStarted, dispatchInputScore, finishDarts, scoreLeft } = useGameInfo();
     const longPressHandlers = useLongPress(
         (e) => {
             e.target.classList.add('ok');
@@ -30,6 +31,17 @@ function Game() {
     function closeFinishDartsModal() {
         setShowFinishDarts(false);
     }
+
+    const scoresList = useMemo(() => {
+        const result = scores;
+
+        if (scoreLeft <= 180) {
+            result.unshift(zeroRow);
+            result.push(zeroRow);
+        }
+
+        return result;
+    }, [scoreLeft]);
 
     // End of game
     useEffect(() => {
@@ -49,14 +61,19 @@ function Game() {
         <>
             <Table>
                 <tbody>
-                    {scores.map((row, indx) => {
+                    {scoresList.map((row, index1) => {
                         return (
-                            <TableRow key={indx}>
-                                {row.map((num, indx2) => {
+                            <TableRow key={index1}>
+                                {row.map((num, index2) => {
                                     return (
-                                        <TableCell key={indx2}>
+                                        <TableCell key={index2}>
                                             {!isNaN(num) && (
-                                                <Button id={num} {...longPressHandlers}>
+                                                <Button
+                                                    id={num}
+                                                    isZero={num === 0}
+                                                    isHighlighted={highlightedScores.includes(num)}
+                                                    {...longPressHandlers}
+                                                >
                                                     {num}
                                                 </Button>
                                             )}
@@ -90,8 +107,10 @@ const TableCell = styled.td`
 `;
 
 const Button = styled.button`
-    color: white;
-    background-color: #666;
+    color: black;
+    background-color: #eee;
+    border: 2px solid #aaa;
+    box-shadow: 2px 2px 6px 1px #666;
     width: 100%;
     font-size: 140px;
     padding: 20px 0;
@@ -104,10 +123,23 @@ const Button = styled.button`
     -moz-user-select: none;
     -ms-user-select: none;
     font-weight: bolder;
-    border: 4px solid #222;
-    box-shadow: 2px 2px 6px 4px rgba(0, 0, 0, 0.7);
+
+    ${({ isZero }) => {
+        if (isZero) {
+            return 'background-color: red; border-color: #b30000; color: white;';
+        }
+    }}
+
+    ${({ isHighlighted }) => {
+        if (isHighlighted) {
+            // return 'background-color: #ccf2ff; border-color: #4dd2ff;';
+            return 'background-color: #ddffcc; border-color: #4ce600;';
+        }
+    }}
 
     &.ok {
-        background-color: green;
+        background-color: #ccff33;
+        border-color: #99cc00;
+        color: black;
     }
 `;
