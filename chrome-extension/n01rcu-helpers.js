@@ -25,7 +25,7 @@ const n01rcu_onWsMessage = function n01rcu_onWsMessage(data, ws) {
             case 'SEARCH_PAGE_SCROLL_BOTTOM':
                 n01rcu_searchScrollBottom();
                 break;
-            case 'SEARCH_PAGE_FILTER_BY_AVERAGE':
+            case 'SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT':
                 n01rcu_searchFilterByAverageAndHide(data, ws);
                 break;
             case 'SEARCH_PAGE_START_GAME':
@@ -179,15 +179,14 @@ const n01rcu_searchStartGame = function n01rcu_searchStartGame(data, ws) {
  * @param {*} ws
  * @returns {*} 
  */
- const n01rcu_sendOnSearchPage = function n01rcu_sendOnSearchPage(ws) {
-    const pageType = n01rcu_detectPageType();
-
+const n01rcu_sendOnSearchPage = function n01rcu_sendOnSearchPage(ws) {
     let result = false;
+    
+    const pageType = n01rcu_detectPageType();
 
     if (pageType === 'search') {
         result = ws.send({
             type: 'CONTROLLERS:ON_SEARCH_PAGE',
-            payload: n01rcu_getSearchResults()
         });
     }
 

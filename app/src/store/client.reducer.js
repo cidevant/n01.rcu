@@ -1,6 +1,7 @@
 import { WS_IN_PREFIX } from '../utils/ws';
 
 const ACTIONS = {
+    // in
     PAIRED: `${WS_IN_PREFIX}:PAIRED`,
     UNPAIRED: `${WS_IN_PREFIX}:UNPAIRED`,
 };

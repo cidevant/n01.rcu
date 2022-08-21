@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { validInputValue } from '../../../utils/game';
 import { useDispatch } from 'react-redux';
@@ -10,16 +10,22 @@ import { useGameInfo } from '../../../hooks/useGameInfo';
 
 export function InputKeyboard() {
     const dispatch = useDispatch();
-    const ref = useRef(null);
     const { scoreLeft } = useGameInfo();
 
     function onSubmit(e) {
         const { value } = e.target;
 
-        if (e.key === 'Enter' && validInputValue(value, scoreLeft)) {
-            dispatch(sendInputScore(value));
-            e.target.value = '';
-            e.target.blur();
+        if (e.key === 'Enter') {
+            if (validInputValue(value, scoreLeft)) {
+                dispatch(sendInputScore(value));
+                e.target.value = '';
+                e.target.blur();
+            } else {
+                e.target.classList.add('error');
+                setTimeout(() => {
+                    e.target.classList.remove('error');
+                }, 100);
+            }
         }
     }
 
@@ -29,14 +35,13 @@ export function InputKeyboard() {
             <Sticky bottom>
                 <Scenes />
                 <StyledInput
+                    autoFocus
                     type="number"
-                    ref={ref}
+                    onKeyDown={onSubmit}
                     min={0}
                     max={180}
-                    autoFocus
                     maxLength={3}
                     minLength={1}
-                    onKeyDown={onSubmit}
                 />
                 <ScoreLeft />
             </Sticky>

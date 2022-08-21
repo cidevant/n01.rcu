@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { ScenesModal } from './ScenesModal';
+import React, { useState } from 'react';
+import { ScenesModal } from '../../ScenesModal';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -26,7 +26,7 @@ export default Scenes;
 function ScenesButton({ open }) {
     return (
         <div className="d-flex align-items-center">
-            <CornerButton color="#0ff" onClick={open}>
+            <CornerButton color="#0dcaf0" onClick={open}>
                 <FontAwesomeIcon icon="fa-solid fa-face-grin-squint-tears" className="text-black" />
             </CornerButton>
         </div>
