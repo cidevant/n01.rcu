@@ -127,7 +127,7 @@ const StatusWrapper = styled.div`
     width: 50%;
     padding: 15px;
     background-color: #eee;
-    color: #777;
+    color: black;
     border-bottom: 1px solid #999;
     font-weight: bold;
     text-align: center;
