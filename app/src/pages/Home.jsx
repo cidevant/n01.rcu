@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useGameInfo } from '../hooks/useGameInfo';
 import { useNavigate } from 'react-router-dom';
 import useHomeInfo from '../hooks/useHomeInfo';
 import styled from 'styled-components';
 
 function Home() {
-    const [searchActive, setSearchActive] = useState(false);
+    const initFetch = useRef();
     const navigate = useNavigate();
     const { gameStarted } = useGameInfo();
     const {
@@ -24,17 +24,17 @@ function Home() {
         }
     }, [navigate, gameStarted]);
 
-    // Enable search
+    // Fetch players
     useEffect(() => {
-        if (!searchActive && searchAvailable && players.length === 0) {
-            setSearchActive(true);
-            dispatchFilter();
+        if (searchAvailable && !initFetch.current) {
+            dispatchFilter(filter);
+            initFetch.current = true;
         }
-    }, [searchActive, searchAvailable, players, dispatchFilter]);
+    }, [dispatchFilter, searchAvailable, filter]);
 
     return (
         <div>
-            {searchActive && (
+            {searchAvailable && (
                 <ScrollBottomButton onClick={dispatchScrollBottom}>
                     SCROLL BOTTOM
                 </ScrollBottomButton>

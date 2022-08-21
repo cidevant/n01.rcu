@@ -4,6 +4,20 @@
 const n01rcu_ws = new n01rcu_WebSocketClient();
 const n01rcu_backupFunctions = {};
 const n01rcu_wrapperFunctions = {
+    // Watches update of JOIN (n01rcu_JOIN) value
+    createList: function () { 
+         if (join !== n01rcu_JOIN) {
+            n01rcu_JOIN = join;
+            n01rcu_sendOnSearchPage(n01rcu_ws);
+         }
+    },
+    // Watches update of JOIN (n01rcu_JOIN) value
+    createDiffList: function () {         
+        if (join !== n01rcu_JOIN) {
+            n01rcu_JOIN = join;
+            n01rcu_sendOnSearchPage(n01rcu_ws);
+         }
+    },
     //start of new leg
     initScore: function () {
         console.log('[n01.rcu.n01rcu-action-listeners] wrapper initScore');

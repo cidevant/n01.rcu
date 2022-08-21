@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { sendScrollBottom, sendFilterByAverage, sendStartGame } from '../store/home.reducer';
 import { useNetworkInfo } from './useNetworkInfo';
@@ -8,8 +9,15 @@ export function useHomeInfo() {
     const [isConnected, isPaired] = useNetworkInfo();
     const { gameStarted } = useGameInfo();
     const info = useSelector((state) => state.home);
-    const searchAvailable =
-        isConnected && isPaired && info.onSearchPage === true && gameStarted === false;
+    const searchAvailable = useMemo(
+        () =>
+            gameStarted === false &&
+            isConnected &&
+            isPaired &&
+            info.onSearchPage === true &&
+            info.joinedSearch,
+        [isConnected, isPaired, info.onSearchPage, gameStarted, info.joinedSearch]
+    );
 
     function dispatchFilter(filter) {
         dispatch(sendFilterByAverage(filter ? filter : info.filter));
@@ -27,6 +35,7 @@ export function useHomeInfo() {
         searchAvailable,
         players: info.players,
         filter: info.filter,
+        joinedSearch: info.joinedSearch,
         lastGamePlayerId: info.lastGamePlayerId,
         dispatchFilter,
         dispatchScrollBottom,

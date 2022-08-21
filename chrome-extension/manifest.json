@@ -1,45 +1,45 @@
 {
-  "manifest_version": 3,
-  "name": "[n01.online] remote control unit client",
-  "version": "1.0.0",
-  "background": {
-    "service_worker": "n01rcu-background.js"
-  },
-  "action": {
-    "default_icon": {
-      "16": "icons/default.png",
-      "36": "icons/default.png",
-      "48": "icons/default.png",
-      "120": "icons/default.png"
-    }
-  },
-  "content_scripts": [
-    {
-      "matches": [
-        "https://nakka.com/n01/online/",
-        "https://nakka.com/n01/online/n01.php"
-      ],
-      "js": [
-        "n01rcu-content-script.js"
-      ],
-      "run_at": "document_end"
-    }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": [
-        "n01rcu-helpers.js",
-        "n01rcu-websocket.js",
-        "n01rcu-action-listener.js"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
-    }
-  ],
-  "permissions": [
-    "tabs",
-    "activeTab",
-    "scripting"
-  ]
+    "manifest_version": 3,
+    "name": "[n01.online] remote control unit client",
+    "version": "1.0.0",
+    "background": {
+        "service_worker": "n01rcu-background.js"
+    },
+    "action": {
+        "default_icon": {
+            "16": "icons/default.png",
+            "36": "icons/default.png",
+            "48": "icons/default.png",
+            "120": "icons/default.png"
+        }
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://nakka.com/n01/online/",
+                "https://nakka.com/n01/online/n01.php"
+            ],
+            "js": [
+                "n01rcu-content-script.js"
+            ],
+            "run_at": "document_end"
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "n01rcu-helpers.js",
+                "n01rcu-websocket.js",
+                "n01rcu-action-listener.js"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ],
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "scripting"
+    ]
 }

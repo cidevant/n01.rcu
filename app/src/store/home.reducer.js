@@ -31,15 +31,16 @@ export function sendStartGame(payload) {
         payload,
     };
 }
-
+const defaultFilter = {
+    from: 0,
+    to: 180,
+};
 const initialState = {
     onSearchPage: false,
+    joinedSearch: false,
     lastGamePlayerId: null,
     players: [],
-    filter: {
-        from: 0,
-        to: 180,
-    },
+    filter: localStorage.getItem('filter') ?? defaultFilter,
 };
 
 export default function homeReducer(state, action) {
@@ -53,6 +54,7 @@ export default function homeReducer(state, action) {
             state = {
                 ...state,
                 onSearchPage: true,
+                joinedSearch: action.payload['payload'],
             };
             break;
         case GAME_ACTIONS.MATCH_START:
@@ -64,6 +66,7 @@ export default function homeReducer(state, action) {
 
         // Filter
         case ACTIONS.SEARCH_PAGE_FILTER_BY_AVERAGE: // out
+            localStorage.setItem('filter', action.payload);
             state = {
                 ...state,
                 filter: action.payload,

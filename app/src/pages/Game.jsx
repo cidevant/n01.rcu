@@ -33,7 +33,7 @@ function Game() {
     }
 
     const scoresList = useMemo(() => {
-        const result = scores;
+        const result = [...scores];
 
         if (scoreLeft <= 180) {
             result.unshift(zeroRow);

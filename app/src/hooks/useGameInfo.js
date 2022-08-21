@@ -1,3 +1,4 @@
+import { useMemo, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { sendInputScore, setFinishDarts } from '../store/game.reducer';
 import { validInputValue } from '../utils/game';
@@ -9,7 +10,11 @@ export function useGameInfo() {
     const dispatch = useDispatch();
     const [isConnected, isPaired] = useNetworkInfo();
     const { scoreLeft, match, finishDarts } = useSelector((state) => state.game);
-    const gameStarted = isConnected && isPaired && match != null && scoreLeft >= 0;
+    const matchIsNotEmpty = match != null;
+    const gameStarted = useMemo(
+        () => isConnected && isPaired && matchIsNotEmpty && scoreLeft >= 0,
+        [isConnected, isPaired, matchIsNotEmpty, scoreLeft]
+    );
 
     function dispatchInputScore(num) {
         if (validInputValue(num, scoreLeft)) {

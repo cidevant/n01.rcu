@@ -1,6 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 
+let n01rcu_JOIN = false;
+let n01rcu_PAIRED = false;
+
 /**
  * Process commands from websocket server
  *
@@ -118,25 +121,25 @@ const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to) {
  * @param {*} ws websocket connection
  */
 const n01rcu_searchFilterByAverageAndHide = function n01rcu_searchFilterByAverageAndHide(data, ws) {
-    const search = n01rcu_getSearchResults(data?.payload?.from, data?.payload?.to)
-    const me = n01rcu_getPlayer();
-
-    // Hide myself
-    if (me && me.pid) {
-        $(`.user_list_item[id="${me.pid}"]`).hide();
-    }
+    if (join === true) {
+        const search = n01rcu_getSearchResults(data?.payload?.from, data?.payload?.to)
+        const me = n01rcu_getPlayer();
     
-    // Hide all who not passed filter
-    search.notPassedFilter.forEach((user) => {
-        $(`.user_list_item[id="${user.id}"]`).hide();
-    });
-
-    // Show all who passed
-    search.passedFilter.forEach((user) => {
-        $(`.user_list_item[id="${user.id}"]`).show();
-    });
-
-    if (ws) {
+        // Hide myself
+        if (me && me.pid) {
+            $(`.user_list_item[id="${me.pid}"]`).hide();
+        }
+    
+        // Hide all who not passed filter
+        search.notPassedFilter.forEach((user) => {
+            $(`.user_list_item[id="${user.id}"]`).hide();
+        });
+    
+        // Show all who passed
+        search.passedFilter.forEach((user) => {
+            $(`.user_list_item[id="${user.id}"]`).show();
+        });
+    
         ws.send({
             type: 'CONTROLLERS:SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT',
             payload: search.passedFilter,
@@ -180,17 +183,14 @@ const n01rcu_searchStartGame = function n01rcu_searchStartGame(data, ws) {
  * @returns {*} 
  */
 const n01rcu_sendOnSearchPage = function n01rcu_sendOnSearchPage(ws) {
-    let result = false;
-    
     const pageType = n01rcu_detectPageType();
 
     if (pageType === 'search') {
-        result = ws.send({
+        ws.send({
             type: 'CONTROLLERS:ON_SEARCH_PAGE',
+            payload: n01rcu_JOIN,
         });
     }
-
-    return result;
 }
 
 /**
@@ -360,6 +360,8 @@ const n01rcu_getLocalStorage = function n01rcu_getLocalStorage(key, shouldParseJ
  * @param {*} ws
  */
 const n01rcu_setPaired = function n01rcu_setPaired(paired = false, ws) {
+    n01rcu_PAIRED = paired;
+
     n01rcu_changeExtensionIcon(paired ? 'paired' : 'connected');
 
     switch (n01rcu_detectPageType()) {
@@ -493,7 +495,7 @@ const n01rcu_detectPageType = function n01rcu_detectPageType() {
         return 'game';
     }
 
-    if (path === '/n01/online/' && join === true) {
+    if (path === '/n01/online/') {
         return 'search';
     }
 
@@ -506,13 +508,16 @@ const n01rcu_detectPageType = function n01rcu_detectPageType() {
  * @returns {*} 
  */
 const n01rcu_shouldConnect = function n01rcu_shouldConnect() {
+    const player = n01rcu_getPlayer();
     const type = n01rcu_detectPageType();
 
-    switch (type) {
-        case 'search':
-            return true;
-        case 'game':
-            return true;
+    if (player.sid) {
+        switch (type) {
+            case 'search':
+                return true;
+            case 'game':
+                return true;
+        }
     }
 
     return false;
@@ -536,5 +541,5 @@ const n01rcu_isValidPlayerId = function n01rcu_isValidPlayerId(id) {
         return false;
     }
 
-    return splitId[0].length === 8 && splitId[1].length === 13 ;
+    return splitId[0].length === 8 && splitId[1].length === 13;
 }
