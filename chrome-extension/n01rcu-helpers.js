@@ -240,6 +240,11 @@ const n01rcu_removeFunctionsWrappers = function n01rcu_removeFunctionsWrappers(w
 let n01rcu_matchUpdater;
 let n01rcu_matchUpdaterLastMessage;
 
+/**
+ * Reports match updates
+ *
+ * @param {*} ws
+ */
 const n01rcu_startMatchUpdater = function n01rcu_startMatchUpdater(ws) {
     if (ws.open && window.location.pathname === '/n01/online/n01.php') {
         console.log('[n01.rcu.helpers] startMatchUpdater');
@@ -273,6 +278,11 @@ const n01rcu_startMatchUpdater = function n01rcu_startMatchUpdater(ws) {
 }
 
 
+/**
+ * Stops reporting match updates
+ *
+ * @param {*} ws
+ */
 const n01rcu_stopMatchUpdater = function n01rcu_stopMatchUpdater(ws) {
     if (n01rcu_matchUpdater !== null) {
         console.log('[n01.rcu.helpers] stopMatchUpdater');
@@ -281,4 +291,40 @@ const n01rcu_stopMatchUpdater = function n01rcu_stopMatchUpdater(ws) {
         n01rcu_matchUpdater = null;
         n01rcu_matchUpdaterLastMessage = null;
     }
+}
+
+
+/**
+ * Detects type of page
+ *
+ * @returns {?string} 'game' or 'search'
+ */
+const n01rcu_detectPageType = function n01rcu_detectPageType() {
+    const path = window.location.pathname;
+
+    if (path === '/n01/online/n01.php') {
+        return 'game';
+    }
+
+    if (path === '/n01/online/' && join === true) {
+        return 'search';
+    }
+
+    return null;
+}
+
+
+const n01rcu_shouldConnect = function n01rcu_shouldConnect() {
+    const type = n01rcu_detectPageType();
+
+    switch (type) {
+        case 'search':
+            return true;
+        case 'game':
+            return true;
+    }
+
+    console.log('[n01.rcu.n01rcu-helpers][shouldConnect] page not recognized', window.location.pathname)
+
+    return false;
 }

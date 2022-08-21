@@ -65,31 +65,6 @@ const n01rcu_wrapperFunctions = {
     },
 };
 
-const n01rcu_shouldConnect = function n01rcu_shouldConnect() {
-    const path = window.location.pathname;
-
-    if (path === '/n01/online/n01.php') {
-        console.log('[n01.rcu.n01rcu-action-listeners][shouldConnect] match started -> requesting connect')
-        
-        return true;
-    }
-
-    if (path === '/n01/online/') {
-        if (join === true) {
-            console.log('[n01.rcu.n01rcu-action-listeners][shouldConnect] search match -> requesting connect')
-        
-            return true;
-        }
-
-        console.log('[n01.rcu.n01rcu-action-listeners][shouldConnect] not searching match -> no need to connect')
-
-        return false;
-    }
-
-    console.log('[n01.rcu.n01rcu-action-listeners][shouldConnect] bad path -> no need to connect', path)
-
-    return false;
-}
 
 window.onload = () => {
     if (n01rcu_shouldConnect()) {

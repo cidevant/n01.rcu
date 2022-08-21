@@ -39,7 +39,7 @@ class n01rcu_WebSocketClient {
         if (this.open) {
             console.log('[n01.rcu.ws.client] disconnecting');
 
-            this.__socket.close(code, reason);
+            this.__socket.close(code ?? 1000, reason ?? 'Normal Closure');
         } else {
             console.log('[n01.rcu.ws.client] disconnect error: no connection to server');
 
