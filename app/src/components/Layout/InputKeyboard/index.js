@@ -19,6 +19,7 @@ export function InputKeyboard() {
         if (e.key === 'Enter' && validInputValue(value, scoreLeft)) {
             dispatch(sendInputScore(value));
             e.target.value = '';
+            e.target.blur();
         }
     }
 

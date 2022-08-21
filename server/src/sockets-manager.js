@@ -43,7 +43,7 @@ class SocketsManager {
 
           if (meta.id === connectionInfo.id) {
             console.error(
-              '[sockets][validateSocketConnectionInfo] replace existing client',
+              chalk.bgYellow('[sockets][validateSocketConnectionInfo] replace existing client'),
               JSON.stringify(connectionInfo)
             );
 
@@ -197,24 +197,28 @@ class SocketsManager {
    * @returns {*}
    */
   send(socket, message) {
-    const msg = JSON.stringify(message);
-    const socketInfo = this.getSerializedInfo(socket);
+    try {
+      const msg = JSON.stringify(message);
+      const socketInfo = this.getSerializedInfo(socket);
 
-    if (!socket) {
-      console.error(chalk.red("[sockets][send][error] socket doesn't exits"), msg);
+      if (!socket) {
+        console.error(chalk.red("[sockets][send][error] socket doesn't exits"), message['type']);
 
-      return;
+        return;
+      }
+
+      if (!message || Object.keys(message).length === 0) {
+        console.error(chalk.red('[sockets][send][error] message is empty'), socketInfo);
+
+        return;
+      }
+
+      console.log('[sockets][send]', message['type'], '==>', socketInfo);
+
+      socket.send(msg);
+    } catch (error) {
+      console.error(chalk.red('[sockets][send][error] cant parse message'), message);
     }
-
-    if (!message || Object.keys(message).length === 0) {
-      console.error(chalk.red('[sockets][send][error] message is empty'), socketInfo);
-
-      return;
-    }
-
-    console.log('[sockets][send]', msg, '==>', socketInfo);
-
-    socket.send(msg);
   }
 
   getMeta(socket) {
