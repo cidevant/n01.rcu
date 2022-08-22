@@ -6,11 +6,10 @@ import styled from 'styled-components';
 import useLongPress from '../hooks/useLongPress';
 
 function Home() {
-    const initFetch = useRef();
+    const fetchPolling = useRef();
     const navigate = useNavigate();
     const { gameStarted } = useGameInfo();
-    const { searchAvailable, players, dispatchFilter, dispatchSetFilter, dispatchStartGame } =
-        useHomeInfo();
+    const { searchAvailable, players, dispatchFilter, filter, dispatchStartGame } = useHomeInfo();
 
     function refreshData() {
         dispatchFilter();
@@ -34,16 +33,16 @@ function Home() {
 
     // Players polling
     useEffect(() => {
-        if (searchAvailable && initFetch.current == null) {
+        if (searchAvailable && fetchPolling.current == null) {
             dispatchFilter();
-            initFetch.current = setInterval(() => {
+            fetchPolling.current = setInterval(() => {
                 dispatchFilter();
             }, 5000);
-        } else if (!searchAvailable && initFetch.current != null) {
-            clearInterval(initFetch.current);
-            initFetch.current = null;
+        } else if (!searchAvailable && fetchPolling.current != null) {
+            clearInterval(fetchPolling.current);
+            fetchPolling.current = null;
         }
-    }, [dispatchFilter, searchAvailable]);
+    }, [dispatchFilter, searchAvailable, filter.from, filter.to]);
 
     return (
         <div>

@@ -24,7 +24,7 @@ export function Filter() {
 export default Filter;
 
 function FilterButton({ open }) {
-    const color = '#444';
+    const color = '#6c757d';
 
     return (
         <div className="d-flex align-items-center">
