@@ -180,8 +180,7 @@ const n01rcu_searchStartGame = function n01rcu_searchStartGame(data, ws) {
     const playButton = userEl.find('input[type="button"][value="Play"].play_button');
 
     if (playButton.is(':visible')) {
-        console.error("STARTNG MATCH WITH", data['payload'])
-        // playButton.click();
+        playButton.click();
     } else {
         console.log('[n01.rcu.helpers][searchStartGame][error] cant start game with player', data['payload']);
     }
@@ -288,7 +287,16 @@ const n01rcu_changeExtensionIcon = function n01rcu_changeExtensionIcon(icon = 'd
  */
 const n01rcu_getPlayer = function n01rcu_getPlayer() {
     try {
-        return n01rcu_getLocalStorage('n01_net.onlineOptions');
+        const user = n01rcu_getLocalStorage('n01_net.onlineOptions');
+
+        if (!user) {
+            throw new Error('no player info')
+        }
+
+        return {
+            ...user,
+            playerName: user.editName ?? user.gname ?? user.tname ?? user.fname ?? user.playerName,
+        }
     } catch (error) {
         console.log('[n01.rcu.helpers] getPlayer error: ', error);
 
