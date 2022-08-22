@@ -135,20 +135,20 @@ const n01rcu_searchFilterByAverageAndHide = function n01rcu_searchFilterByAverag
         const search = n01rcu_getSearchResults(data?.payload?.from, data?.payload?.to)
         const me = n01rcu_getPlayer();
     
-        // Hide myself
-        if (me && me.pid) {
-            $(`.user_list_item[id="${me.pid}"]`).hide();
-        }
+        // // Hide myself
+        // if (me && me.pid) {
+        //     $(`.user_list_item[id="${me.pid}"]`).hide();
+        // }
     
-        // Hide all who not passed filter
-        search.notPassedFilter.forEach((user) => {
-            $(`.user_list_item[id="${user.id}"]`).hide();
-        });
+        // // Hide all who not passed filter
+        // search.notPassedFilter.forEach((user) => {
+        //     $(`.user_list_item[id="${user.id}"]`).hide();
+        // });
     
-        // Show all who passed
-        search.passedFilter.forEach((user) => {
-            $(`.user_list_item[id="${user.id}"]`).show();
-        });
+        // // Show all who passed
+        // search.passedFilter.forEach((user) => {
+        //     $(`.user_list_item[id="${user.id}"]`).show();
+        // });
 
         ws.send({
             type: 'CONTROLLERS:SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT',
