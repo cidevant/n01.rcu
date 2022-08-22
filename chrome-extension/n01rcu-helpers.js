@@ -152,7 +152,7 @@ const n01rcu_searchFilterByAverageAndHide = function n01rcu_searchFilterByAverag
 
         ws.send({
             type: 'CONTROLLERS:SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT',
-            payload: search.passedFilter,
+            payload: [...search.passedFilter].reverse(),
         });
     }
 };

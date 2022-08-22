@@ -42,7 +42,7 @@ export function useHomeInfo() {
 
     return {
         searchAvailable,
-        players: [...info.players],
+        players: info.players,
         filter: info.filter,
         joinedSearch: info.joinedSearch,
         lastGamePlayerId: info.lastGamePlayerId,

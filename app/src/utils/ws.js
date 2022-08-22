@@ -49,14 +49,18 @@ class WebsocketClient {
      * @param {*} data
      */
     send = (data) => {
-        const msg = JSON.stringify(data);
+        try {
+            const msg = JSON.stringify(data);
 
-        if (this.open) {
-            console.log('[ws.client] send message', data['type']);
+            if (this.open) {
+                console.log('[ws.client] send message', data['type']);
 
-            this.__socket.send(msg);
-        } else {
-            console.error('[ws.client] send error: no connection', msg);
+                this.__socket.send(msg);
+            } else {
+                throw new Error(`[ws.client] send error: no connection ${msg}`);
+            }
+        } catch (error) {
+            console.log(error);
         }
     };
 
