@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
     sendScrollBottom,
@@ -24,9 +24,9 @@ export function useHomeInfo() {
         [isConnected, isPaired, info.onSearchPage, gameStarted, info.joinedSearch]
     );
 
-    function dispatchFilter() {
+    const dispatchFilter = useCallback(() => {
         dispatch(sendFilterByAverage(info.filter));
-    }
+    }, [dispatch, info.filter]);
 
     function dispatchSetFilter(filter) {
         dispatch(setFilterByAverage(filter));

@@ -9,17 +9,14 @@ function Home() {
     const initFetch = useRef();
     const navigate = useNavigate();
     const { gameStarted } = useGameInfo();
-    const { searchAvailable, players, dispatchScrollBottom, dispatchFilter, dispatchStartGame } =
+    const { searchAvailable, players, dispatchFilter, dispatchSetFilter, dispatchStartGame } =
         useHomeInfo();
-
-    function stripAverageFromName(name) {
-        return name.replace(/\([0-9]*\.[0-9]*\)/, '');
-    }
 
     function refreshData() {
         dispatchFilter();
     }
 
+    // Starts game
     const longPressHandlers = useLongPress(
         (e) => {
             e.target.classList.add('ok');
@@ -35,7 +32,7 @@ function Home() {
         }
     }, [navigate, gameStarted]);
 
-    // Init players polling
+    // Players polling
     useEffect(() => {
         if (searchAvailable && initFetch.current == null) {
             dispatchFilter();
@@ -53,7 +50,7 @@ function Home() {
             {searchAvailable && <RefreshButton onClick={refreshData}>REFRESH</RefreshButton>}
             {searchAvailable &&
                 players?.length > 0 &&
-                players.reverse().map((player) => {
+                players.map((player) => {
                     return (
                         <PlayerWrapper key={player.id} className="d-flex flex-row">
                             {player.average && (
@@ -77,6 +74,10 @@ function Home() {
 }
 
 export default Home;
+
+function stripAverageFromName(name) {
+    return name.replace(/\([0-9]*\.[0-9]*\)/, '');
+}
 
 const PlayerWrapper = styled.div`
     border-bottom: 2px solid #ccc;

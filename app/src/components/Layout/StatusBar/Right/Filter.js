@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FilterModal } from './FilterModal';
+import { SearchFilterModal } from '../../../SearhcFilterModal';
 import { Button } from './index';
 
 export function Filter() {
@@ -16,7 +16,7 @@ export function Filter() {
     return (
         <>
             <FilterButton open={onShow} />
-            <FilterModal show={modalShow} close={onClose} />
+            <SearchFilterModal show={modalShow} close={onClose} />
         </>
     );
 }
