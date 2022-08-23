@@ -17,8 +17,8 @@ class n01rcu_WebSocketClient {
         } else {
             const player = n01rcu_getPlayer();
 
-            if (player && player.sid && player.playerName) {
-                const params = `?client=true&id=${player.sid}&name=${player.playerName}&accessCode=TEST`;
+            if (player && player.sid && player.pid && player.playerName) {
+                const params = `?client=true&id=${player.sid}&name=${player.playerName}&playerId=${player.pid}&accessCode=TEST`;
 
                 console.log(
                     `[n01.rcu.ws.client] connecting to ${this.__url} (name: ${player.playerName}, id: ${player.sid})`
