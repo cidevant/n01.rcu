@@ -41,7 +41,7 @@ class SocketsManager {
         existingClients.forEach((client) => {
           const meta = this.getMeta(client);
 
-          if (meta.id === connectionInfo.id) {
+          if (meta.playerId === connectionInfo.playerId) {
             console.error(
               chalk.bgYellow('[sockets][validateSocketConnectionInfo] replace existing client'),
               JSON.stringify(connectionInfo)
@@ -94,6 +94,7 @@ class SocketsManager {
 
     this.sockets.set(socket, {
       id: connectionInfo.id,
+      playerId: connectionInfo.playerId,
       name: connectionInfo.name,
       client: connectionInfo.client === 'true',
       accessCode: connectionInfo.accessCode,
