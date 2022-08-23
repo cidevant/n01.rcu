@@ -106,6 +106,11 @@ const PlayButton = styled.button`
     width: 200px;
     height: 130px;
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.5);
+    user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 
     &.ok {
         background-color: #ccff33;
