@@ -112,7 +112,7 @@ const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to, cam =
                     });
                 }
             } else {
-                // Hide all not playing
+                // not playing or no cam
                 returnValue.notPassedFilter.push({
                     id: playerId,
                     name: userEl.find('.user_list_name_text').text(),
