@@ -82,6 +82,11 @@ export default AccessCodeForm;
 const ToggleButton = styled.div`
     font-weight: bold;
     font-size: 24px;
+    user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 
     ${({ enabled }) => {
         if (enabled) {
