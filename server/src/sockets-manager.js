@@ -1,7 +1,7 @@
 import queryString from 'query-string';
 import chalk from 'chalk';
 
-const privateMetaAttributes = ['accessCode'];
+const privateMetaAttributes = ['accessCode', 'id'];
 
 class SocketsManager {
   constructor() {
@@ -296,7 +296,7 @@ class SocketsManager {
     const meta = this.getMeta(socket);
 
     if (meta) {
-      return `[${meta.client ? 'client' : 'controller'}][${meta.name}][${meta.id}]`;
+      return `[${meta.client ? 'client' : 'controller'}][${meta.name}][${meta.playerId}]`;
     }
   }
 

@@ -4,15 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import useHomeInfo from '../hooks/useHomeInfo';
 import styled from 'styled-components';
 import useLongPress from '../hooks/useLongPress';
+import useInterval from '../hooks/useInterval';
 
 function Home() {
-    const fetchPolling = useRef();
+    // const fetchPolling = useRef();
     const navigate = useNavigate();
     const { gameStarted } = useGameInfo();
-    const { searchAvailable, players, dispatchFilter, filter, dispatchStartGame } = useHomeInfo();
+    const { searchAvailable, players, dispatchFilter, dispatchScrollBottom, dispatchStartGame } =
+        useHomeInfo();
 
-    function refreshData() {
-        dispatchFilter();
+    function scrollBottom() {
+        dispatchScrollBottom();
     }
 
     // Starts game
@@ -31,22 +33,16 @@ function Home() {
         }
     }, [navigate, gameStarted]);
 
-    // Players polling
-    useEffect(() => {
-        if (searchAvailable && fetchPolling.current == null) {
+    // Start polling for player list
+    useInterval(() => {
+        if (searchAvailable) {
             dispatchFilter();
-            fetchPolling.current = setInterval(() => {
-                dispatchFilter();
-            }, 5000);
-        } else if (!searchAvailable && fetchPolling.current != null) {
-            clearInterval(fetchPolling.current);
-            fetchPolling.current = null;
         }
-    }, [dispatchFilter, searchAvailable, filter.from, filter.to]);
+    }, 5000);
 
     return (
         <div>
-            {searchAvailable && <RefreshButton onClick={refreshData}>REFRESH</RefreshButton>}
+            {searchAvailable && <RefreshButton onClick={scrollBottom}>SCROLL BOTTOM</RefreshButton>}
             {searchAvailable &&
                 players?.length > 0 &&
                 players.map((player) => {

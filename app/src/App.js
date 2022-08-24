@@ -7,6 +7,7 @@ import store from './store';
 
 import Home from './pages/Home';
 import Game from './pages/Game';
+import Settings from './pages/Settings';
 
 export default function App() {
     return (
@@ -16,6 +17,7 @@ export default function App() {
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/game" element={<Game />} />
+                        <Route path="/settings" element={<Settings />} />
                     </Routes>
                 </Layout>
             </WebSocket>
