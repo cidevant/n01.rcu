@@ -84,7 +84,7 @@ const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to) {
         const average = isNaN(avgValue) ? null : avgValue;
         const playerId = userEl.attr('id');
         const isSearching = userEl.find('input[type="button"][value="Play"].play_button').is(':visible');
-        const isCamAvailable = user.find('.webcam').is(':visible');
+        const isCamAvailable = userEl.find('.webcam').is(':visible');
 
         if (n01rcu_isValidPlayerId(playerId)) {
             if (isSearching && isCamAvailable) {
