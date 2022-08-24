@@ -84,9 +84,10 @@ const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to) {
         const average = isNaN(avgValue) ? null : avgValue;
         const playerId = userEl.attr('id');
         const isSearching = userEl.find('input[type="button"][value="Play"].play_button').is(':visible');
+        const isCamAvailable = user.find('.webcam').is(':visible');
 
         if (n01rcu_isValidPlayerId(playerId)) {
-            if (isSearching) {
+            if (isSearching && isCamAvailable) {
                 // Filter by params
                 if (!isNaN(from) || !isNaN(to)) {
                     if (isValid(avgValue)) {
@@ -295,12 +296,40 @@ const n01rcu_getPlayer = function n01rcu_getPlayer() {
 
         return {
             ...user,
-            playerName: user.editName ?? user.gname ?? user.tname ?? user.fname ?? user.playerName,
+            playerName: n01rcu_getPlayerName(user),
         }
     } catch (error) {
         console.log('[n01.rcu.helpers] getPlayer error: ', error);
 
         return {};
+    }
+}
+
+/**
+ * Returns user name
+ *
+ * @param {Object} user
+ * @returns {string} name
+ */
+const n01rcu_getPlayerName = function n01rcu_getPlayerName(user) {
+    if (user?.editName?.length > 0) {
+        return user.editName;
+    }
+
+    if (user?.gname?.length > 0) {
+        return user.gname;
+    }
+
+    if (user?.tname?.length > 0) {
+        return user.tname;
+    }
+
+    if (user?.fname?.length > 0) {
+        return user.fname;
+    }
+
+    if (user?.playerName?.length > 0) {
+        return user.playerName;
     }
 }
 
