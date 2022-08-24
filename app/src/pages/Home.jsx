@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useGameInfo } from '../hooks/useGameInfo';
 import { useNavigate } from 'react-router-dom';
 import useHomeInfo from '../hooks/useHomeInfo';

@@ -9,6 +9,7 @@ import Button from 'react-bootstrap/Button';
 function AccessCodeForm(props) {
     const [from, setFrom] = useState(useSelector((state) => state.home.filter.from));
     const [to, setTo] = useState(useSelector((state) => state.home.filter.to));
+    const [cam, setCam] = useState(useSelector((state) => state.home.filter.cam));
     const { searchAvailable } = useHomeInfo();
 
     function updateFrom(event) {
@@ -21,10 +22,15 @@ function AccessCodeForm(props) {
         setTo(event.target.value);
     }
 
+    function updateCam() {
+        setCam(!cam);
+    }
+
     function applyFilter() {
         props.applyFormValues({
             from,
             to,
+            cam,
         });
     }
 
@@ -49,8 +55,18 @@ function AccessCodeForm(props) {
                         onChange={updateTo}
                     />
                 </FormInputWrapper>
+                <FormInputWrapper className="mt-5 d-flex flex-row">
+                    <TitleForm>CAMERA</TitleForm>
+                    <ToggleButton
+                        enabled={cam === true}
+                        className="d-flex align-items-center justify-content-center ms-4 flex-grow-1"
+                        onClick={updateCam}
+                    >
+                        {cam === true ? 'ENABLED' : 'DISABLED'}
+                    </ToggleButton>
+                </FormInputWrapper>
 
-                <ButtonWrapper className="d-grid gap-2">
+                <ButtonWrapper className="d-grid gap-2 mt-4">
                     <Button size="lg" onClick={applyFilter} variant="success">
                         <FontAwesomeIcon icon="fa-solid fa-filter" className="text-white me-4" />
                         APPLY FILTER
@@ -62,6 +78,19 @@ function AccessCodeForm(props) {
 }
 
 export default AccessCodeForm;
+
+const ToggleButton = styled.div`
+    font-weight: bold;
+    font-size: 24px;
+
+    ${({ enabled }) => {
+        if (enabled) {
+            return 'background-color: green; color: white;';
+        }
+
+        return 'background-color: #bbb;';
+    }}
+`;
 
 const FormInputWrapper = styled.div`
     padding: 0 20px;

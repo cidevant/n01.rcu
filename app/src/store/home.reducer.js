@@ -53,6 +53,7 @@ try {
     filterValue = {
         from: 0,
         to: 180,
+        cam: true,
     };
 }
 
