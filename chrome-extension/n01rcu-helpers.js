@@ -48,7 +48,7 @@ const n01rcu_onWsMessage = function n01rcu_onWsMessage(data, ws) {
  * @param {?number} to Average score to
  * @returns {Array<object>} list of users
  */
-const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to) {
+const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to, cam = true) {
     let notMeSelector = '';
 
     const me = n01rcu_getPlayer();
@@ -84,10 +84,10 @@ const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to) {
         const average = isNaN(avgValue) ? null : avgValue;
         const playerId = userEl.attr('id');
         const isSearching = userEl.find('input[type="button"][value="Play"].play_button').is(':visible');
-        const isCamAvailable = userEl.find('.webcam').is(':visible');
+        const camFilter = cam === false ? true : userEl.find('.webcam').is(':visible');
 
         if (n01rcu_isValidPlayerId(playerId)) {
-            if (isSearching && isCamAvailable) {
+            if (isSearching && camFilter) {
                 // Filter by params
                 if (!isNaN(from) || !isNaN(to)) {
                     if (isValid(avgValue)) {
@@ -133,7 +133,7 @@ const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to) {
  */
 const n01rcu_searchFilterByAverageAndHide = function n01rcu_searchFilterByAverageAndHide(data, ws) {
     if (join === true) {
-        const search = n01rcu_getSearchResults(data?.payload?.from, data?.payload?.to)
+        const search = n01rcu_getSearchResults(data?.payload?.from, data?.payload?.to, data?.payload?.cam);
         const me = n01rcu_getPlayer();
     
         // // Hide myself
