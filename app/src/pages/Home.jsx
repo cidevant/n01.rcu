@@ -88,7 +88,7 @@ const PlayerName = styled.div`
 `;
 
 const PlayerAverage = styled.div`
-    font-size: 52px;
+    font-size: 32px;
     margin-right: 20px;
     font-weight: bold;
 `;
