@@ -84,7 +84,8 @@ const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to, cam =
         const average = isNaN(avgValue) ? null : avgValue;
         const playerId = userEl.attr('id');
         const isSearching = userEl.find('input[type="button"][value="Play"].play_button').is(':visible');
-        const camFilter = cam === false ? true : userEl.find('.webcam').is(':visible');
+        const camEnabled = userEl.find('.webcam').is(':visible');
+        const camFilter = cam === false ? true : camEnabled;
 
         if (n01rcu_isValidPlayerId(playerId)) {
             if (isSearching && camFilter) {
@@ -95,12 +96,14 @@ const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to, cam =
                             id: playerId,
                             name: userEl.find('.user_list_name_text').text(),
                             average,
+                            cam: camEnabled,
                         });
                     } else {
                         returnValue.notPassedFilter.push({
                             id: playerId,
                             name: userEl.find('.user_list_name_text').text(),
                             average,
+                            cam: camEnabled,
                         });
                     }
                 } else {
@@ -109,6 +112,7 @@ const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to, cam =
                         id: playerId,
                         name: userEl.find('.user_list_name_text').text(),
                         average,
+                        cam: camEnabled,
                     });
                 }
             } else {
@@ -117,6 +121,7 @@ const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to, cam =
                     id: playerId,
                     name: userEl.find('.user_list_name_text').text(),
                     average,
+                    cam: camEnabled,
                 });
             }
         }

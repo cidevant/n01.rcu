@@ -5,6 +5,7 @@ import useHomeInfo from '../hooks/useHomeInfo';
 import styled from 'styled-components';
 import useLongPress from '../hooks/useLongPress';
 import useInterval from '../hooks/useInterval';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function Home() {
     // const fetchPolling = useRef();
@@ -54,6 +55,9 @@ function Home() {
                                 </PlayerAverage>
                             )}
                             <PlayerName className="flex-grow-1 d-flex align-items-center">
+                                {player.cam && (
+                                    <FontAwesomeIcon className="me-2" icon="fa-solid fa-video" />
+                                )}
                                 {stripAverageFromName(player.name)}
                             </PlayerName>
                             <PlayerButtonWrapper className="d-flex align-items-center">
