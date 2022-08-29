@@ -1,20 +1,13 @@
 import Button from 'react-bootstrap/Button';
 import Form from './Form';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import React, { useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useHomeInfo from '../../hooks/useHomeInfo';
 
 export function SearchFilterModal({ show, close }) {
     const { dispatchSetFilter } = useHomeInfo();
-    const applyFormValues = useCallback(
-        (filter) => {
-            dispatchSetFilter(filter);
-            close();
-        },
-        [dispatchSetFilter, close]
-    );
 
     return (
         <Offcanvas placement="end" show={show} onHide={close}>
@@ -24,7 +17,7 @@ export function SearchFilterModal({ show, close }) {
                     FILTER
                 </Button>
             </ButtonWrapper>
-            <Form applyFormValues={applyFormValues} />
+            <Form applyFormValues={dispatchSetFilter} />
         </Offcanvas>
     );
 }

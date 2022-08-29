@@ -6,7 +6,7 @@ import useHomeInfo from '../../hooks/useHomeInfo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from 'react-bootstrap/Button';
 
-function AccessCodeForm(props) {
+function SearchFilterForm(props) {
     const [from, setFrom] = useState(useSelector((state) => state.home.filter.from));
     const [to, setTo] = useState(useSelector((state) => state.home.filter.to));
     const [cam, setCam] = useState(useSelector((state) => state.home.filter.cam));
@@ -14,23 +14,42 @@ function AccessCodeForm(props) {
 
     function updateFrom(event) {
         event.preventDefault();
-        setFrom(event.target.value);
+
+        const { value } = event.target;
+
+        if (value >= 0 && value <= 180) {
+            setFrom(value);
+            props.applyFormValues({
+                from: parseInt(value, 10),
+                to: parseInt(to, 10),
+                cam,
+            });
+        }
     }
 
     function updateTo(event) {
         event.preventDefault();
-        setTo(event.target.value);
+
+        const { value } = event.target;
+
+        if (value >= 0 && value <= 180) {
+            setTo(value);
+            props.applyFormValues({
+                from: parseInt(from, 10),
+                to: parseInt(value, 10),
+                cam,
+            });
+        }
     }
 
-    function updateCam() {
+    function updateCam(event) {
+        event.preventDefault();
+
         setCam(!cam);
-    }
-
-    function applyFilter() {
         props.applyFormValues({
-            from,
-            to,
-            cam,
+            from: parseInt(from, 10),
+            to: parseInt(to, 10),
+            cam: !cam,
         });
     }
 
@@ -55,21 +74,15 @@ function AccessCodeForm(props) {
                         onChange={updateTo}
                     />
                 </FormInputWrapper>
-                <FormInputWrapper className="mt-5 d-flex flex-row">
-                    <TitleForm>CAMERA</TitleForm>
-                    <ToggleButton
-                        enabled={cam === true}
-                        className="d-flex align-items-center justify-content-center ms-4 flex-grow-1"
-                        onClick={updateCam}
-                    >
-                        {cam === true ? 'ENABLED' : 'DISABLED'}
-                    </ToggleButton>
-                </FormInputWrapper>
 
                 <ButtonWrapper className="d-grid gap-2 mt-4">
-                    <Button size="lg" onClick={applyFilter} variant="success">
-                        <FontAwesomeIcon icon="fa-solid fa-filter" className="text-white me-4" />
-                        APPLY FILTER
+                    <Button
+                        size="lg"
+                        onClick={updateCam}
+                        variant={cam === true ? 'success' : 'secondary'}
+                    >
+                        <FontAwesomeIcon className="text-white me-4" icon="fa-solid fa-video" />
+                        {cam === true ? 'ENABLED' : 'DISABLED'}
                     </Button>
                 </ButtonWrapper>
             </div>
@@ -77,25 +90,7 @@ function AccessCodeForm(props) {
     );
 }
 
-export default AccessCodeForm;
-
-const ToggleButton = styled.div`
-    font-weight: bold;
-    font-size: 24px;
-    user-select: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-
-    ${({ enabled }) => {
-        if (enabled) {
-            return 'background-color: green; color: white;';
-        }
-
-        return 'background-color: #bbb;';
-    }}
-`;
+export default SearchFilterForm;
 
 const FormInputWrapper = styled.div`
     padding: 0 20px;

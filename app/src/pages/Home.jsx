@@ -11,12 +11,7 @@ function Home() {
     // const fetchPolling = useRef();
     const navigate = useNavigate();
     const { gameStarted } = useGameInfo();
-    const { searchAvailable, players, dispatchFilter, dispatchScrollBottom, dispatchStartGame } =
-        useHomeInfo();
-
-    function scrollBottom() {
-        dispatchScrollBottom();
-    }
+    const { searchAvailable, players, dispatchFilter, dispatchStartGame } = useHomeInfo();
 
     // Starts game
     const longPressHandlers = useLongPress(
@@ -43,7 +38,6 @@ function Home() {
 
     return (
         <div>
-            {searchAvailable && <RefreshButton onClick={scrollBottom}>SCROLL BOTTOM</RefreshButton>}
             {searchAvailable &&
                 players?.length > 0 &&
                 players.map((player) => {
