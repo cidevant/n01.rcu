@@ -86,6 +86,7 @@ const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to, cam =
         const isSearching = userEl.find('input[type="button"][value="Play"].play_button').is(':visible');
         const camEnabled = userEl.find('.webcam').is(':visible');
         const camFilter = cam === false ? true : camEnabled;
+        const legsMessage = userEl.find('.legs_msg').text();
 
         if (n01rcu_isValidPlayerId(playerId)) {
             if (isSearching && camFilter) {
@@ -97,6 +98,7 @@ const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to, cam =
                             name: userEl.find('.user_list_name_text').text(),
                             average,
                             cam: camEnabled,
+                            legs: legsMessage,
                         });
                     } else {
                         returnValue.notPassedFilter.push({
@@ -104,6 +106,7 @@ const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to, cam =
                             name: userEl.find('.user_list_name_text').text(),
                             average,
                             cam: camEnabled,
+                            legs: legsMessage,
                         });
                     }
                 } else {
@@ -113,6 +116,7 @@ const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to, cam =
                         name: userEl.find('.user_list_name_text').text(),
                         average,
                         cam: camEnabled,
+                        legs: legsMessage,
                     });
                 }
             } else {
@@ -122,6 +126,7 @@ const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to, cam =
                     name: userEl.find('.user_list_name_text').text(),
                     average,
                     cam: camEnabled,
+                    legs: legsMessage,
                 });
             }
         }

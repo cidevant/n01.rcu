@@ -62,7 +62,8 @@ function Home() {
                             </PlayerName>
                             <PlayerButtonWrapper className="d-flex align-items-center">
                                 <PlayButton id={player.id} {...longPressHandlers}>
-                                    PLAY
+                                    PLAY <br />
+                                    <SmallText>{player.legs}</SmallText>
                                 </PlayButton>
                             </PlayerButtonWrapper>
                         </PlayerWrapper>
@@ -81,6 +82,10 @@ function stripAverageFromName(name) {
 const PlayerWrapper = styled.div`
     border-bottom: 2px solid #ccc;
     padding: 40px 40px;
+`;
+
+const SmallText = styled.span`
+    font-size: 24px;
 `;
 
 const PlayerName = styled.div`
@@ -103,7 +108,7 @@ const PlayButton = styled.button`
     font-size: 30px;
     border-radius: 15px;
     font-weight: bold;
-    width: 200px;
+    width: 250px;
     height: 130px;
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.5);
     user-select: none;
