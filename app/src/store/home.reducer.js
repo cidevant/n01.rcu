@@ -3,6 +3,7 @@ import { ACTIONS as GAME_ACTIONS } from './game.reducer';
 
 const ACTIONS = {
     SET_FILTER: 'SET_FILTER',
+    SET_KEEP_SCROLLING_BOTTOM: 'SET_KEEP_SCROLLING_BOTTOM',
 
     // in
     ON_SEARCH_PAGE: `${WS_IN_PREFIX}:ON_SEARCH_PAGE`,
@@ -30,6 +31,13 @@ export function sendFilterByAverage(payload) {
 export function setFilterByAverage(payload) {
     return {
         type: ACTIONS.SET_FILTER,
+        payload,
+    };
+}
+
+export function setKeepScrollingBottom(payload) {
+    return {
+        type: ACTIONS.SET_KEEP_SCROLLING_BOTTOM,
         payload,
     };
 }
@@ -63,6 +71,7 @@ const initialState = {
     lastGamePlayerId: '',
     players: [],
     filter: filterValue,
+    keepScrollingBottom: false,
 };
 
 export default function homeReducer(state, action) {
@@ -87,6 +96,7 @@ export default function homeReducer(state, action) {
             break;
 
         // Filter
+
         case ACTIONS.SET_FILTER:
             localStorage.setItem('filter', JSON.stringify(action.payload));
             state = {
@@ -97,11 +107,18 @@ export default function homeReducer(state, action) {
                 },
             };
             break;
-
         case ACTIONS.SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT:
             state = {
                 ...state,
                 players: action.payload['payload'],
+            };
+            break;
+
+        // Scroll bottom
+        case ACTIONS.SET_KEEP_SCROLLING_BOTTOM:
+            state = {
+                ...state,
+                keepScrollingBottom: action.payload,
             };
             break;
     }

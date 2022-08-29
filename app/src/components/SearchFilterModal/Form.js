@@ -10,7 +10,8 @@ function SearchFilterForm(props) {
     const [from, setFrom] = useState(useSelector((state) => state.home.filter.from));
     const [to, setTo] = useState(useSelector((state) => state.home.filter.to));
     const [cam, setCam] = useState(useSelector((state) => state.home.filter.cam));
-    const { searchAvailable } = useHomeInfo();
+    const [scroll, setScroll] = useState(useSelector((state) => state.home.keepScrollingBottom));
+    const { searchAvailable, dispatchKeepScrollingBottom } = useHomeInfo();
 
     function updateFrom(event) {
         event.preventDefault();
@@ -53,6 +54,13 @@ function SearchFilterForm(props) {
         });
     }
 
+    function updateScroll(event) {
+        event.preventDefault();
+
+        setScroll(!scroll);
+        dispatchKeepScrollingBottom(!scroll);
+    }
+
     return (
         <Form>
             <div className="d-grid">
@@ -75,7 +83,7 @@ function SearchFilterForm(props) {
                     />
                 </FormInputWrapper>
 
-                <ButtonWrapper className="d-grid gap-2 mt-4">
+                <ButtonWrapper className="d-grid gap-2 mt-4 mb-4">
                     <Button
                         size="lg"
                         onClick={updateCam}
@@ -86,6 +94,24 @@ function SearchFilterForm(props) {
                             icon={cam === true ? 'fa-solid fa-video' : 'fa-solid fa-video-slash'}
                         />
                         {cam === true ? 'ENABLED' : 'DISABLED'}
+                    </Button>
+                </ButtonWrapper>
+
+                <ButtonWrapper className="d-grid gap-2 mt-5">
+                    <Button
+                        size="lg"
+                        onClick={updateScroll}
+                        variant={scroll === true ? 'success' : 'secondary'}
+                    >
+                        <FontAwesomeIcon
+                            className="text-white me-4"
+                            icon={
+                                scroll === true
+                                    ? 'fa-solid fa-arrow-down'
+                                    : 'fa-solid fa-arrows-to-circle'
+                            }
+                        />
+                        {scroll === true ? 'SCROLLING' : 'STILL'}
                     </Button>
                 </ButtonWrapper>
             </div>

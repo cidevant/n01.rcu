@@ -11,7 +11,14 @@ function Home() {
     // const fetchPolling = useRef();
     const navigate = useNavigate();
     const { gameStarted } = useGameInfo();
-    const { searchAvailable, players, dispatchFilter, dispatchStartGame } = useHomeInfo();
+    const {
+        searchAvailable,
+        players,
+        dispatchFilter,
+        dispatchStartGame,
+        dispatchScrollBottom,
+        keepScrollingBottom,
+    } = useHomeInfo();
 
     // Starts game
     const longPressHandlers = useLongPress(
@@ -33,6 +40,12 @@ function Home() {
     useInterval(() => {
         if (searchAvailable) {
             dispatchFilter();
+        }
+    }, 5000);
+
+    useInterval(() => {
+        if (keepScrollingBottom) {
+            dispatchScrollBottom();
         }
     }, 5000);
 
@@ -116,12 +129,4 @@ const PlayButton = styled.button`
         border-color: #99cc00;
         color: black;
     }
-`;
-
-const RefreshButton = styled.button`
-    width: 100%;
-    padding: 20px;
-    border: 0;
-    height: 100px;
-    font-size: 40px;
 `;

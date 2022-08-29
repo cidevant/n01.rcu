@@ -5,6 +5,7 @@ import {
     sendFilterByAverage,
     sendStartGame,
     setFilterByAverage,
+    setKeepScrollingBottom,
 } from '../store/home.reducer';
 import { useNetworkInfo } from './useNetworkInfo';
 import { useGameInfo } from './useGameInfo';
@@ -32,6 +33,10 @@ export function useHomeInfo() {
         dispatch(setFilterByAverage(filter));
     }
 
+    function dispatchKeepScrollingBottom(value) {
+        dispatch(setKeepScrollingBottom(value));
+    }
+
     function dispatchScrollBottom() {
         dispatch(sendScrollBottom());
     }
@@ -46,10 +51,12 @@ export function useHomeInfo() {
         filter: info.filter,
         joinedSearch: info.joinedSearch,
         lastGamePlayerId: info.lastGamePlayerId,
+        keepScrollingBottom: info.keepScrollingBottom,
         dispatchSetFilter,
         dispatchFilter,
         dispatchScrollBottom,
         dispatchStartGame,
+        dispatchKeepScrollingBottom,
     };
 }
 
