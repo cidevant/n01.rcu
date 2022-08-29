@@ -81,7 +81,10 @@ function SearchFilterForm(props) {
                         onClick={updateCam}
                         variant={cam === true ? 'success' : 'secondary'}
                     >
-                        <FontAwesomeIcon className="text-white me-4" icon="fa-solid fa-video" />
+                        <FontAwesomeIcon
+                            className="text-white me-4"
+                            icon={cam === true ? 'fa-solid fa-video' : 'fa-solid fa-video-slash'}
+                        />
                         {cam === true ? 'ENABLED' : 'DISABLED'}
                     </Button>
                 </ButtonWrapper>
