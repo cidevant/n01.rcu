@@ -1,7 +1,7 @@
 import queryString from 'query-string';
 import chalk from 'chalk';
 
-const privateMetaAttributes = ['accessCode', 'id'];
+const privateMetaAttributes = ['id', 'accessCode'];
 
 class SocketsManager {
   constructor() {
@@ -186,7 +186,7 @@ class SocketsManager {
         });
 
         console.log(chalk.greenBright('[sockets][pair]'), this.getSerializedInfo(socket));
-      }, 100);
+      }, 300);
     }
   }
 
@@ -296,7 +296,9 @@ class SocketsManager {
     const meta = this.getMeta(socket);
 
     if (meta) {
-      return `[${meta.client ? 'client' : 'controller'}][${meta.name}][${meta.playerId}]`;
+      const playerId = meta.playerId != null && `[${meta.playerId}]`;
+
+      return `[${meta.client ? 'client' : 'controller'}][${meta.name}]${playerId}`;
     }
   }
 

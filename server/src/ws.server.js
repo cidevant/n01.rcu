@@ -1,6 +1,7 @@
 import { handleActions } from './ws.handlers.js';
 import { sockets } from './sockets-manager.js';
 import { WebSocketServer } from 'ws';
+import chalk from 'chalk';
 
 /**
  * WebSocket server
@@ -23,4 +24,6 @@ export function attachWebsocketServer(server) {
       wsServer.emit('connection', ws, request);
     });
   });
+
+  console.log('[ws.server] listening on path', chalk.greenBright('/ws'));
 }

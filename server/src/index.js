@@ -1,8 +1,10 @@
 import { attachWebsocketServer } from './ws.server.js';
 import { initWebServer } from './web.server.js';
 
-// Run Web server
-const server = initWebServer();
+const PORT = process.env.PORT || 3000;
 
-// Attach WebSockets server
-attachWebsocketServer(server);
+// Web server
+const webServer = initWebServer(PORT);
+
+// WebSockets Server
+attachWebsocketServer(webServer);
