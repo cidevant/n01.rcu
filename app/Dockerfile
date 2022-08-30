@@ -1,5 +1,5 @@
 FROM node:18-alpine
-RUN apk add --no-cache build-base nodejs icu-data-fullnp
+RUN apk add --no-cache build-base nodejs icu-data-full
 ENV NODE_ENV="development"
 ENV BROWSER="none"
 ENV PORT=7001
