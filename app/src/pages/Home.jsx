@@ -77,7 +77,7 @@ function Home() {
                     );
                 })}
 
-            {searchAvailable === false && <div>SEARCH IS NOT AVAILABLE22</div>}
+            {searchAvailable === false && <div>SEARCH IS NOT AVAILABLE</div>}
         </div>
     );
 }

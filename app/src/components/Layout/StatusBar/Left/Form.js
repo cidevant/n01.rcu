@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Spinner from 'react-bootstrap/Spinner';
-import { faHandshake } from '@fortawesome/fontawesome-free-solid';
 
 function AccessCodeForm(props) {
     const wsStatus = useSelector((state) => state.ws.status);
@@ -108,7 +107,7 @@ function ClientConnection({ status, client, serverStatus }) {
         }
 
         if (status) {
-            return <FontAwesomeIcon className="me-2 text-success" icon={faHandshake} />;
+            return <FontAwesomeIcon className="me-2 text-success" icon="fa-solid fa-handshake" />;
         }
 
         return <Spinner className="me-2" animation="border" size="sm" />;

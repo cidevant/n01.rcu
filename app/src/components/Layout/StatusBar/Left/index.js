@@ -1,4 +1,3 @@
-import { faHandshake } from '@fortawesome/fontawesome-free-solid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NetworkModal } from './NetworkModal';
 import React, { useState, useMemo } from 'react';
@@ -32,7 +31,7 @@ function NetworkButton({ open }) {
     const icon = useMemo(() => {
         if (isConnected) {
             if (isPaired) {
-                return <FontAwesomeIcon fontSize={70} icon={faHandshake} />;
+                return <FontAwesomeIcon fontSize={70} icon="fa-solid fa-handshake" />;
             }
 
             return <Spinner animation="border" size="lg" />;
