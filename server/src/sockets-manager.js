@@ -1,7 +1,7 @@
 import queryString from 'query-string';
 import chalk from 'chalk';
 
-const privateMetaAttributes = ['accessCode'];
+const privateMetaAttributes = ['accessCode', 'id'];
 
 class SocketsManager {
   constructor() {
@@ -23,7 +23,11 @@ class SocketsManager {
         connectionInfo
       );
 
-      return false;
+      return {
+        valid: false,
+        code: 3000,
+        reason: 'missing accessCode',
+      };
     }
 
     if (connectionInfo.client === 'true') {
@@ -32,16 +36,44 @@ class SocketsManager {
       );
 
       if (existingClients.length > 0) {
+        let replace = false;
+
+        existingClients.forEach((client) => {
+          const meta = this.getMeta(client);
+
+          if (meta.playerId === connectionInfo.playerId) {
+            console.error(
+              chalk.bgYellow('[sockets][validateSocketConnectionInfo] replace existing client'),
+              JSON.stringify(connectionInfo)
+            );
+
+            replace = true;
+
+            client.close(3005, 'new client connected');
+            this.onClose(client);
+          }
+        });
+
+        if (replace) {
+          return {
+            valid: true,
+          };
+        }
+
         console.error(
           chalk.red('[sockets][validateSocketConnectionInfo][error] client already exists'),
-          connectionInfo
+          JSON.stringify(connectionInfo)
         );
 
-        return false;
+        return {
+          valid: false,
+          code: 3000,
+          reason: 'client already exists',
+        };
       }
     }
 
-    return true;
+    return { valid: true };
   }
 
   /**
@@ -54,13 +86,15 @@ class SocketsManager {
   onConnect(socket, request) {
     const [, params] = request.url.split('?') ?? [];
     const connectionInfo = queryString.parse(params);
+    const { valid, code, reason } = this.validateSocketConnectionInfo(connectionInfo);
 
-    if (!this.validateSocketConnectionInfo(connectionInfo)) {
-      socket.close();
+    if (!valid) {
+      socket.close(code, reason);
     }
 
     this.sockets.set(socket, {
       id: connectionInfo.id,
+      playerId: connectionInfo.playerId,
       name: connectionInfo.name,
       client: connectionInfo.client === 'true',
       accessCode: connectionInfo.accessCode,
@@ -98,7 +132,7 @@ class SocketsManager {
 
         controllers.forEach((controllerSocket) => {
           this.send(controllerSocket, {
-            type: 'unpaired',
+            type: 'UNPAIRED',
           });
         });
       } else {
@@ -111,7 +145,7 @@ class SocketsManager {
           console.log(chalk.yellowBright('[sockets][onClose][unpair] no controllers'), socketInfo);
 
           this.send(clientSocket, {
-            type: 'unpaired',
+            type: 'UNPAIRED',
           });
         }
       }
@@ -141,14 +175,14 @@ class SocketsManager {
           controllersMetaSafe.push(this.getMetaSafe(controllerSocket));
 
           this.send(controllerSocket, {
-            type: 'paired',
-            value: clientMetaSafe,
+            type: 'PAIRED',
+            payload: clientMetaSafe,
           });
         });
 
         this.send(clientSocket, {
-          type: 'paired',
-          value: controllersMetaSafe,
+          type: 'PAIRED',
+          payload: controllersMetaSafe,
         });
 
         console.log(chalk.greenBright('[sockets][pair]'), this.getSerializedInfo(socket));
@@ -164,24 +198,28 @@ class SocketsManager {
    * @returns {*}
    */
   send(socket, message) {
-    const msg = JSON.stringify(message);
-    const socketInfo = this.getSerializedInfo(socket);
+    try {
+      const msg = JSON.stringify(message);
+      const socketInfo = this.getSerializedInfo(socket);
 
-    if (!socket) {
-      console.error(chalk.red("[sockets][send][error] socket doesn't exits"), msg);
+      if (!socket) {
+        console.error(chalk.red("[sockets][send][error] socket doesn't exits"), message['type']);
 
-      return;
+        return;
+      }
+
+      if (!message || Object.keys(message).length === 0) {
+        console.error(chalk.red('[sockets][send][error] message is empty'), socketInfo);
+
+        return;
+      }
+
+      console.log('[sockets][send]', message['type'], '==>', socketInfo);
+
+      socket.send(msg);
+    } catch (error) {
+      console.error(chalk.red('[sockets][send][error] cant parse message'), message);
     }
-
-    if (!message || Object.keys(message).length === 0) {
-      console.error(chalk.red('[sockets][send][error] message is empty'), socketInfo);
-
-      return;
-    }
-
-    console.log('[sockets][send]', msg, '==>', socketInfo);
-
-    socket.send(msg);
   }
 
   getMeta(socket) {
@@ -258,7 +296,7 @@ class SocketsManager {
     const meta = this.getMeta(socket);
 
     if (meta) {
-      return `[${meta.client ? 'client' : 'controller'}][${meta.name}][${meta.id}]`;
+      return `[${meta.client ? 'client' : 'controller'}][${meta.name}][${meta.playerId}]`;
     }
   }
 

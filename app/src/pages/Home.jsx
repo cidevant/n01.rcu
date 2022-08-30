@@ -1,25 +1,132 @@
-import React, { useContext } from 'react';
-import { WebsocketContext } from '../websocket/context';
+import React, { useEffect } from 'react';
+import { useGameInfo } from '../hooks/useGameInfo';
+import { useNavigate } from 'react-router-dom';
+import useHomeInfo from '../hooks/useHomeInfo';
+import styled from 'styled-components';
+import useLongPress from '../hooks/useLongPress';
+import useInterval from '../hooks/useInterval';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function Home() {
-    const ws = useContext(WebsocketContext);
+    // const fetchPolling = useRef();
+    const navigate = useNavigate();
+    const { gameStarted } = useGameInfo();
+    const {
+        searchAvailable,
+        players,
+        dispatchFilter,
+        dispatchStartGame,
+        dispatchScrollBottom,
+        keepScrollingBottom,
+    } = useHomeInfo();
 
-    console.log('WS', ws);
+    // Starts game
+    const longPressHandlers = useLongPress(
+        (e) => {
+            e.target.classList.add('ok');
+            dispatchStartGame(e.target.id);
+        },
+        (e) => e.target.classList.remove('ok')
+    );
 
-    function sendText() {
-        ws.send('MY_EVENT', { data: 'XXX' });
-    }
+    // Navigate to Game page, when game started
+    useEffect(() => {
+        if (gameStarted) {
+            navigate('/game');
+        }
+    }, [navigate, gameStarted]);
+
+    // Start polling for player list
+    useInterval(() => {
+        if (searchAvailable) {
+            dispatchFilter();
+        }
+    }, 5000);
+
+    useInterval(() => {
+        if (keepScrollingBottom) {
+            dispatchScrollBottom();
+        }
+    }, 5000);
 
     return (
-        <>
-            <div>HELLO</div>
-            <div>
-                <button onClick={sendText} className="btn btn-primary">
-                    MY NAME
-                </button>
-            </div>
-        </>
+        <div>
+            {searchAvailable &&
+                players?.length > 0 &&
+                players.map((player) => {
+                    return (
+                        <PlayerWrapper key={player.id} className="d-flex flex-row">
+                            {player.average && (
+                                <PlayerAverage className="d-flex align-items-center">
+                                    {player.average}
+                                </PlayerAverage>
+                            )}
+                            <PlayerName className="flex-grow-1 d-flex align-items-center">
+                                {player.cam && (
+                                    <FontAwesomeIcon className="me-2" icon="fa-solid fa-video" />
+                                )}
+                                {stripAverageFromName(player.name)}
+                            </PlayerName>
+                            <PlayerButtonWrapper className="d-flex align-items-center">
+                                <PlayButton id={player.id} {...longPressHandlers}>
+                                    PLAY <br />
+                                    <SmallText>{player.legs}</SmallText>
+                                </PlayButton>
+                            </PlayerButtonWrapper>
+                        </PlayerWrapper>
+                    );
+                })}
+        </div>
     );
 }
 
 export default Home;
+
+function stripAverageFromName(name) {
+    return name.replace(/\([0-9]*\.[0-9]*\)/, '');
+}
+
+const PlayerWrapper = styled.div`
+    border-bottom: 2px solid #ccc;
+    padding: 40px 40px;
+`;
+
+const SmallText = styled.span`
+    font-size: 24px;
+`;
+
+const PlayerName = styled.div`
+    font-size: 32px;
+`;
+
+const PlayerAverage = styled.div`
+    font-size: 32px;
+    margin-right: 20px;
+    font-weight: bold;
+`;
+
+const PlayerButtonWrapper = styled.div``;
+
+const PlayButton = styled.button`
+    border: 0;
+    background-color: green;
+    color: white;
+    padding: 20px;
+    font-size: 30px;
+    border-radius: 15px;
+    font-weight: bold;
+    width: 250px;
+    height: 130px;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.5);
+    user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+
+    &.ok {
+        background-color: #ccff33;
+        border-color: #99cc00;
+        color: black;
+    }
+`;

@@ -1,11 +1,15 @@
-import React from 'react';
 import { StatusBar } from './StatusBar';
+import { InputKeyboard } from './InputKeyboard';
+import { useGameInfo } from '../../hooks/useGameInfo';
 
 export function Layout(props) {
+    const { gameStarted } = useGameInfo();
+
     return (
-        <div>
+        <>
             <StatusBar />
             {props.children}
-        </div>
+            {gameStarted && <InputKeyboard />}
+        </>
     );
 }
