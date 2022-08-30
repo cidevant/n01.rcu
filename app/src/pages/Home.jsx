@@ -76,6 +76,8 @@ function Home() {
                         </PlayerWrapper>
                     );
                 })}
+
+            {searchAvailable === false && <div>SEARCH IS NOT AVAILABLE22</div>}
         </div>
     );
 }
@@ -117,10 +119,9 @@ const PlayButton = styled.button`
     font-weight: bold;
     width: 250px;
     height: 130px;
-    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
     user-select: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
 

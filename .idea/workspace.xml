@@ -1,35 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b5627a5d-d206-49b3-802d-d9159605f7fc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+    <list default="true" id="b5627a5d-d206-49b3-802d-d9159605f7fc" name="Changes" comment="use docker for dev">
       <change afterPath="$PROJECT_DIR$/.idea/scala_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose.dev.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dockerignore" beforeDir="false" afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrome-extension/n01_source/n01.js" beforeDir="false" afterPath="$PROJECT_DIR$/n01_js_scripts/n01.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrome-extension/n01_source/n01_chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/n01_js_scripts/n01_chat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrome-extension/n01_source/n01_country.js" beforeDir="false" afterPath="$PROJECT_DIR$/n01_js_scripts/n01_country.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrome-extension/n01_source/n01_data.js" beforeDir="false" afterPath="$PROJECT_DIR$/n01_js_scripts/n01_data.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrome-extension/n01_source/n01_date_format.js" beforeDir="false" afterPath="$PROJECT_DIR$/n01_js_scripts/n01_date_format.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrome-extension/n01_source/n01_online.js" beforeDir="false" afterPath="$PROJECT_DIR$/n01_js_scripts/n01_online.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrome-extension/n01_source/n01_setting.js" beforeDir="false" afterPath="$PROJECT_DIR$/n01_js_scripts/n01_setting.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrome-extension/n01_source/n01_util.js" beforeDir="false" afterPath="$PROJECT_DIR$/n01_js_scripts/n01_util.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/pages/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/pages/Home.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/web.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/web.server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/static/calc.html" beforeDir="false" afterPath="$PROJECT_DIR$/old_app/calc.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/static/css/calc.css" beforeDir="false" afterPath="$PROJECT_DIR$/old_app/css/calc.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/static/css/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/old_app/css/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/static/css/modal.css" beforeDir="false" afterPath="$PROJECT_DIR$/old_app/css/modal.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/static/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/old_app/favicon.ico" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/static/images/backspace.png" beforeDir="false" afterPath="$PROJECT_DIR$/old_app/images/backspace.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/static/images/enter.png" beforeDir="false" afterPath="$PROJECT_DIR$/old_app/images/enter.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/old_app/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/static/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/old_app/js/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/static/js/websocket.js" beforeDir="false" afterPath="$PROJECT_DIR$/old_app/js/websocket.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,34 +39,44 @@
     <option name="version" value="2" />
   </component>
   <component name="ProjectId" id="2E51kqP7afCt4vnTSlFx5vlRrT4" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;/home/katz/.anyenv/envs/nodenv/shims/node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;scala_project_settings_configurable.last_selected_tab_index&quot;: &quot;0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;Docker&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/home/katz/Code/n01.rcu/app",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "/home/katz/.anyenv/envs/nodenv/shims/node",
+    "nodejs_package_manager_path": "npm",
+    "scala_project_settings_configurable.last_selected_tab_index": "0",
+    "settings.editor.selected.configurable": "Docker"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app" />
+      <recent name="$PROJECT_DIR$/server" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Docker.Dockerfile">
+  <component name="RunManager" selected="Docker.docker-compose.dev.yml: Compose Deployment (1)">
     <configuration type="NodeJSConfigurationType" path-to-node="$USER_HOME$/.anyenv/envs/nodenv/shims/node" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
@@ -91,6 +84,22 @@
       <deployment type="dockerfile">
         <settings>
           <option name="sourceFilePath" value="Dockerfile" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.dev.yml: Compose Deployment (1)" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value="docker-compose.dev.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.dev.yml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value="docker-compose.dev.yml" />
         </settings>
       </deployment>
       <method v="2" />
@@ -104,11 +113,15 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Docker.docker-compose.dev.yml: Compose Deployment" />
+      <item itemvalue="Docker.docker-compose.dev.yml: Compose Deployment (1)" />
       <item itemvalue="Docker.Dockerfile" />
       <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.docker-compose.dev.yml: Compose Deployment (1)" />
+        <item itemvalue="Docker.docker-compose.dev.yml: Compose Deployment" />
         <item itemvalue="Docker.Dockerfile" />
         <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
       </list>
@@ -147,8 +160,16 @@
       <workItem from="1661870792403" duration="407000" />
       <workItem from="1661876833435" duration="603000" />
       <workItem from="1661877446317" duration="4087000" />
-      <workItem from="1661881545006" duration="742000" />
+      <workItem from="1661881545006" duration="2276000" />
     </task>
+    <task id="LOCAL-00001" summary="use docker for build">
+      <created>1661882431655</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1661882431655</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -176,6 +197,11 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="use docker for build" />
+    <MESSAGE value="use docker for dev" />
+    <option name="LAST_COMMIT_MESSAGE" value="use docker for dev" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

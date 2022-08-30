@@ -1,8 +1,8 @@
-import { execSync } from 'child_process';
-import { sockets } from './sockets-manager.js';
+// import { execSync } from 'child_process';
+// import { sockets } from './sockets-manager.js';
 import config from '../config.js';
 import express from 'express';
-import queryString from 'query-string';
+// import queryString from 'query-string';
 
 /**
  * Web server
@@ -66,37 +66,34 @@ export function initWebServer() {
   });
 
   return app.listen(config.web.port, () => {
-    console.log(`[web.server] ${config.web.protocol}://${config.host}:${config.web.port}`);
-    console.log(
-      `[n01.obs.ws.server] ${config.websocket.protocol}://${config.host}:${config.web.port}/ws`
-    );
+    console.log(`[ws.server] ${config.websocket.protocol}://${config.host}:${config.web.port}/ws`);
   });
 }
-
-function sendScore(score, request) {
-  const [, params] = request.url.split('?') ?? [];
-  const connectionInfo = queryString.parse(params);
-
-  if (!connectionInfo.accessCode) {
-    console.error('[web.server][sendScore][error] missing accessCode');
-
-    return;
-  }
-
-  const pairedControllers = sockets.filterSocketsByMeta(
-    (meta) => meta.client && meta.accessCode === connectionInfo.accessCode && meta.pair !== null
-  );
-
-  if (pairedControllers.length === 1) {
-    sockets.send(pairedControllers[0], {
-      type: 'SET_INPUT_SCORE',
-      payload: score,
-    });
-  } else if (pairedControllers.length > 1) {
-    console.error(
-      `[web.server][sendScore][error] several clients associated with controller (paired controllers: ${pairedControllers})`
-    );
-  } else {
-    console.error(`[web.server][sendScore][error] no clients found for ${connectionInfo}`);
-  }
-}
+//
+// function sendScore(score, request) {
+//   const [, params] = request.url.split('?') ?? [];
+//   const connectionInfo = queryString.parse(params);
+//
+//   if (!connectionInfo.accessCode) {
+//     console.error('[web.server][sendScore][error] missing accessCode');
+//
+//     return;
+//   }
+//
+//   const pairedControllers = sockets.filterSocketsByMeta(
+//     (meta) => meta.client && meta.accessCode === connectionInfo.accessCode && meta.pair !== null
+//   );
+//
+//   if (pairedControllers.length === 1) {
+//     sockets.send(pairedControllers[0], {
+//       type: 'SET_INPUT_SCORE',
+//       payload: score,
+//     });
+//   } else if (pairedControllers.length > 1) {
+//     console.error(
+//       `[web.server][sendScore][error] several clients associated with controller (paired controllers: ${pairedControllers})`
+//     );
+//   } else {
+//     console.error(`[web.server][sendScore][error] no clients found for ${connectionInfo}`);
+//   }
+// }

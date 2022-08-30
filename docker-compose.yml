@@ -1,6 +1,6 @@
-version: '3.2'
+version: '3'
 services:
-  n01rcu:
+  n01rcu_composed:
     build:
       context: .
       dockerfile: 'Dockerfile'
