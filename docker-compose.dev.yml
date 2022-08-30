@@ -1,6 +1,7 @@
 version: '3'
 services:
   n01rcu_app:
+    stdin_open: true
     build:
       context: ./app
       dockerfile: 'Dockerfile'

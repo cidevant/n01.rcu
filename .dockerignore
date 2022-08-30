@@ -1,5 +1,5 @@
-app/node_modules
-server/node_modules
+**/node_modules
+app/build
 n01_js_scripts
 old_app
 .idea

@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { sendInputScore, setFinishDarts } from '../store/game.reducer';
 import { validInputValue } from '../utils/game';
