@@ -16,49 +16,45 @@ export function initWebServer() {
     res.sendfile('static/index.html');
   });
 
-  app.get('/calc', function (_, res) {
-    res.sendfile('static/calc.html');
-  });
+  // app.get('/sockets', function (_req, res) {
+  //   res.json({
+  //     ok: true,
+  //     sockets: sockets.listMetaSafe,
+  //   });
+  // });
 
-  app.get('/sockets', function (_req, res) {
-    res.json({
-      ok: true,
-      sockets: sockets.listMetaSafe,
-    });
-  });
-
-  config.scenes.forEach((scene) => {
-    app.get(`/scene/${scene.name}`, (req, res) => {
-      const cmd = `obs-cli --host ${config.host} --password ${config.obs.password} --port ${config.obs.port}`;
-      const scoreValue = parseInt(scene.name, 10);
-
-      try {
-        console.log(`[web.server] scene: ${scene.name}, timeout: ${scene.timeout}`);
-
-        // switch scenes
-        execSync(`${cmd} scene switch ${scene.name}_scene`);
-        setTimeout(() => {
-          execSync(`${cmd} scene switch main_scene`);
-        }, scene.timeout);
-
-        // send score
-        if (!isNaN(scoreValue)) {
-          setTimeout(() => {
-            sendScore(scoreValue, req);
-          }, 1500);
-        }
-
-        res.json({ ok: true });
-      } catch (error) {
-        console.error(`[web.server] scene error: ${scene.name}`, error.message.toString());
-
-        res.json({
-          ok: false,
-          error: error.message.toString(),
-        });
-      }
-    });
-  });
+  // config.scenes.forEach((scene) => {
+  //   app.get(`/scene/${scene.name}`, (req, res) => {
+  //     const cmd = `obs-cli --host ${config.host} --password ${config.obs.password} --port ${config.obs.port}`;
+  //     const scoreValue = parseInt(scene.name, 10);
+  //
+  //     try {
+  //       console.log(`[web.server] scene: ${scene.name}, timeout: ${scene.timeout}`);
+  //
+  //       // switch scenes
+  //       execSync(`${cmd} scene switch ${scene.name}_scene`);
+  //       setTimeout(() => {
+  //         execSync(`${cmd} scene switch main_scene`);
+  //       }, scene.timeout);
+  //
+  //       // send score
+  //       if (!isNaN(scoreValue)) {
+  //         setTimeout(() => {
+  //           sendScore(scoreValue, req);
+  //         }, 1500);
+  //       }
+  //
+  //       res.json({ ok: true });
+  //     } catch (error) {
+  //       console.error(`[web.server] scene error: ${scene.name}`, error.message.toString());
+  //
+  //       res.json({
+  //         ok: false,
+  //         error: error.message.toString(),
+  //       });
+  //     }
+  //   });
+  // });
 
   app.get('*', function (req, res) {
     console.error('[web.server] error: route not found', req.params);
