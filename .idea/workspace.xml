@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b5627a5d-d206-49b3-802d-d9159605f7fc" name="Changes" comment="use docker for dev">
-      <change afterPath="$PROJECT_DIR$/.idea/scala_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose.dev.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dockerignore" beforeDir="false" afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/pages/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/pages/Home.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/web.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/web.server.js" afterDir="false" />
-    </list>
+    <list default="true" id="b5627a5d-d206-49b3-802d-d9159605f7fc" name="Changes" comment="use docker for dev" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -160,7 +148,7 @@
       <workItem from="1661870792403" duration="407000" />
       <workItem from="1661876833435" duration="603000" />
       <workItem from="1661877446317" duration="4087000" />
-      <workItem from="1661881545006" duration="2276000" />
+      <workItem from="1661881545006" duration="2321000" />
     </task>
     <task id="LOCAL-00001" summary="use docker for build">
       <created>1661882431655</created>
@@ -169,7 +157,14 @@
       <option name="project" value="LOCAL" />
       <updated>1661882431655</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="use docker for dev">
+      <created>1661883829770</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1661883829770</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
