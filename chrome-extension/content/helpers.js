@@ -63,10 +63,11 @@ function n01rcu_ToContentEventsHandler({ detail: data }) {
             n01rcu_ws.__accessCode = data?.accessCode;
             break;
         case 'CONNECT':
+            n01rcu_ws.disconnect(1000, 'user disconnect-connect');
             n01rcu_ws.connect();
             break;
         case 'DISCONNECT':
-            n01rcu_ws.disconnect(1000, 'user action');
+            n01rcu_ws.disconnect(1000, 'user disconnect');
             break;
         default:
             break;
@@ -81,12 +82,12 @@ function n01rcu_ToContentEventsHandler({ detail: data }) {
 function n01rcu_reportConnectionStatusToPopup() {
     n01rcu_dispatchToPopup({
         type: 'SET_CONNECTION_STATUS',
-        server: n01rcu_ws.open ?? false,
+        server: n01rcu_ws?.open ?? false,
         paired: n01rcu_PAIRED,
         searching: n01rcu_JOIN,
         close: {
-            code: n01rcu_ws.__closeCode,
-            reason: n01rcu_ws.__closeReason,
+            code: n01rcu_ws?.__closeCode,
+            reason: n01rcu_ws?.__closeReason,
         }
     });
 }
