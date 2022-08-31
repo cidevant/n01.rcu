@@ -14,31 +14,36 @@
         <h3>Connection</h3>
         <ul class="connectionList">
             <li class="connectionItem">
-                <span class="connectionTitle">Server</span>
-                <span id="server"></span>
+                <div class="connectionTitle">Server</div>
+                <div id="server_status"></div>
             </li>
             <li class="connectionItem">
-                <span class="connectionTitle">Controllers</span>
-                <span id="controllers"></span>
+                <div class="connectionTitle">Controllers</div>
+                <div id="controllers_status"></div>
             </li>
         </ul>
 
         <h3>Settings</h3>
         <ul class="settingsList">
             <li class="settingsItem">
-                <span class="settingsTitle">Server</span>
-                <span class="settingsInput"></span>
+                <div class="settingsTitle">Server URL</div>
+                <div class="settingsInput">
+                    <input type="text" name="server_url_input" id="server_url_input">
+                </div>
             </li>
             <li class="settingsItem">
-                <span class="settingsTitle">Access code</span>
-                <span class="settingsInput"></span>
+                <div class="settingsTitle">Access code</div>
+                <div class="settingsInput">
+                    <input type="text" name="access_code_input" id="access_code_input">
+                </div>
             </li>
         </ul>
 
-        <button id="submit_button"></button>
+        <button id="submit_button">save</button>
     </div>
 
     <link rel='stylesheet' href='popup.css' />
+    <script src='jquery-3.6.1.min.js'></script>
     <script src='helpers.js'></script>
     <script src='popup.js'></script>
 </body>

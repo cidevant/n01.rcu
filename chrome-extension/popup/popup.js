@@ -1,9 +1,8 @@
 window.addEventListener('DOMContentLoaded', () => {
-    const sendMessageButton = document.getElementById('submit_button');
+    
 
-    sendMessageButton.onclick = async (e) => {
-        e.preventDefault();
 
+    $('#submit_button').on('click', async () => {
         await sendMessage({ test: 'DATA' });
-    }
+    })
 });

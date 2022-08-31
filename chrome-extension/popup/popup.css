@@ -2,3 +2,59 @@
     width: 500px;
     height: 300px;
 }
+
+h3 {
+    
+}
+
+/* ---------------------------------------- */
+
+ul.connectionList {
+
+}
+
+li.connectionItem {
+
+}
+
+div.connectionTitle {
+
+}
+
+#server_status {
+
+}
+
+#controllers_status {
+
+}
+
+/* ---------------------------------------- */
+
+
+ul.settingsList {
+
+}
+
+li.settingsItem {
+
+}
+
+div.settingsTitle {
+
+}
+
+input#server_url_input {
+
+}
+
+
+input#access_code_input {
+    
+}
+
+/* ---------------------------------------- */
+
+button#submit_button {
+    
+}

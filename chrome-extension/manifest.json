@@ -11,9 +11,7 @@
                 "https://nakka.com/n01/online/",
                 "https://nakka.com/n01/online/n01.php"
             ],
-            "js": [
-               "jquery-3.6.1.min.js" , "content.js"
-            ],
+            "js": ["content.js"],
             "run_at": "document_end"
         }
     ],
