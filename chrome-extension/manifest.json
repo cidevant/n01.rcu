@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "[n01.online] RCU Client",
+    "name": "[n01.RCU] CLIENT",
     "version": "1.0.1",
     "background": {
         "service_worker": "background.js"
