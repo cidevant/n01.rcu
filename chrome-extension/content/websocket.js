@@ -7,11 +7,18 @@
  * @class n01obs__WebSocketClient
  */
 class n01rcu_WebSocketClient {
+    static instance;
+
     constructor() {
-        this.__url = n01rcu_DEFAULT_SERVER_URL;
-        this.__accessCode = n01rcu_DEFAULT_ACCESS_CODE;
+        if (n01rcu_WebSocketClient.instance != null) {
+            return n01rcu_WebSocketClient.instance;
+        }
+
+        n01rcu_WebSocketClient.instance = this;
         this.__closeCode = null;
         this.__closeReason = null;
+
+        this.resetSettings();
     }
 
     connect = () => {
@@ -36,6 +43,26 @@ class n01rcu_WebSocketClient {
                 console.log('[n01.rcu.ws] connect error: no user info', JSON.stringify(player));
             }
         }
+    };
+
+    updateSettings = (url, code) => {
+        if (this.__isValidUrl(url)) {
+            this.__url = url;
+        } else {
+            console.log('[n01.rcu.ws][error] updateSettings: invalid url');
+        }
+
+        if (this.__isValidAccessCode(code)) {
+            this.__accessCode = code;
+        } else {
+            console.log('[n01.rcu.ws][error] updateSettings: invalid accessCode');
+        }
+    };
+
+    resetSettings = () => {
+        console.log('[n01.rcu.ws] resetSettings');
+
+        this.updateSettings(n01rcu_DEFAULT_SERVER_URL, n01rcu_DEFAULT_ACCESS_CODE);
     };
 
     disconnect = (code, reason) => {
@@ -109,4 +136,12 @@ class n01rcu_WebSocketClient {
     get open() {
         return this.__socket && this.__socket.readyState === WebSocket.OPEN;
     }
+
+    __isValidAccessCode = (input) => {
+        return input?.length === 4;
+    };
+
+    __isValidUrl = (input) => {
+        return input?.startsWith('ws') && input?.endsWith('/ws');
+    };
 }

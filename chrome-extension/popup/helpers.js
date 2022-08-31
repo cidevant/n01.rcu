@@ -1,19 +1,13 @@
 /* eslint-disable no-unused-vars */
 
-const __connection = {
-    status: {
-        server: false,
-        paired: false,
-        searching: false,
-        close: {
-            code: null,
-            reason: null,
-        },
-    },
-    settings: {
-        url: 'url',
-        accessCode: 'accessCode',
-    },
+let __connection = {
+    url: '-url-',
+    accessCode: '-accessCode-',
+    server: false,
+    paired: false,
+    searching: false,
+    closeCode: null,
+    closeReason: null,
 };
 
 function receivedEventsHandler({ __type, ...data }, _sender, _sendResponse) {
@@ -21,16 +15,50 @@ function receivedEventsHandler({ __type, ...data }, _sender, _sendResponse) {
         console.log('[n01.rcu.popup]', JSON.stringify(data));
 
         switch (data?.type) {
-            case 'SET_CONNECTION_STATUS':
-                setConnectionStatus(data);
-                break;
-            case 'SET_CONNECTION_SETTINGS':
-                setConnectionSettings(data);
-                break;
+            case 'SET_CONNECTION': {
+                __connection = {
+                    ...__connection,
+                    ...data,
+                };
+
+                delete __connection.type;
+
+                updateConnectionInfo();
+            } break;
             default:
                 break;
         }
     }
+}
+
+function updateConnectionInfo() {
+    $('#server_status').text(__connection.server ? 'CONNECTED' : 'DISCONNECTED');
+    $('#controllers_status').text(__connection.paired ? 'PAIRED' : 'UNPAIRED');
+    $('#server_url_input').val(__connection.url).attr('disabled', __connection.server);
+    $('#access_code_input').val(__connection.accessCode).attr('disabled', __connection.server);
+}
+
+function setInputValidation(selector, isValid = false) {
+    const el = $(selector);
+
+    if (el) {
+        const className = isValid === true ? 'ok' : 'error';
+
+        el.addClass(className);
+
+        setTimeout(() => {
+            el.removeClass(className);
+        }, 400);
+    }
+}
+
+function isValidUrl(input) {
+    return input?.startsWith('ws') && input?.endsWith('/ws');
+
+}
+
+function isValidAccessCode(input) {
+    return input?.length === 4;
 }
 
 /**
@@ -69,50 +97,4 @@ function dispatchToBackground(payload) {
         __type: 'n01rcu.Event.Background',
         ...payload
     });
-}
-
-function updateConnection() {
-    $('#server_status').text(__connection.status.server ? 'CONNECTED' : 'DISCONNECTED');
-    $('#controllers_status').text(__connection.status.paired ? 'PAIRED' : 'UNPAIRED');
-    $('#server_url_input').val(__connection.settings.url).attr('disabled', __connection.status.server);
-    $('#access_code_input').val(__connection.settings.accessCode).attr('disabled', __connection.status.server);
-}
-
-function setConnectionStatus(data) {
-    __connection.status = {
-        ...__connection.status,
-        ...data,
-    };
-    updateConnection();
-}
-
-function setConnectionSettings(data) {
-    __connection.settings = {
-        ...__connection.settings,
-        ...data,
-    };
-    updateConnection();
-}
-
-function setInputValidation(selector, isValid = false) {
-    const el = $(selector);
-
-    if (el) {
-        const className = isValid === true ? 'ok' : 'error';
-
-        el.addClass(className);
-
-        setTimeout(() => {
-            el.removeClass(className);
-        }, 200);
-    }
-}
-
-function isValidUrl(input) {
-    return input?.startsWith('ws') && input?.endsWith('/ws');
-
-}
-
-function isValidAccessCode(input) {
-    return input?.length === 4;
 }

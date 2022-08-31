@@ -1,6 +1,5 @@
 function onPopupLoadedListener() {
-    dispatchToContent({ type: 'GET_CONNECTION_SETTINGS' });
-    dispatchToContent({ type: 'GET_CONNECTION_STATUS' });
+    dispatchToContent({ type: 'GET_CONNECTION' });
 
     $('#connect_button').on('click', async () => {
         const url = $('#server_url_input').val();

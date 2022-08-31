@@ -49,48 +49,34 @@ function n01rcu_onWsMessage(data, ws) {
  *
  * @param {*} event
  */
-function n01rcu_ToContentEventsHandler({ detail: data }) {
-    switch (data?.type) {
-        case 'GET_CONNECTION_STATUS': {
-            n01rcu_reportConnectionStatusToPopup();
-        }
-            break;
-        case 'GET_CONNECTION_SETTINGS': {
-            
-            n01rcu_dispatchToPopup({
-                type: 'SET_CONNECTION_SETTINGS',
-                url: n01rcu_ws.__url,
-                accessCode: n01rcu_ws.__accessCode,
-            });
-        }
-            break;
-        case 'RESET_CONNECTION_SETTINGS': {
-            n01rcu_ws.__url = n01rcu_DEFAULT_SERVER_URL;
-            n01rcu_ws.__accessCode = n01rcu_DEFAULT_ACCESS_CODE;
+function n01rcu_ToContentEventsHandler(ws) {
+    return ({ detail: data }) => {
+        console.log('[ToContent]', data.type, data, ws);
 
-            n01rcu_dispatchToPopup({
-                type: 'SET_CONNECTION_SETTINGS',
-                url: n01rcu_ws.__url,
-                accessCode: n01rcu_ws.__accessCode,
-            });
+        switch (data?.type) {
+            case 'GET_CONNECTION': {
+                n01rcu_reportConnectionToPopup(ws);
+            } break;
+            case 'RESET_CONNECTION_SETTINGS': {
+                ws.resetSettings();
+                n01rcu_reportConnectionToPopup(ws);
+            } break;
+            case 'SERVER_CONNECT': {
+                ws.updateSettings(data?.url, data?.accessCode);
+    
+                if (ws.open) {
+                    ws.disconnect(1000, 'user wants to connect');
+                }
+    
+                ws.connect();
+            } break;
+            case 'SERVER_DISCONNECT': {
+                ws.disconnect(1000, 'user wants to disconnect');
+            } break;
+            default:
+                break;
         }
-            break;
-        case 'SERVER_CONNECT': {
-            n01rcu_ws.disconnect(1000, 'user disconnect-connect');
-
-            n01rcu_ws.__url = data?.url;
-            n01rcu_ws.__accessCode = data?.accessCode;
-
-            n01rcu_ws.connect();
-        }
-            break;
-        case 'SERVER_DISCONNECT': {
-            n01rcu_ws.disconnect(1000, 'user disconnect');
-        }
-            break;
-        default:
-            break;
-    }
+    };
 
 }
 
@@ -98,17 +84,21 @@ function n01rcu_ToContentEventsHandler({ detail: data }) {
  * Sends connection status to Popup
  *
  */
-function n01rcu_reportConnectionStatusToPopup() {
-    n01rcu_dispatchToPopup({
-        type: 'SET_CONNECTION_STATUS',
-        server: n01rcu_ws?.open ?? false,
+function n01rcu_reportConnectionToPopup(ws) {
+    const values = {
+        type: 'SET_CONNECTION',
+        url: ws.__url,
+        accessCode: ws.__accessCode,
+        server: ws?.open ?? false,
         paired: n01rcu_PAIRED,
         searching: n01rcu_JOIN,
-        close: {
-            code: n01rcu_ws?.__closeCode,
-            reason: n01rcu_ws?.__closeReason,
-        }
-    });
+        closeCode: ws?.__closeCode,
+        closeReason: ws?.__closeReason,
+    };
+    
+    console.log('[toPopup] SET_CONNECTION', values);
+
+    n01rcu_dispatchToPopup(values);
 }
 
 /** 
