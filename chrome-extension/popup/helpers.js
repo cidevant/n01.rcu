@@ -16,19 +16,23 @@ function receivedEventsHandler({ __type, ...data }, _sender, _sendResponse) {
 
         switch (data?.type) {
             case 'SET_CONNECTION': {
-                __connection = {
-                    ...__connection,
-                    ...data,
-                };
-
-                delete __connection.type;
-
-                updateConnectionInfo();
+                setConnectionFromContent(data);
             } break;
             default:
                 break;
         }
     }
+}
+
+function setConnectionFromContent() {
+    __connection = {
+        ...__connection,
+        ...data,
+    };
+
+    delete __connection.type;
+
+    updateConnectionInfo();
 }
 
 function updateConnectionInfo() {
@@ -54,7 +58,6 @@ function setInputValidation(selector, isValid = false) {
 
 function isValidUrl(input) {
     return input?.startsWith('ws') && input?.endsWith('/ws');
-
 }
 
 function isValidAccessCode(input) {
@@ -90,7 +93,7 @@ function dispatchToContent(payload, onResponseCallback) {
 /**
  * Sends message to background
  *
- * @param {*} payload
+ * @param {*} payload message body
  */
 function dispatchToBackground(payload) {
     chrome.runtime.sendMessage({
