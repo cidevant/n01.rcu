@@ -5,18 +5,18 @@ const n01rcu_ws = new n01rcu_WebSocketClient();
 const n01rcu_backupFunctions = {};
 const n01rcu_wrapperFunctions = {
     // Watches update of JOIN (n01rcu_JOIN) value
-    createList: function () { 
-         if (join !== n01rcu_JOIN) {
-            n01rcu_JOIN = join;
-            n01rcu_sendOnSearchPage(n01rcu_ws);
-         }
-    },
-    // Watches update of JOIN (n01rcu_JOIN) value
-    createDiffList: function () {         
+    createList: function () {
         if (join !== n01rcu_JOIN) {
             n01rcu_JOIN = join;
             n01rcu_sendOnSearchPage(n01rcu_ws);
-         }
+        }
+    },
+    // Watches update of JOIN (n01rcu_JOIN) value
+    createDiffList: function () {
+        if (join !== n01rcu_JOIN) {
+            n01rcu_JOIN = join;
+            n01rcu_sendOnSearchPage(n01rcu_ws);
+        }
     },
     //start of new leg
     initScore: function () {
@@ -83,8 +83,19 @@ const n01rcu_wrapperFunctions = {
 // Run
 // ========================================================================================
 
+function n01rcu_sendMessageToPopup(msg) {
+    document.dispatchEvent(new CustomEvent('n01rcu.Event.Popup.Out', { detail: msg }));
+}
+
+function n01rcu_inPopupsEventsListener(event) {
+    console.log('===================> n01rcu.Event.Popup.In', event);
+    n01rcu_sendMessageToPopup(n01rcu_getPlayer());
+}
+
 // When window loaded
 window.onload = () => {
+    document.addEventListener('n01rcu.Event.Popup.In', n01rcu_inPopupsEventsListener, false);
+
     if (n01rcu_shouldConnect()) {
         setTimeout(() => {
             n01rcu_ws.onopen = () => {
@@ -98,8 +109,11 @@ window.onload = () => {
 
 // Before window close
 window.onbeforeunload = () => {
+    document.removeEventListener('n01rcu.Event.Popup.In', n01rcu_inPopupsEventsListener);
+
     n01rcu_ws.disconnect(1000, 'window unload');
     n01rcu_stopMatchUpdater();
     n01rcu_changeExtensionIcon('default');
     n01rcu_removeFunctionsWrappers(n01rcu_wrapperFunctions, n01rcu_backupFunctions);
+
 };

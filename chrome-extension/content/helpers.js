@@ -10,7 +10,7 @@ let n01rcu_PAIRED = false;
  * @param {*} data Message from server
  * @param {*} ws WebSocket client reference for responding
  */
-const n01rcu_onWsMessage = function n01rcu_onWsMessage(data, ws) {
+function n01rcu_onWsMessage(data, ws) {
     try {
         switch (data.type) {
             case 'SET_INPUT_SCORE':
@@ -48,7 +48,7 @@ const n01rcu_onWsMessage = function n01rcu_onWsMessage(data, ws) {
  * @param {?number} to Average score to
  * @returns {Array<object>} list of users
  */
-const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to, cam = true) {
+function n01rcu_getSearchResults(from, to, cam = true) {
     let notMeSelector = '';
 
     const me = n01rcu_getPlayer();
@@ -141,7 +141,7 @@ const n01rcu_getSearchResults = function n01rcu_getSearchResults(from, to, cam =
  * @param {*} data filter conditions: from, to
  * @param {*} ws websocket connection
  */
-const n01rcu_searchFilterByAverageAndHide = function n01rcu_searchFilterByAverageAndHide(data, ws) {
+function n01rcu_searchFilterByAverageAndHide(data, ws) {
     if (join === true) {
         const search = n01rcu_getSearchResults(data?.payload?.from, data?.payload?.to, data?.payload?.cam);
         const me = n01rcu_getPlayer();
@@ -172,7 +172,7 @@ const n01rcu_searchFilterByAverageAndHide = function n01rcu_searchFilterByAverag
  * Scrolls down on search page
  *
  */
-const n01rcu_searchScrollBottom = function n01rcu_searchScrollBottom() {
+function n01rcu_searchScrollBottom() {
     $("#schedule_button").hide();
     $("#menu_button").hide();
     $('#article').css('padding-bottom', 0);
@@ -186,7 +186,7 @@ const n01rcu_searchScrollBottom = function n01rcu_searchScrollBottom() {
  * @param {*} data
  * @param {*} ws
  */
-const n01rcu_searchStartGame = function n01rcu_searchStartGame(data, ws) {
+function n01rcu_searchStartGame(data, ws) {
     const userEl = $(`.user_list_item[id="${data['payload']}"]`);
     const playButton = userEl.find('input[type="button"][value="Play"].play_button');
 
@@ -203,7 +203,7 @@ const n01rcu_searchStartGame = function n01rcu_searchStartGame(data, ws) {
  * @param {*} ws
  * @returns {*} 
  */
-const n01rcu_sendOnSearchPage = function n01rcu_sendOnSearchPage(ws) {
+function n01rcu_sendOnSearchPage(ws) {
     const pageType = n01rcu_detectPageType();
 
     if (pageType === 'search') {
@@ -220,7 +220,7 @@ const n01rcu_sendOnSearchPage = function n01rcu_sendOnSearchPage(ws) {
  * @param {*} data input score action
  * @param {*} ws websocket
  */
-const n01rcu_setInputScore = function n01rcu_setInputScore(data, ws) {
+function n01rcu_setInputScore(data, ws) {
     try {
         // enter score
         for (const value of `${data.payload}`) {
@@ -243,7 +243,7 @@ const n01rcu_setInputScore = function n01rcu_setInputScore(data, ws) {
  * @param {*} data
  * @param {*} ws
  */
-const n01rcu_setFinishDart = function n01rcu_setFinishDart(data, ws) {
+function n01rcu_setFinishDart(data, ws) {
     if ($(`#${data['payload']}`).is(':visible')) {
         console.log('[n01.rcu] setFinishDart:', data);
 
@@ -260,7 +260,7 @@ const n01rcu_setFinishDart = function n01rcu_setFinishDart(data, ws) {
  *
  * @param {WebSocket} ws socket connection
  */
-const n01rcu_sendScoreLeft = function n01rcu_sendScoreLeft(ws, value) {
+function n01rcu_sendScoreLeft(ws, value) {
     try {
         const score = value ?? n01rcu_getPlayerLeftScore();
 
@@ -278,10 +278,10 @@ const n01rcu_sendScoreLeft = function n01rcu_sendScoreLeft(ws, value) {
  *
  * @param {boolean} [connected=true]
  */
-const n01rcu_changeExtensionIcon = function n01rcu_changeExtensionIcon(icon = 'default') {
+function n01rcu_changeExtensionIcon(icon = 'default') {
     setTimeout(function () {
         document.dispatchEvent(
-            new CustomEvent('n01rcu.Event', {
+            new CustomEvent('n01rcu.Event.Background', {
                 detail: {
                     type: 'SET_ICON',
                     icon,
@@ -296,7 +296,7 @@ const n01rcu_changeExtensionIcon = function n01rcu_changeExtensionIcon(icon = 'd
  *
  * @returns {Object} player info
  */
-const n01rcu_getPlayer = function n01rcu_getPlayer() {
+function n01rcu_getPlayer() {
     try {
         const user = n01rcu_getLocalStorage('n01_net.onlineOptions');
 
@@ -321,7 +321,7 @@ const n01rcu_getPlayer = function n01rcu_getPlayer() {
  * @param {Object} user
  * @returns {string} name
  */
-const n01rcu_getPlayerName = function n01rcu_getPlayerName(user) {
+function n01rcu_getPlayerName(user) {
     if (user?.editName?.length > 0) {
         return user.editName;
     }
@@ -348,7 +348,7 @@ const n01rcu_getPlayerName = function n01rcu_getPlayerName(user) {
  *
  * @returns {number} index of player (0 or 1)
  */
-const n01rcu_getPlayerIndexInMatch = function n01rcu_getPlayerIndexInMatch() {
+function n01rcu_getPlayerIndexInMatch() {
     try {
         const match = n01rcu_getLocalStorage('n01_net.setData');
 
@@ -369,7 +369,7 @@ const n01rcu_getPlayerIndexInMatch = function n01rcu_getPlayerIndexInMatch() {
  *
  * @returns {number} left score
  */
-const n01rcu_getPlayerLeftScore = function n01rcu_getPlayerLeftScore() {
+function n01rcu_getPlayerLeftScore() {
     try {
         const playerIndex = n01rcu_getPlayerIndexInMatch();
 
@@ -397,7 +397,7 @@ const n01rcu_getPlayerLeftScore = function n01rcu_getPlayerLeftScore() {
  * @param {string} key localStorage key
  * @returns {Object} parsed object
  */
-const n01rcu_getLocalStorage = function n01rcu_getLocalStorage(key, shouldParseJSON = true) {
+function n01rcu_getLocalStorage(key, shouldParseJSON = true) {
     if (!shouldParseJSON) {
         return localStorage[key];
     }
@@ -417,7 +417,7 @@ const n01rcu_getLocalStorage = function n01rcu_getLocalStorage(key, shouldParseJ
  * @param {boolean} [paired=false]
  * @param {*} ws
  */
-const n01rcu_setPaired = function n01rcu_setPaired(paired = false, ws) {
+function n01rcu_setPaired(paired = false, ws) {
     n01rcu_PAIRED = paired;
 
     n01rcu_changeExtensionIcon(paired ? 'paired' : 'connected');
@@ -441,7 +441,7 @@ const n01rcu_setPaired = function n01rcu_setPaired(paired = false, ws) {
  * @param {*} ws
  * @returns {*} 
  */
-const n01rcu_sendMatchStarted = function n01rcu_sendMatchStarted(ws) {
+function n01rcu_sendMatchStarted(ws) {
     const pageType = n01rcu_detectPageType();
 
     let result = false;
@@ -462,7 +462,7 @@ const n01rcu_sendMatchStarted = function n01rcu_sendMatchStarted(ws) {
  * @param {*} wrapperFunctions
  * @param {*} backupFunctions
  */
-const n01rcu_addFunctionsWrappers = function n01rcu_addFunctionsWrappers(wrapperFunctions, backupFunctions) {
+function n01rcu_addFunctionsWrappers(wrapperFunctions, backupFunctions) {
     Object.keys(wrapperFunctions).forEach((fnName) => {
         backupFunctions[fnName] = window[fnName];
         window[fnName] = function () {
@@ -478,7 +478,7 @@ const n01rcu_addFunctionsWrappers = function n01rcu_addFunctionsWrappers(wrapper
  * @param {*} wrapperFunctions
  * @param {*} backupFunctions
  */
-const n01rcu_removeFunctionsWrappers = function n01rcu_removeFunctionsWrappers(wrapperFunctions, backupFunctions) {
+function n01rcu_removeFunctionsWrappers(wrapperFunctions, backupFunctions) {
     Object.keys(wrapperFunctions).forEach((fnName) => {
         window[fnName] = backupFunctions[fnName];
     });
@@ -492,7 +492,7 @@ let n01rcu_matchUpdaterLastMessage;
  *
  * @param {*} ws
  */
-const n01rcu_startMatchUpdater = function n01rcu_startMatchUpdater(ws) {
+function n01rcu_startMatchUpdater(ws) {
     const pageType = n01rcu_detectPageType();
 
     if (ws.open && pageType === 'game') {
@@ -531,7 +531,7 @@ const n01rcu_startMatchUpdater = function n01rcu_startMatchUpdater(ws) {
  *
  * @param {*} ws
  */
-const n01rcu_stopMatchUpdater = function n01rcu_stopMatchUpdater(ws) {
+function n01rcu_stopMatchUpdater(ws) {
     if (n01rcu_matchUpdater !== null) {
         console.log('[n01.rcu] stopMatchUpdater');
 
@@ -546,7 +546,7 @@ const n01rcu_stopMatchUpdater = function n01rcu_stopMatchUpdater(ws) {
  *
  * @returns {?string} 'game' or 'search'
  */
-const n01rcu_detectPageType = function n01rcu_detectPageType() {
+function n01rcu_detectPageType() {
     const path = window.location.pathname;
 
     if (path === '/n01/online/n01.php') {
@@ -565,7 +565,7 @@ const n01rcu_detectPageType = function n01rcu_detectPageType() {
  *
  * @returns {*} 
  */
-const n01rcu_shouldConnect = function n01rcu_shouldConnect() {
+function n01rcu_shouldConnect() {
     const player = n01rcu_getPlayer();
     const type = n01rcu_detectPageType();
 
@@ -588,7 +588,7 @@ const n01rcu_shouldConnect = function n01rcu_shouldConnect() {
  * @param {string} id player id
  * @returns {boolean} is valid?
  */
-const n01rcu_isValidPlayerId = function n01rcu_isValidPlayerId(id) {
+function n01rcu_isValidPlayerId(id) {
     if (!id || id?.length !== 22) {
         return false;
     }
