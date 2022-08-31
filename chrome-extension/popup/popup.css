@@ -53,6 +53,16 @@ input#access_code_input {
     
 }
 
+input#server_url_input.error,
+input#access_code_input.error {
+    border: 1px solid red;
+}
+
+input#server_url_input.ok,
+input#access_code_input.ok {
+    border: 1px solid green;
+}
+
 /* ---------------------------------------- */
 
 button#submit_button {

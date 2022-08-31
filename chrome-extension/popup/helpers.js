@@ -34,17 +34,22 @@ function setConnectionSettings(data) {
     $('#access_code_input').val(__connection.settings.accessCode);
 }
 
-function isValidUrl(input) {
-    return input?.length === 4;
+function receivedEventsHandler({ __type, ...data }, _sender, _sendResponse) {
+    if (__type === 'n01rcu.Event.Popup') {
+        console.log('[n01.rcu.popup]', JSON.stringify(data));
 
+        switch (data?.type) {
+            case 'SET_CONNECTION_STATUS':
+                setConnectionStatus(data);
+                break;
+            case 'SET_CONNECTION_SETTINGS':
+                setConnectionSettings(data);
+                break;
+            default:
+                break;
+        }
+    }
 }
-
-function isValidAccessCode(input) {
-    return input?.startsWith('ws') && input?.endsWith('/ws');
-
-}
-
-
 
 /**
  * Sends message to content script of active tab
@@ -73,4 +78,27 @@ function dispatchToContent(payload, onResponseCallback) {
  */
 function dispatchToBackground(payload) {
     chrome.runtime.sendMessage({ __type: 'n01rcu.Event.Background', ...payload });
+}
+
+function setInputValidation(selector, isValid = false) {
+    const el = $(selector);
+    
+    if (el) {
+        const className = isValid === true ? 'ok' : 'error';
+
+        el.addClass(className);
+
+        setTimeout(() => {
+            el.removeClass(className);
+        }, 200);
+    }
+}
+
+function isValidUrl(input) {
+    return input?.startsWith('ws') && input?.endsWith('/ws');
+
+}
+
+function isValidAccessCode(input) {
+    return input?.length === 4;
 }
