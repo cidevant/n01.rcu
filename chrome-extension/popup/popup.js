@@ -8,20 +8,20 @@ function onPopupLoadedListener() {
         try {
             // set url valid
             await validateUrl(url);
-            setInputValidation('#server_url_input', true);
             setConnection({
                 url,
                 urlValid: true,
             });
+            setInputValidation('#server_url_input', true);
 
             try {
                 // set accessCode valid
                 await validateAccessCode(url, accessCode);
-                setInputValidation('#access_code_input', true);
                 setConnection({
                     accessCode,
                     accessCodeValid: true,
                 });
+                setInputValidation('#access_code_input', true);
 
                 // connect to server
                 dispatchToContent({
@@ -31,11 +31,11 @@ function onPopupLoadedListener() {
                 });
             } catch (errorCode) {
                 // set accessCode invalid
-                setInputValidation('#access_code_input', false);
                 setConnection({
                     accessCode,
                     accessCodeValid: errorCode,
                 });
+                setInputValidation('#access_code_input', false);
             }
         } catch (errorUrl) {
             // set url invalid
@@ -61,8 +61,8 @@ function onPopupLoadedListener() {
                     accessCode: newAccessCode,
                     accessCodeValid: true,
                 });
-                updateConnectionInfo();
                 setInputValidation('#access_code_input', true);
+                updateConnectionInfo();
             } catch (errorCode) {
                 // accessCode generation failed
                 setConnection({ accessCodeValid: errorCode });

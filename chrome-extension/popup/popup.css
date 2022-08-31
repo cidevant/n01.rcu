@@ -22,9 +22,14 @@ html,
 /* ----------------------------------------------- */
 /* --------------- TOP HEADER */
 
+#top_title {
+    margin: 0px 0 15px 0;
+}
 
 h1 {
-    flex-grow: 1;
+    margin: 0;
+    padding: 0;
+    opacity: 0.5;
 }
 
 .d-flex {
@@ -32,9 +37,55 @@ h1 {
     flex-direction: row;
 }
 
-.settings_errors_wrapper {
-    justify-content: center;
+.flex-center {
+    display: flex;
+    flex-direction: row;
     align-items: center;
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+#settings_errors {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.settings_error {
+    margin-bottom: 2px;
+    flex-direction: row;
+}
+
+.settings_error_label {
+    background-color: black;
+    color: white;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.settings_error_text {
+    background-color: red;
+    color: white;
+    padding-right: 6px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.settings_error_text::before {
+    content: "error";
+    background-color: rgb(139, 2, 2);
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    margin-right: 6px;
+    color: white;
+    font-weight: bolder;
 }
 
 
@@ -44,7 +95,6 @@ h1 {
 
 .table {
     width: 100%;
-    margin: 15px 0 10px 0;
     border-width: 0;
     border-spacing: 0px;
     border-collapse: collapse;

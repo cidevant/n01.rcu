@@ -80,6 +80,8 @@ function updateConnectionInfo() {
         $('#connect_button').show();
         $('#disconnect_button').hide();
     }
+
+    updateErrorsMessages();
 }
 
 function validateUrl(input) {
@@ -175,8 +177,34 @@ function setInputValidation(selector, isValid = false) {
         if (isValid === true) {
             $('#settings_access_code').show();
         } else {
-            $('#settings_access_code').hide();
+            setTimeout(() => {
+                $('#settings_access_code').hide();
+            }, 800);
         }
+    }
+
+    updateErrorsMessages();
+}
+
+function updateErrorsMessages() {
+    const hasMessage = (key) => __connection[key] !== true && __connection[key]?.length > 0;
+    let anyMessage = false;
+
+    [
+        ['urlValid', 'Server URL'],
+        ['accessCodeValid', 'Pairing Code'],
+    ].forEach(([key, label]) => {
+        if (hasMessage(key)) {
+            const $wrapper = $('<div>', { class: 'settings_error d-flex' });
+
+            $('<div>', { class: 'settings_error_label' }).text(label).appendTo($wrapper);
+            $('<div>', { class: 'settings_error_text' }).text(__connection[key]).appendTo($wrapper);
+            $('#settings_errors').append($wrapper);
+            anyMessage = true;
+        }
+    });
+    if (!anyMessage) {
+        $('#settings_errors').empty();
     }
 }
 
