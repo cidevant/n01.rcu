@@ -29,16 +29,22 @@ function setConnectionSettings(data) {
         ...__connection.settings,
         ...data,
     };
+
+    $('#server_url_input').val(__connection.settings.url);
+    $('#access_code_input').val(__connection.settings.accessCode);
 }
 
-function isValidUrl(value) {
-    return false;
+function isValidUrl(input) {
+    return input?.length === 4;
+
+}
+
+function isValidAccessCode(input) {
+    return input?.startsWith('ws') && input?.endsWith('/ws');
+
 }
 
 
-function isValidAccessCode(value) {
-    return false;
-}
 
 /**
  * Sends message to content script of active tab
@@ -46,29 +52,18 @@ function isValidAccessCode(value) {
  * @param {*} payload message body
  * @param {*} onResponseCallback response callback
  */
-async function dispatchToContent(payload, onResponseCallback) {
-    const currentTabId = await getActiveTab();
-    
-    if (currentTabId != null) {
-        chrome.tabs.sendMessage(currentTabId, {__type: 'n01rcu.Event.Content', ...payload}, onResponseCallback);
-    } else {
-        console.log('[n01.rcu.popup][error] dispatchToContent: active tab id is null');
-    }
-}
-
-/**
- * Returns active tab id
- *
- * @returns {?number} id of tab
- */
- async function getActiveTab() {
-    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-
-    if (tabs?.length > 0) {
-        return tabs[0].id;
-    }
-
-    return null;
+function dispatchToContent(payload, onResponseCallback) {
+    return new Promise((resolve, reject) => {
+        chrome.tabs.query({ active: true, currentWindow: true }).then(tabs => {
+            if (tabs?.length > 0) {
+                chrome.tabs.sendMessage(tabs[0].id, { __type: 'n01rcu.Event.Content', ...payload }, onResponseCallback);
+                resolve();
+            } else {
+                console.log('[n01.rcu.popup][error] dispatchToContent: active tab id is null');
+                reject();
+            }
+        }).catch(reject);
+    })
 }
 
 /**
