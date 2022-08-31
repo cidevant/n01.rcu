@@ -19,7 +19,7 @@
  * @param {*} payload message body
  * @param {*} onResponseCallback response callback
  */
-async function sendMessage(payload, onResponseCallback) {
+async function dispatchToContent(payload, onResponseCallback) {
     const currentTabId = await getActiveTab();
     
     if (currentTabId != null) {

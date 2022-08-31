@@ -85,7 +85,7 @@ const n01rcu_wrapperFunctions = {
 
 // When window loaded
 window.onload = () => {
-    document.addEventListener('n01rcu.Event.FromPopup', n01rcu_inPopupsEventsListener, false);
+    document.addEventListener('n01rcu.Event.Content', n01rcu_ToContentEventsHandler, false);
 
     if (n01rcu_shouldConnect()) {
         setTimeout(() => {
@@ -100,10 +100,9 @@ window.onload = () => {
 
 // Before window close
 window.onbeforeunload = () => {
-    document.removeEventListener('n01rcu.Event.FromPopup', n01rcu_inPopupsEventsListener);
+    document.removeEventListener('n01rcu.Event.Content', n01rcu_ToContentEventsHandler);
     n01rcu_ws.disconnect(1000, 'window unload');
     n01rcu_stopMatchUpdater();
     n01rcu_changeExtensionIcon('default');
     n01rcu_removeFunctionsWrappers(n01rcu_wrapperFunctions, n01rcu_backupFunctions);
-
 };

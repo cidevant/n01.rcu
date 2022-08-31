@@ -15,7 +15,7 @@ function n01rcu_scriptInjector(path) {
     });
 }
 
-function n01rcu_FromPopupEventsListener() {
+function n01rcu_ToContentEventsListener() {
     if (
         chrome == null ||
         chrome.runtime == null ||
@@ -25,7 +25,7 @@ function n01rcu_FromPopupEventsListener() {
     }
 
     chrome.runtime.onMessage.addListener((detail) => {
-        document.dispatchEvent(new CustomEvent('n01rcu.Event.FromPopup', { detail }));
+        document.dispatchEvent(new CustomEvent('n01rcu.Event.Content', { detail }));
     });
 }
 
@@ -45,9 +45,9 @@ n01rcu_scriptInjector('content/helpers.js')
     .then(() => n01rcu_scriptInjector('content/websocket.js'))
     .then(() => n01rcu_scriptInjector('content/index.js'));
 
-// @TODO use only 1 event for passing messages between "Content - Popup - Background"
-document.removeEventListener('n01rcu.Event.ToBackground', n01rcu_FromContentEventsListener);
-document.addEventListener('n01rcu.Event.ToBackground', n01rcu_FromContentEventsListener, false);
-document.removeEventListener('n01rcu.Event.ToPopup', n01rcu_FromContentEventsListener);
-document.addEventListener('n01rcu.Event.ToPopup', n01rcu_FromContentEventsListener, false);
-n01rcu_FromPopupEventsListener();
+// Events
+document.removeEventListener('n01rcu.Event.Background', n01rcu_FromContentEventsListener);
+document.addEventListener('n01rcu.Event.Background', n01rcu_FromContentEventsListener, false);
+document.removeEventListener('n01rcu.Event.Popup', n01rcu_FromContentEventsListener);
+document.addEventListener('n01rcu.Event.Popup', n01rcu_FromContentEventsListener, false);
+n01rcu_ToContentEventsListener();

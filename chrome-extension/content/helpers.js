@@ -42,6 +42,34 @@ function n01rcu_onWsMessage(data, ws) {
 }
 
 /**
+ * Responds to events from Popup
+ *
+ * @param {*} event
+ */
+ function n01rcu_ToContentEventsHandler(event) {
+    console.log('===================> n01rcu_ToContentEventsHandler', event);
+    n01rcu_dispatchToPopup(n01rcu_getPlayer());
+}
+
+/**
+ * Sends message to popup
+ *
+ * @param {*} msg
+ */
+ function n01rcu_dispatchToPopup(msg) {
+    document.dispatchEvent(new CustomEvent('n01rcu.Event.Popup', { detail: msg }));
+}
+
+/**
+ * Sends message to background
+ *
+ * @param {*} msg
+ */
+ function n01rcu_dispatchToBackground(msg) {
+    document.dispatchEvent(new CustomEvent('n01rcu.Event.Background', { detail: msg }));
+}
+
+/**
  * Returns list of user which satisfies search condition
  *
  * @param {?number} from Average score from
@@ -280,14 +308,10 @@ function n01rcu_sendScoreLeft(ws, value) {
  */
 function n01rcu_changeExtensionIcon(icon = 'default') {
     setTimeout(function () {
-        document.dispatchEvent(
-            new CustomEvent('n01rcu.Event.ToBackground', {
-                detail: {
-                    type: 'SET_ICON',
-                    icon,
-                },
-            })
-        );
+        n01rcu_dispatchToBackground({
+            type: 'SET_ICON',
+            icon,
+        });
     }, 0);
 }
 
@@ -600,13 +624,4 @@ function n01rcu_isValidPlayerId(id) {
     }
 
     return splitId[0].length === 8 && splitId[1].length === 13;
-}
-
-function n01rcu_sendMessageToPopup(msg) {
-    document.dispatchEvent(new CustomEvent('n01rcu.Event.ToPopup', { detail: msg }));
-}
-
-function n01rcu_inPopupsEventsListener(event) {
-    console.log('===================> n01rcu.Event.FromPopup', event);
-    n01rcu_sendMessageToPopup(n01rcu_getPlayer());
 }
