@@ -13,7 +13,7 @@ class n01rcu_WebSocketClient {
 
     connect = () => {
         if (this.open) {
-            console.log('[n01.rcu.ws.client] connect error: already connected');
+            console.log('[n01.rcu.ws] connect error: already connected');
         } else {
             const player = n01rcu_getPlayer();
 
@@ -21,7 +21,7 @@ class n01rcu_WebSocketClient {
                 const params = `?client=true&id=${player.sid}&name=${player.playerName}&playerId=${player.pid}&accessCode=TEST`;
 
                 console.log(
-                    `[n01.rcu.ws.client] connecting to ${this.__url} (name: ${player.playerName}, id: ${player.sid})`
+                    `[n01.rcu.ws] connecting to ${this.__url} (name: ${player.playerName}, id: ${player.sid})`
                 );
 
                 this.__socket = new WebSocket(`${this.__url}${params}`);
@@ -30,18 +30,18 @@ class n01rcu_WebSocketClient {
                 this.__socket.onclose = this.__onClose;
                 this.__socket.onmessage = this.__onMessage;
             } else {
-                console.log('[n01.rcu.ws.client] connect error: no user info', JSON.stringify(player));
+                console.log('[n01.rcu.ws] connect error: no user info', JSON.stringify(player));
             }
         }
     };
 
     disconnect = (code, reason) => {
         if (this.open) {
-            console.log('[n01.rcu.ws.client] disconnecting');
+            console.log('[n01.rcu.ws] disconnecting');
 
             this.__socket.close(code ?? 1000, reason ?? 'Normal Closure');
         } else {
-            console.log('[n01.rcu.ws.client] disconnect error: no connection to server');
+            console.log('[n01.rcu.ws] disconnect error: no connection to server');
 
             n01rcu_changeExtensionIcon('default');
         }
@@ -56,13 +56,13 @@ class n01rcu_WebSocketClient {
         const msg = JSON.stringify(data);
 
         if (this.open) {
-            console.log('[n01.rcu.ws.client] send message', data['type']);
+            console.log('[n01.rcu.ws] send message', data['type']);
 
             this.__socket.send(msg);
 
             return true;
         } else {
-            console.log('[n01.rcu.ws.client][error] send message: no connection to server', data['type']);
+            console.log('[n01.rcu.ws][error] send message: no connection to server', data['type']);
         }
 
         return false;
@@ -74,28 +74,28 @@ class n01rcu_WebSocketClient {
      * @param {*} event message event
      */
     __onMessage = (event) => {
-        console.log('[n01.rcu.ws.client] received message', event.data);
+        console.log('[n01.rcu.ws] received message', event.data);
         
         this.onmessage?.(event);
         n01rcu_onWsMessage(JSON.parse(event.data), this);
     };
 
     __onOpen = () => {
-        console.log('[n01.rcu.ws.client] connected');
+        console.log('[n01.rcu.ws] connected');
 
         this.onopen?.();
         n01rcu_changeExtensionIcon('connected');
     };
 
     __onClose = (event) => {
-        console.log('[n01.rcu.ws.client] closed connection', event?.code, event?.reason);
+        console.log('[n01.rcu.ws] closed connection', event?.code, event?.reason);
         
         this.onclose?.(event);
         n01rcu_changeExtensionIcon('default');
     };
 
     __onError = () => {
-        console.log('[n01.rcu.ws.client] connection failed');
+        console.log('[n01.rcu.ws] connection failed');
 
         this.onerror?.();
         n01rcu_changeExtensionIcon('failed');
