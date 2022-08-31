@@ -1,0 +1,45 @@
+{
+    "manifest_version": 3,
+    "name": "[n01.RCU] CLIENT",
+    "version": "1.0.1",
+    "background": {
+        "service_worker": "service-worker.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://nakka.com/n01/online/",
+                "https://nakka.com/n01/online/n01.php"
+            ],
+            "js": ["state.service.js", "helpers.js", "content.js"],
+            "run_at": "document_end"
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "content/helpers.js",
+                "content/websocket.js",
+                "content/index.js"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ],
+    "action": {
+        "default_popup": "popup/index.html",
+        "default_icon": {
+            "16": "icons/default.png",
+            "36": "icons/default.png",
+            "48": "icons/default.png",
+            "120": "icons/default.png"
+        }
+    },
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "scripting",
+        "storage"
+    ]
+}
