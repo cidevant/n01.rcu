@@ -119,26 +119,41 @@ html,
 
 #server_url_input.error {
     border: 1px solid red;
+    background-color: rgba(255, 0, 0, 0.15);
+    color: black;
+    font-weight: bold;
 }
 
 #server_url_input.ok {
     border: 1px solid green;
+    background-color:  rgb(0, 249, 0);
+    font-weight: bold;
+    color: black;
 }
 
 /*  ACCESS CODE  */
 
 #access_code_input {
-    background-color: rgb(0, 234, 4);
-    color: rgb(0, 0, 0, 0.8);
+    border: 1px solid #9b6018;
+    background-color: #ffa029;
+    color: black;
     display: inline-block;
     padding: 3px 7px;
     font-size: 18px;
     font-weight: bold;
 }
 
-#access_code_input.error {}
+#access_code_input.error {
+    border: 1px solid red;
+    background-color: rgba(255, 0, 0, 0.15);
+    color: black;
+}
 
-#access_code_input.ok {}
+#access_code_input.ok {
+    border: 1px solid green;
+    background-color:  rgb(0, 249, 0);
+    color: black;
+}
 
 #access_code_hint {
     display: inline-block;
