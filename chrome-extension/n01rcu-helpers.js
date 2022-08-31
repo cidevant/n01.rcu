@@ -37,7 +37,7 @@ const n01rcu_onWsMessage = function n01rcu_onWsMessage(data, ws) {
                 break;
         }
     } catch (error) {
-        console.log('[n01.rcu.helpers] onWsMessage error: ', error);
+        console.log('[n01.rcu] onWsMessage error: ', error);
     }
 }
 
@@ -193,7 +193,7 @@ const n01rcu_searchStartGame = function n01rcu_searchStartGame(data, ws) {
     if (playButton.is(':visible')) {
         playButton.click();
     } else {
-        console.log('[n01.rcu.helpers][searchStartGame][error] cant start game with player', data['payload']);
+        console.log('[n01.rcu][searchStartGame][error] cant start game with player', data['payload']);
     }
 }
 
@@ -233,7 +233,7 @@ const n01rcu_setInputScore = function n01rcu_setInputScore(data, ws) {
         // respond with score left
         n01rcu_sendScoreLeft(ws);
     } catch (error) {
-        console.log('[n01.rcu.helpers] inputScore error: ', error);
+        console.log('[n01.rcu][error] setInputScore:', error);
     }
 }
 
@@ -245,12 +245,12 @@ const n01rcu_setInputScore = function n01rcu_setInputScore(data, ws) {
  */
 const n01rcu_setFinishDart = function n01rcu_setFinishDart(data, ws) {
     if ($(`#${data['payload']}`).is(':visible')) {
-        console.log('[n01.rcu.helpers] setFinishDart ', data);
+        console.log('[n01.rcu] setFinishDart:', data);
 
         $(`#${data['payload']}`).click();
     } else {
         console.log(
-            `[n01.rcu.helpers] setFinishDart error: ${data['payload']} not found or is not visible`
+            `[n01.rcu][error] setFinishDart: ${data['payload']} not found or is not visible`
         );
     }
 }
@@ -269,7 +269,7 @@ const n01rcu_sendScoreLeft = function n01rcu_sendScoreLeft(ws, value) {
             payload: score === -1 ? '-' : score,
         });
     } catch (error) {
-        console.log('[n01.rcu.helpers] sendScoreLeft error', error);
+        console.log('[n01.rcu][error] sendScoreLeft:', error);
     }
 }
 
@@ -309,7 +309,7 @@ const n01rcu_getPlayer = function n01rcu_getPlayer() {
             playerName: n01rcu_getPlayerName(user),
         }
     } catch (error) {
-        console.log('[n01.rcu.helpers] getPlayer error: ', error);
+        console.log('[n01.rcu][error] getPlayer: ', error);
 
         return {};
     }
@@ -358,7 +358,7 @@ const n01rcu_getPlayerIndexInMatch = function n01rcu_getPlayerIndexInMatch() {
             throw 'No match data found';
         }
     } catch (error) {
-        console.log('[n01.rcu.helpers] getPlayerIndexInMatch error: ', error);
+        console.log('[n01.rcu][error] getPlayerIndexInMatch: ', error);
 
         return -1;
     }
@@ -385,7 +385,7 @@ const n01rcu_getPlayerLeftScore = function n01rcu_getPlayerLeftScore() {
 
         throw 'bad getPlayerIndexInMatch index';
     } catch (error) {
-        console.log('[n01.rcu.helpers] getPlayerLeftScore error: ', error);
+        console.log('[n01.rcu][error] getPlayerLeftScore: ', error);
 
         return -1;
     }
@@ -405,7 +405,7 @@ const n01rcu_getLocalStorage = function n01rcu_getLocalStorage(key, shouldParseJ
     try {
         return JSON.parse(localStorage[key]);
     } catch (error) {
-        console.log('[n01.rcu.helpers] getLocalStorage error: ', error);
+        console.log('[n01.rcu][error] getLocalStorage: ', error);
 
         return {};
     }
@@ -496,7 +496,7 @@ const n01rcu_startMatchUpdater = function n01rcu_startMatchUpdater(ws) {
     const pageType = n01rcu_detectPageType();
 
     if (ws.open && pageType === 'game') {
-        console.log('[n01.rcu.helpers] startMatchUpdater');
+        console.log('[n01.rcu] startMatchUpdater');
 
         const result = n01rcu_sendMatchStarted(ws);
 
@@ -516,7 +516,7 @@ const n01rcu_startMatchUpdater = function n01rcu_startMatchUpdater(ws) {
                             payload: JSON.parse(matchResultString),
                         });
                     } catch (error) {
-                        console.log('[n01.rcu.helpers][error] startMatchUpdater', error);
+                        console.log('[n01.rcu][error] startMatchUpdater:', error);
                     }
 
                     n01rcu_matchUpdaterLastMessage = matchResultString
@@ -533,7 +533,7 @@ const n01rcu_startMatchUpdater = function n01rcu_startMatchUpdater(ws) {
  */
 const n01rcu_stopMatchUpdater = function n01rcu_stopMatchUpdater(ws) {
     if (n01rcu_matchUpdater !== null) {
-        console.log('[n01.rcu.helpers] stopMatchUpdater');
+        console.log('[n01.rcu] stopMatchUpdater');
 
         clearInterval(n01rcu_matchUpdater);
         n01rcu_matchUpdater = null;

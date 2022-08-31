@@ -20,7 +20,7 @@ const n01rcu_wrapperFunctions = {
     },
     //start of new leg
     initScore: function () {
-        console.log('[n01.rcu.n01rcu-action-listeners] wrapper initScore');
+        console.log('[n01.rcu.runner] wrapper initScore');
 
         n01rcu_sendScoreLeft(n01rcu_ws);
     },
@@ -35,7 +35,7 @@ const n01rcu_wrapperFunctions = {
             return acc;
         }, []);
 
-        console.log('[n01.rcu.n01rcu-action-listeners] wrapper finishMenuOpen', outs);
+        console.log('[n01.rcu.runner] wrapper finishMenuOpen', outs);
 
         setTimeout(() => {
             // if only one possibility - send without confirmation
@@ -52,7 +52,7 @@ const n01rcu_wrapperFunctions = {
     },
     // leg finished by you, dialog message: "Game shot 3rd dart (23 darts)", buttons: [ok]
     finishMsgOpen: function () {
-        console.log('[n01.rcu.n01rcu-action-listeners] wrapper finishMsgOpen');
+        console.log('[n01.rcu.runner] wrapper finishMsgOpen');
 
         setTimeout(() => {
             $('#msg_ok').click(); // press OK
@@ -60,7 +60,7 @@ const n01rcu_wrapperFunctions = {
     },
     // leg finished by opponent, dialog message: "Game shot 3rd dart (23 darts)", buttons: [ok]
     netFinishMsgOpen: function () {
-        console.log('[n01.rcu.n01rcu-action-listeners] wrapper netFinishMsgOpen');
+        console.log('[n01.rcu.runner] wrapper netFinishMsgOpen');
 
         setTimeout(() => {
             $('#msg_net_ok').click(); // press OK
@@ -68,7 +68,7 @@ const n01rcu_wrapperFunctions = {
     },
     // match finished, dialog message: "Winner is PlayerX", buttons: [ok]
     endMatchMsgOpen: function () {
-        console.log('[n01.rcu.n01rcu-action-listeners] wrapper endMatchMsgOpen');
+        console.log('[n01.rcu.runner] wrapper endMatchMsgOpen');
 
         $('#msg_net_ok').click(); // press OK
         n01rcu_ws.send({ type: 'CONTROLLERS:MATCH_END' });

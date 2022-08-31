@@ -30,7 +30,7 @@
             "resources": [
                 "n01rcu-helpers.js",
                 "n01rcu-websocket.js",
-                "n01rcu-action-listener.js"
+                "n01rcu-runner.js"
             ],
             "matches": [
                 "<all_urls>"
