@@ -6,7 +6,7 @@ const n01rcu_ws = new n01rcu_WebSocketClient();
 // When window loaded
 window.onload = () => {
     // events
-    document.addEventListener('n01rcu.Event.Content', n01rcu_ToContentEventsHandler, false);
+    document.addEventListener('n01rcu.Event.Content', n01rcu_ToContentEventsHandler);
     // ws setup
     n01rcu_ws.onopen = () => {
         n01rcu_changeExtensionIcon('connected');
