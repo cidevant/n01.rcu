@@ -6,7 +6,7 @@ module.exports = {
         es2022: true,
     },
     plugins: ['react', 'prettier', 'jsdoc'],
-    extends: ['react-app', 'eslint:recommended', 'plugin:prettier/recommended', 'prettier'],
+    extends: ['eslint:recommended', 'plugin:prettier/recommended', 'prettier'],
     globals: {
         describe: 'readonly',
         it: 'readonly',
@@ -22,15 +22,7 @@ module.exports = {
         quotes: [2, 'single', 'avoid-escape'],
         semi: [2, 'always'],
         'default-case': 'off',
-        'no-unused-vars': [
-            1,
-            {
-                vars: 'all',
-                args: 'all',
-                argsIgnorePattern: 'res|next|^err|event|^_',
-                ignoreRestSiblings: true,
-            },
-        ],
+        'no-undef': 'off',
         'prettier/prettier': [
             'error',
             {

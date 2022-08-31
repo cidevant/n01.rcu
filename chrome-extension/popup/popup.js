@@ -3,18 +3,19 @@ function onPopupLoadedListener() {
 
     $('#connect_button').on('click', async () => {
         const url = $('#server_url_input').val();
-        const accessCode = $('#access_code_input').val();
+        const accessCode = $('#access_code_input').text();
         const validUrl = isValidUrl(url);
-        const validCode = isValidAccessCode(accessCode);
 
-        setInputValidation('#server_url_input', validUrl);
-        setInputValidation('#access_code_input', validCode);
-
-        if (validUrl && validCode) {
-            dispatchToContent({ 
-                type: 'SERVER_CONNECT',
-                url,
-                accessCode,
+        if (validUrl) {
+            isValidAccessCode(accessCode, url).then((validCode) => {
+                if (validCode) {
+                    dispatchToContent({
+                        type: 'SERVER_CONNECT',
+                        url,
+                        accessCode,
+                    });
+                }
+                setInputValidation('#server_url_input', validUrl);
             });
         }
     });
@@ -25,6 +26,25 @@ function onPopupLoadedListener() {
 
     $('#reset_button').on('click', async () => {
         dispatchToContent({ type: 'RESET_CONNECTION_SETTINGS' });
+    });
+
+    $('#generate_button').on('click', async () => {
+        const url = $('#server_url_input').val();
+        const validUrl = isValidUrl(url);
+
+        if (validUrl) {
+            generateAccessCode()
+                .then((code) => {
+                    setConnectionFromContent({ accessCode: code });
+                    setInputValidation('#access_code_input', true);
+                })
+                .catch(() => {
+                    console.error('[n01.rcu.popup][error] generateAccessCode', error);
+                    setInputValidation('#access_code_input', false);
+                });
+        } else {
+            setInputValidation('#server_url_input', false);
+        }
     });
 }
 

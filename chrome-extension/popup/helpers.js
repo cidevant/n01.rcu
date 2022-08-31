@@ -15,16 +15,18 @@ function receivedEventsHandler({ __type, ...data }, _sender, _sendResponse) {
         console.log('[n01.rcu.popup]', JSON.stringify(data));
 
         switch (data?.type) {
-            case 'SET_CONNECTION': {
-                setConnectionFromContent(data);
-            } break;
+            case 'SET_CONNECTION':
+                {
+                    setConnectionFromContent(data);
+                }
+                break;
             default:
                 break;
         }
     }
 }
 
-function setConnectionFromContent({ type, ...data}) {
+function setConnectionFromContent({ type, ...data }) {
     __connection = {
         ...__connection,
         ...data,
@@ -37,7 +39,7 @@ function updateConnectionInfo() {
     $('#server_status').text(__connection.server ? 'CONNECTED' : 'DISCONNECTED');
     $('#controllers_status').text(__connection.paired ? 'PAIRED' : 'UNPAIRED');
     $('#server_url_input').val(__connection.url).attr('disabled', __connection.server);
-    $('#access_code_input').val(__connection.accessCode);
+    $('#access_code_input').text(__connection.accessCode);
 
     if (__connection.server) {
         $('#connect_button').hide();
@@ -45,9 +47,15 @@ function updateConnectionInfo() {
         $('#generate_button').hide();
         $('#disconnect_button').show();
     } else {
-        $('#connect_button').show();
         $('#reset_button').show();
-        $('#generate_button').show();
+
+        if (isValidUrl(__connection.url)) {
+            $('#generate_button').show();
+        } else {
+            setInputValidation('#server_url_input', false);
+        }
+
+        $('#connect_button').show();
         $('#disconnect_button').hide();
     }
 }
@@ -70,8 +78,50 @@ function isValidUrl(input) {
     return input?.startsWith('ws') && input?.endsWith('/ws');
 }
 
-function isValidAccessCode(input) {
-    return input?.length === 4;
+function isValidAccessCode(input, url) {
+    return new Promise((resolve, reject) => {
+        if (input?.length === 4) {
+            try {
+                fetch(`${`${url}`.replace('/ws', '')}/check-access-code`)
+                    .then((resp) => resp.json())
+                    .then((resp) => {
+                        if (resp.ok === true) {
+                            resolve();
+                        } else {
+                            reject(resp.error);
+                        }
+                    })
+                    .catch((error) => {
+                        reject(`fetch error ${error.message}`);
+                    });
+            } catch (error) {
+                reject(`fetch error ${error.message}`);
+            }
+        } else {
+            reject('bad length');
+        }
+    });
+}
+
+function generateAccessCode() {
+    return new Promise((resolve, reject) => {
+        try {
+            fetch(`${`${__connection.url}`.replace('/ws', '')}/generate-access-code`)
+                .then((resp) => resp.json())
+                .then((resp) => {
+                    if (resp?.ok === true && resp?.code?.length === 4) {
+                        resolve(resp.code);
+                    } else {
+                        reject(resp.error);
+                    }
+                })
+                .catch((error) => {
+                    reject(`fetch error ${error.message}`);
+                });
+        } catch (error) {
+            reject(`fetch error ${error.message}`);
+        }
+    });
 }
 
 /**
@@ -82,21 +132,28 @@ function isValidAccessCode(input) {
  */
 function dispatchToContent(payload, onResponseCallback) {
     return new Promise((resolve, reject) => {
-        chrome.tabs.query({
-            active: true,
-            currentWindow: true
-        }).then(tabs => {
-            if (tabs?.length > 0) {
-                chrome.tabs.sendMessage(tabs[0].id, {
-                    __type: 'n01rcu.Event.Content',
-                    ...payload
-                }, onResponseCallback);
-                resolve();
-            } else {
-                console.log('[n01.rcu.popup][error] dispatchToContent: active tab id is null');
-                reject();
-            }
-        }).catch(reject);
+        chrome.tabs
+            .query({
+                active: true,
+                currentWindow: true,
+            })
+            .then((tabs) => {
+                if (tabs?.length > 0) {
+                    chrome.tabs.sendMessage(
+                        tabs[0].id,
+                        {
+                            __type: 'n01rcu.Event.Content',
+                            ...payload,
+                        },
+                        onResponseCallback
+                    );
+                    resolve();
+                } else {
+                    console.log('[n01.rcu.popup][error] dispatchToContent: active tab id is null');
+                    reject();
+                }
+            })
+            .catch(reject);
     });
 }
 
@@ -108,6 +165,6 @@ function dispatchToContent(payload, onResponseCallback) {
 function dispatchToBackground(payload) {
     chrome.runtime.sendMessage({
         __type: 'n01rcu.Event.Background',
-        ...payload
+        ...payload,
     });
 }
