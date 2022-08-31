@@ -1,70 +1,106 @@
+body, html, * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
 .wrapper {
-    width: 500px;
-    height: 300px;
+    background-color: #ddd;
+    padding: 10px;
 }
 
-h3 {
-    
-}
-
-/* ---------------------------------------- */
-
-ul.connectionList {
-
-}
-
-li.connectionItem {
-
-}
-
-div.connectionTitle {
-
-}
-
-#server_status {
-
-}
-
-#controllers_status {
-
-}
-
-/* ---------------------------------------- */
-
-
-ul.settingsList {
-
-}
-
-li.settingsItem {
-
-}
-
-div.settingsTitle {
-
-}
-
-input#server_url_input {
-
+.table {
+    width: 100%;
+    margin: 15px 0 10px 0;
+    border-width: 0;
+    border-spacing: 0px;
+    border-collapse: collapse;
 }
 
 
-input#access_code_input {
-    
+/* --------------- HEAD */
+
+
+.table thead tr td:not(:first-child) {
+    background-color: black;
+    color: white;
+    font-size: 18px;
+    padding: 5px 10px;
+    min-width: 100px;
 }
 
-input#server_url_input.error,
-input#access_code_input.error {
+.table thead tr td:last-child {
+    text-align: right;
+}
+
+
+/* -------------- BODY */
+
+
+/* VALUE,STATUS,ACTION */
+.table tbody .value, 
+.table tbody .status, 
+.table tbody .action {
+    padding: 5px 10px;
+}
+.table tbody tr:first-child td {
+    padding-top: 10px;
+}
+
+
+
+/* LABEL */
+.table tbody .label {
+    min-width: 100px;
+}
+
+/* VALUE */
+
+.table tbody .value {
+    padding-left: 0;
+    min-width: 300px;
+}
+
+
+/* VALUE */
+
+.table tbody .status {
+    min-width: 100px;
+}
+
+/* ACTION */
+
+.table tbody .action {
+    padding-right: 0;
+    min-width: 140px;
+}
+
+/* -------------- GENERAL */
+
+
+.table tbody input {
+    width: 100%;
+    padding: 5px 10px;
+
+}
+
+.table tbody button {
+    width: 100%;
+    padding: 4px 0;
+    text-transform: uppercase;
+}
+
+
+/* -------------- */
+
+#server_url_input.error,
+#access_code_input.error {
     border: 1px solid red;
 }
 
-input#server_url_input.ok,
-input#access_code_input.ok {
+#server_url_input.ok,
+#access_code_input.ok {
     border: 1px solid green;
 }
 
 /* ---------------------------------------- */
-
-button#submit_button {
-    
-}

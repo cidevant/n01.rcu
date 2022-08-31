@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[n01.online] RCU Client</title>
+</head>
+
+<body>
+    <div class='wrapper'>
+        <h1>[n01.online] RCU Client</h1>
+
+        <div class="settings_error" id="settings_server_url_error"></div>
+        <div class="settings_error" id="settings_access_code_error"></div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <td></td>
+                    <td>Value</td>
+                    <td>Status</td>
+                    <td>Action</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="settings_server_url">
+                    <td class="label">Server URL</td>
+                    <td class="value">
+                        <input type="text" placeholder="ws://127.0.0.1:3000/ws" name="server_url_input" id="server_url_input">
+                    </td>
+                    <td class="status">
+                        <div id="server_status"></div>
+                    </td>
+                    <td class="action">
+                        <button id="connect_button">try connect</button>
+                        <button id="disconnect_button">disconnect</button>
+                    </td>
+                </tr>
+                <tr id="settings_access_code">
+                    <td class="label">Access code</td>
+                    <td class="value">
+                        <div id="access_code_input"></div>
+                    </td>
+                    <td class="status">
+                        <div id="controllers_status"></div>
+                    </td>
+                    <td class="action">
+                        <button id="generate_button">change</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        
+    </div>
+
+    <link rel='stylesheet' href='popup.css' />
+    <script src='jquery-3.6.1.min.js'></script>
+    <script src='helpers.js'></script>
+    <script src='popup.js'></script>
+</body>
+
+</html>
