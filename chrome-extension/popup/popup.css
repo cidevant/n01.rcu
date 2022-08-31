@@ -18,6 +18,30 @@ html,
     padding: 10px;
 }
 
+
+/* ----------------------------------------------- */
+/* --------------- TOP HEADER */
+
+
+h1 {
+    flex-grow: 1;
+}
+
+.d-flex {
+    display: flex;
+    flex-direction: row;
+}
+
+.settings_errors_wrapper {
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* ----------------------------------------------- */
+/* --------------- TABLE */
+
+
 .table {
     width: 100%;
     margin: 15px 0 10px 0;
@@ -134,13 +158,15 @@ html,
 /*  ACCESS CODE  */
 
 #access_code_input {
-    border: 1px solid #9b6018;
-    background-color: #ffa029;
+    border: 1px solid #333;
+    background-color: #ccc;
     color: black;
     display: inline-block;
     padding: 3px 7px;
     font-size: 18px;
     font-weight: bold;
+    min-width: 70px;
+    text-align: center;
 }
 
 #access_code_input.error {
