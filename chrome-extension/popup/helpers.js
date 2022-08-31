@@ -1,11 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 let __connection = {
-    // internal state
-    urlValid: false,
-    accessCodeValid: false,
-
-    // provided by content
+    // provided by `Content`
     url: null,
     accessCode: null,
     server: false,
@@ -13,6 +9,10 @@ let __connection = {
     searching: false,
     closeCode: null,
     closeReason: null,
+
+    // internal state
+    urlValid: false,
+    accessCodeValid: false,
 };
 
 function receivedEventsHandler({ __type, ...action }, _sender, _sendResponse) {
@@ -94,14 +94,14 @@ function validateUrl(input) {
                         if (resp?.ok === true) {
                             resolve(true);
                         } else {
-                            reject(`fetch response error ${JSON.stringify(resp)}`);
+                            reject(`response ${JSON.stringify(resp)}`);
                         }
                     })
                     .catch((error) => {
-                        reject(`fetch error ${error.message}`);
+                        reject(error.message);
                     });
             } catch (error) {
-                reject(`fetch error ${error.message}`);
+                reject(error.message);
             }
         } else {
             reject('invalid url format');
@@ -119,14 +119,14 @@ function validateAccessCode(url, input) {
                         if (resp.ok === true) {
                             resolve();
                         } else {
-                            reject(`fetch result error ${JSON.stringify(resp)}`);
+                            reject(`response ${JSON.stringify(resp)}`);
                         }
                     })
                     .catch((error) => {
-                        reject(`fetch error ${error.message}`);
+                        reject(error.message);
                     });
             } catch (error) {
-                reject(`fetch error ${error.message}`);
+                reject(error.message);
             }
         } else {
             reject('invalid access code format');
@@ -134,6 +134,11 @@ function validateAccessCode(url, input) {
     });
 }
 
+/**
+ * Requests new access code from server
+ *
+ * @returns {Promise<string>} fetch promise
+ */
 function generateAccessCode() {
     return new Promise((resolve, reject) => {
         try {
@@ -147,22 +152,40 @@ function generateAccessCode() {
                     }
                 })
                 .catch((error) => {
-                    reject(`fetch error ${error.message}`);
+                    reject(error.message);
                 });
         } catch (error) {
-            reject(`fetch error ${error.message}`);
+            reject(error.message);
         }
     });
 }
 
+/**
+ * Validates format `url`
+ *
+ * @param {string} input value to check
+ * @returns {boolean} has valid format?
+ */
 function isValidUrlFormat(input) {
     return input?.startsWith('ws') && input?.endsWith('/ws');
 }
 
+/**
+ * Validates format `accessCode`
+ *
+ * @param {string} input value to check
+ * @returns {boolean} has valid format?
+ */
 function isValidAccessCodeFormat(input) {
     return input?.length === 4;
 }
 
+/**
+ * Makes ok/error animation and hides/shows `accessCode`
+ *
+ * @param {*} selector
+ * @param {boolean} [isValid=false]
+ */
 function setInputValidation(selector, isValid = false) {
     const className = isValid === true ? 'ok' : 'error';
 
@@ -172,7 +195,7 @@ function setInputValidation(selector, isValid = false) {
         $(selector).removeClass(className);
     }, 400);
 
-    // toggle access code state
+    // hide/show access_code if url is valid/invalid
     if (selector === '#server_url_input') {
         if (isValid === true) {
             $('#settings_access_code').show();
@@ -186,6 +209,9 @@ function setInputValidation(selector, isValid = false) {
     updateErrorsMessages();
 }
 
+/**
+ * Shows/hides errors which are stored at `urlValid` and `accessCodeValid` variables
+ */
 function updateErrorsMessages() {
     const hasMessage = (key) => __connection[key] !== true && __connection[key]?.length > 0;
 
@@ -252,6 +278,13 @@ function dispatchToBackground(payload) {
     });
 }
 
+/**
+ * Convert WS url to WEB url
+ *
+ * @param {string} url ws://.../ws
+ * @param {string} path replaces /ws at the end
+ * @returns {string} output http://.../path
+ */
 function getWebServerUrl(url, path) {
     return `${url}`.replace('wss://', 'https://').replace('ws://', 'http://').replace('/ws', path);
 }
