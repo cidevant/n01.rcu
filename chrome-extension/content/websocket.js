@@ -91,7 +91,6 @@ class n01rcu_WebSocketClient {
         console.log('[n01.rcu.ws] closed connection', event?.code, event?.reason);
         
         this.onclose?.(event);
-        n01rcu_changeExtensionIcon('default');
     };
 
     __onError = () => {

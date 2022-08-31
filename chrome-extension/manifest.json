@@ -3,7 +3,7 @@
     "name": "[n01.online] RCU Client",
     "version": "1.0.1",
     "background": {
-        "service_worker": "sw.js"
+        "service_worker": "background.js"
     },
     "content_scripts": [
         {
@@ -12,7 +12,7 @@
                 "https://nakka.com/n01/online/n01.php"
             ],
             "js": [
-                "index.js"
+               "jquery-3.6.1.min.js" , "content.js"
             ],
             "run_at": "document_end"
         }
@@ -20,9 +20,9 @@
     "web_accessible_resources": [
         {
             "resources": [
-                "src/helpers.js",
-                "src/websocket.js",
-                "src/index.js"
+                "content/helpers.js",
+                "content/websocket.js",
+                "content/index.js"
             ],
             "matches": [
                 "<all_urls>"
@@ -30,8 +30,7 @@
         }
     ],
     "action": {
-        "default_popup": "popup/index.html",
-        "default_title": "[n01.online] RCU Client",
+        "default_popup": "popup/popup.html",
         "default_icon": {
             "16": "icons/default.png",
             "36": "icons/default.png",
