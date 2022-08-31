@@ -1,7 +1,16 @@
-body, html, * {
+@font-face {
+    font-family: 'Roboto Flex';
+    font-style: normal;
+    src: url('RobotoFlex-Regular.ttf') format('truetype');
+}
+
+body,
+html,
+* {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+    font-family: 'Roboto Flex', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .wrapper {
@@ -18,10 +27,11 @@ body, html, * {
 }
 
 
+/* ----------------------------------------------- */
 /* --------------- HEAD */
 
 
-.table thead tr td:not(:first-child) {
+.table>thead .titles {
     background-color: black;
     color: white;
     font-size: 18px;
@@ -29,27 +39,31 @@ body, html, * {
     min-width: 100px;
 }
 
-.table thead tr td:last-child {
+.table>thead .last {
     text-align: right;
 }
 
 
+/* ----------------------------------------------- */
 /* -------------- BODY */
 
 
-/* VALUE,STATUS,ACTION */
-.table tbody .value, 
-.table tbody .status, 
-.table tbody .action {
+/* VALUE, STATUS, ACTION */
+
+.table>tbody .value,
+.table>tbody .status,
+.table>tbody .action {
     padding: 5px 10px;
+    min-width: 250px;
+    min-height: 50px;
 }
-.table tbody tr:first-child td {
+
+.table tbody #settings_server_url td {
     padding-top: 10px;
 }
 
-
-
 /* LABEL */
+
 .table tbody .label {
     min-width: 100px;
 }
@@ -61,26 +75,32 @@ body, html, * {
     min-width: 300px;
 }
 
-
-/* VALUE */
+/* STATUS */
 
 .table tbody .status {
-    min-width: 100px;
+    min-width: 140px;
+    font-weight: bold;
 }
 
 /* ACTION */
 
 .table tbody .action {
     padding-right: 0;
-    min-width: 140px;
+    min-width: 160px;
 }
 
+
+/* ----------------------------------------------- */
 /* -------------- GENERAL */
 
 
 .table tbody input {
     width: 100%;
     padding: 5px 10px;
+    min-height: 30px;
+    height: 30px;
+    border: 1px solid #666;
+    outline: unset;
 
 }
 
@@ -91,16 +111,37 @@ body, html, * {
 }
 
 
-/* -------------- */
+/* ----------------------------------------------- */
+/* -------------- FORM */
 
-#server_url_input.error,
-#access_code_input.error {
+
+/*  SERVER  */
+
+#server_url_input.error {
     border: 1px solid red;
 }
 
-#server_url_input.ok,
-#access_code_input.ok {
+#server_url_input.ok {
     border: 1px solid green;
 }
 
-/* ---------------------------------------- */
+/*  ACCESS CODE  */
+
+#access_code_input {
+    background-color: rgb(0, 234, 4);
+    color: rgb(0, 0, 0, 0.8);
+    display: inline-block;
+    padding: 3px 7px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#access_code_input.error {}
+
+#access_code_input.ok {}
+
+#access_code_hint {
+    display: inline-block;
+    margin-left: 5px;
+    color: #777;
+}

@@ -18,9 +18,9 @@
             <thead>
                 <tr>
                     <td></td>
-                    <td>Value</td>
-                    <td>Status</td>
-                    <td>Action</td>
+                    <td class="titles">Value</td>
+                    <td class="titles">Status</td>
+                    <td class="titles last">Action</td>
                 </tr>
             </thead>
             <tbody>
@@ -33,27 +33,25 @@
                         <div id="server_status"></div>
                     </td>
                     <td class="action">
-                        <button id="connect_button">try connect</button>
+                        <button id="connect_button">connect</button>
                         <button id="disconnect_button">disconnect</button>
                     </td>
                 </tr>
                 <tr id="settings_access_code">
-                    <td class="label">Access code</td>
+                    <td class="label">Pairing Code</td>
                     <td class="value">
                         <div id="access_code_input"></div>
+                        <span id="access_code_hint">( use this code for pairing with RCU )</span>
                     </td>
                     <td class="status">
                         <div id="controllers_status"></div>
                     </td>
                     <td class="action">
-                        <button id="generate_button">change</button>
+                        <button id="generate_button">get new code</button>
                     </td>
                 </tr>
             </tbody>
         </table>
-
-
-        
     </div>
 
     <link rel='stylesheet' href='popup.css' />
