@@ -22,6 +22,7 @@ html,
 /* ----------------------------------------------- */
 /* --------------- TOP HEADER */
 
+
 #top_title {
     margin: 0px 0 15px 0;
 }
@@ -142,6 +143,19 @@ h1 {
 
 .table tbody .label {
     min-width: 100px;
+}
+
+.table tbody .label > div { 
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#reset_button {
+    margin-left: 5px;
+    cursor: pointer !important;
+    width: 16px;
+    height: 16px;
 }
 
 /* VALUE */

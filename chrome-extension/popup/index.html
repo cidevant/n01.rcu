@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <title>[n01.online] RCU Client</title>
 </head>
 
@@ -36,9 +36,21 @@
             </thead>
             <tbody>
                 <tr id="settings_server_url">
-                    <td class="label">Server URL</td>
+                    <td class="label">
+                        <div>
+                            Server URL
+                            <img 
+                                id="reset_button" 
+                                src="../icons/reset.png"
+                                title="Reset connection values to defaults" 
+                                alt="Reset connection values to defaults" 
+                                width="16" 
+                                height="16" 
+                            />
+                        </div>
+                    </td>
                     <td class="value">
-                        <input type="text" placeholder="ws://127.0.0.1:3000/ws" name="server_url_input" id="server_url_input">
+                        <input type="text" placeholder="ws://n01.devant.cz:4000/ws" id="server_url_input">
                     </td>
                     <td class="status">
                         <div id="server_status"></div>
