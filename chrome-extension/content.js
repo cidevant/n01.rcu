@@ -15,7 +15,7 @@ function n01rcu_scriptInjector(path) {
     });
 }
 
-function n01rcu_InEventsListener() {
+function n01rcu_FromPopupEventsListener() {
     if (
         chrome == null ||
         chrome.runtime == null ||
@@ -29,7 +29,7 @@ function n01rcu_InEventsListener() {
     });
 }
 
-function n01rcu_OutEventsListener(event) {
+function n01rcu_FromContentEventsListener(event) {
     if (
         chrome == null ||
         chrome.runtime == null ||
@@ -45,8 +45,8 @@ n01rcu_scriptInjector('content/helpers.js')
     .then(() => n01rcu_scriptInjector('content/websocket.js'))
     .then(() => n01rcu_scriptInjector('content/index.js'));
     
-document.removeEventListener('n01rcu.Event.ToBackground', n01rcu_OutEventsListener);
-document.addEventListener('n01rcu.Event.ToBackground', n01rcu_OutEventsListener, false);
-document.removeEventListener('n01rcu.Event.ToPopup', n01rcu_OutEventsListener);
-document.addEventListener('n01rcu.Event.ToPopup', n01rcu_OutEventsListener, false);
-n01rcu_InEventsListener();
+document.removeEventListener('n01rcu.Event.ToBackground', n01rcu_FromContentEventsListener);
+document.addEventListener('n01rcu.Event.ToBackground', n01rcu_FromContentEventsListener, false);
+document.removeEventListener('n01rcu.Event.ToPopup', n01rcu_FromContentEventsListener);
+document.addEventListener('n01rcu.Event.ToPopup', n01rcu_FromContentEventsListener, false);
+n01rcu_FromPopupEventsListener();
