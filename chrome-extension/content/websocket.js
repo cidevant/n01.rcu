@@ -15,10 +15,18 @@ class n01rcu_WebSocketClient {
         }
 
         n01rcu_WebSocketClient.instance = this;
+
         this.__closeCode = null;
         this.__closeReason = null;
+     
+        const storedUrl = localStorage.getItem('n01_rcu_url');
+        const storedCode = localStorage.getItem('n01_rcu_code');
 
-        this.resetSettings();
+        if (this.__isValidUrl(storedUrl) && this.__isValidAccessCode(storedCode)) {
+            this.updateSettings(storedUrl, storedCode);
+        } else {
+            this.resetSettings();
+        }
     }
 
     connect = () => {
@@ -48,12 +56,14 @@ class n01rcu_WebSocketClient {
     updateSettings = (url, code) => {
         if (this.__isValidUrl(url)) {
             this.__url = url;
+            localStorage.setItem('n01_rcu_url', url);
         } else {
             console.log('[n01.rcu.ws][error] updateSettings: invalid url');
         }
 
         if (this.__isValidAccessCode(code)) {
             this.__accessCode = code;
+            localStorage.setItem('n01_rcu_code', code);
         } else {
             console.log('[n01.rcu.ws][error] updateSettings: invalid accessCode');
         }

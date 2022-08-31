@@ -81,11 +81,13 @@ function updateConnectionInfo() {
     $('#access_code_input').text(__connection.accessCode);
 
     if (__connection.server) {
+        $('#access_code_input').addClass('disabled');
         $('#connect_button').hide();
         $('#reset_button').hide();
         $('#generate_button').hide();
         $('#disconnect_button').show();
     } else {
+        $('#access_code_input').removeClass('disabled');
         $('#reset_button').show();
 
         if (__connection.urlValid) {
@@ -221,7 +223,7 @@ function setInputValidation(selector, isValid = false) {
     $(selector).addClass(className);
     setTimeout(() => {
         $(selector).removeClass(className);
-    }, 400);
+    }, 250);
 
     // hide/show access_code if url is valid/invalid
     if (selector === '#server_url_input') {
@@ -230,7 +232,7 @@ function setInputValidation(selector, isValid = false) {
         } else {
             setTimeout(() => {
                 $('#settings_access_code').hide();
-            }, 800);
+            }, 300);
         }
     }
 
