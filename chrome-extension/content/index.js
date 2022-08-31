@@ -83,15 +83,6 @@ const n01rcu_wrapperFunctions = {
 // Run
 // ========================================================================================
 
-function n01rcu_sendMessageToPopup(msg) {
-    document.dispatchEvent(new CustomEvent('n01rcu.Event.Popup.Out', { detail: msg }));
-}
-
-function n01rcu_inPopupsEventsListener(event) {
-    console.log('===================> n01rcu.Event.Popup.In', event);
-    n01rcu_sendMessageToPopup(n01rcu_getPlayer());
-}
-
 // When window loaded
 window.onload = () => {
     document.addEventListener('n01rcu.Event.Popup.In', n01rcu_inPopupsEventsListener, false);

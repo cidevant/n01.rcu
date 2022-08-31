@@ -601,3 +601,12 @@ function n01rcu_isValidPlayerId(id) {
 
     return splitId[0].length === 8 && splitId[1].length === 13;
 }
+
+function n01rcu_sendMessageToPopup(msg) {
+    document.dispatchEvent(new CustomEvent('n01rcu.Event.Popup.Out', { detail: msg }));
+}
+
+function n01rcu_inPopupsEventsListener(event) {
+    console.log('===================> n01rcu.Event.Popup.In', event);
+    n01rcu_sendMessageToPopup(n01rcu_getPlayer());
+}
