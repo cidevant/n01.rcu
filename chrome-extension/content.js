@@ -15,7 +15,7 @@ function n01rcu_scriptInjector(path) {
     });
 }
 
-function n01rcu_ToContentEventsListener() {
+function n01rcu_receiveEventsListener() {
     if (
         chrome == null ||
         chrome.runtime == null ||
@@ -24,12 +24,14 @@ function n01rcu_ToContentEventsListener() {
         return;
     }
 
-    chrome.runtime.onMessage.addListener((detail) => {
-        document.dispatchEvent(new CustomEvent('n01rcu.Event.Content', { detail }));
+    chrome.runtime.onMessage.addListener(({ __type, ...data}) => {
+        if (__type === 'n01rcu.Event.Content') {
+            document.dispatchEvent(new CustomEvent(__type, { detail: data }));
+        }
     });
 }
 
-function n01rcu_FromContentEventsListener(event) {
+function n01rcu_sendEventsListener(event) {
     if (
         chrome == null ||
         chrome.runtime == null ||
@@ -46,8 +48,8 @@ n01rcu_scriptInjector('content/helpers.js')
     .then(() => n01rcu_scriptInjector('content/index.js'));
 
 // Events
-document.removeEventListener('n01rcu.Event.Background', n01rcu_FromContentEventsListener);
-document.addEventListener('n01rcu.Event.Background', n01rcu_FromContentEventsListener, false);
-document.removeEventListener('n01rcu.Event.Popup', n01rcu_FromContentEventsListener);
-document.addEventListener('n01rcu.Event.Popup', n01rcu_FromContentEventsListener, false);
-n01rcu_ToContentEventsListener();
+document.removeEventListener('n01rcu.Event.Background', n01rcu_sendEventsListener);
+document.addEventListener('n01rcu.Event.Background', n01rcu_sendEventsListener, false);
+document.removeEventListener('n01rcu.Event.Popup', n01rcu_sendEventsListener);
+document.addEventListener('n01rcu.Event.Popup', n01rcu_sendEventsListener, false);
+n01rcu_receiveEventsListener();

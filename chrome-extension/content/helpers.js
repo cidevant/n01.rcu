@@ -46,17 +46,120 @@ function n01rcu_onWsMessage(data, ws) {
  *
  * @param {*} event
  */
- function n01rcu_ToContentEventsHandler(event) {
-    console.log('===================> n01rcu_ToContentEventsHandler', event);
-    n01rcu_dispatchToPopup(n01rcu_getPlayer());
+function n01rcu_ToContentEventsHandler({ data }) {
+    switch (data?.type) {
+        case 'GET_CONNECTION_STATUS':
+            n01rcu_reportConnectionStatusToPopup();
+            break;
+        case 'GET_CONNECTION_SETTINGS':
+            n01rcu_dispatchToPopup({
+                type: 'SET_CONNECTION_SETTINGS',
+                url: n01rcu_ws.__url,
+                accessCode: n01rcu_ws.__accessCode,
+            });
+            break;
+        case 'SET_CONNECTION_SETTINGS':
+            n01rcu_ws.__url = data?.url;
+            n01rcu_ws.__accessCode = data?.accessCode;
+            break;
+        case 'CONNECT':
+            n01rcu_ws.connect();
+            break;
+        case 'DISCONNECT':
+            n01rcu_ws.disconnect(1000, 'user action');
+            break;
+        default:
+            break;
+    }
+
 }
+
+/** 
+ * Wrap native n01 functions
+ */
+const n01rcu_backupFunctions = {};
+const n01rcu_wrapperFunctions = {
+    // Watches update of JOIN (n01rcu_JOIN) value
+    createList: function () {
+        if (join !== n01rcu_JOIN) {
+            n01rcu_JOIN = join;
+            n01rcu_sendOnSearchPage(n01rcu_ws);
+        }
+    },
+    // Watches update of JOIN (n01rcu_JOIN) value
+    createDiffList: function () {
+        if (join !== n01rcu_JOIN) {
+            n01rcu_JOIN = join;
+            n01rcu_sendOnSearchPage(n01rcu_ws);
+        }
+    },
+    //start of new leg
+    initScore: function () {
+        console.log('[n01.rcu.wrapper] initScore');
+
+        n01rcu_sendScoreLeft(n01rcu_ws);
+    },
+    // enter outs
+    finishMenuOpen: function () {
+        // possible outs
+        const outs = ['finish_first', 'finish_second', 'finish_third'].reduce((acc, curr) => {
+            if ($(`#${curr}`).is(':visible')) {
+                acc.push(curr);
+            }
+
+            return acc;
+        }, []);
+
+        console.log('[n01.rcu.wrapper] finishMenuOpen', outs);
+
+        setTimeout(() => {
+            // if only one possibility - send without confirmation
+            if (outs.length === 1) {
+                $(`#${outs[0]}`).click();
+            } else {
+                // let user choose
+                n01rcu_ws.send({
+                    type: 'CONTROLLERS:GET_FINISH_DARTS',
+                    payload: outs,
+                });
+            }
+        }, 500);
+    },
+    // leg finished by you, dialog message: "Game shot 3rd dart (23 darts)", buttons: [ok]
+    finishMsgOpen: function () {
+        console.log('[n01.rcu.wrapper] finishMsgOpen');
+
+        setTimeout(() => {
+            $('#msg_ok').click(); // press OK
+        }, 500);
+    },
+    // leg finished by opponent, dialog message: "Game shot 3rd dart (23 darts)", buttons: [ok]
+    netFinishMsgOpen: function () {
+        console.log('[n01.rcu.wrapper] netFinishMsgOpen');
+
+        setTimeout(() => {
+            $('#msg_net_ok').click(); // press OK
+        }, 500);
+    },
+    // match finished, dialog message: "Winner is PlayerX", buttons: [ok]
+    endMatchMsgOpen: function () {
+        console.log('[n01.rcu.wrapper] endMatchMsgOpen');
+
+        $('#msg_net_ok').click(); // press OK
+        n01rcu_ws.send({ type: 'CONTROLLERS:MATCH_END' });
+
+        setTimeout(() => {
+            menuFunc('menu_new'); // press Exit button
+        }, 3000);
+    },
+};
 
 /**
  * Sends message to popup
  *
  * @param {*} msg
  */
- function n01rcu_dispatchToPopup(msg) {
+function n01rcu_dispatchToPopup(msg) {
     document.dispatchEvent(new CustomEvent('n01rcu.Event.Popup', { detail: msg }));
 }
 
@@ -65,7 +168,7 @@ function n01rcu_onWsMessage(data, ws) {
  *
  * @param {*} msg
  */
- function n01rcu_dispatchToBackground(msg) {
+function n01rcu_dispatchToBackground(msg) {
     document.dispatchEvent(new CustomEvent('n01rcu.Event.Background', { detail: msg }));
 }
 
@@ -173,17 +276,17 @@ function n01rcu_searchFilterByAverageAndHide(data, ws) {
     if (join === true) {
         const search = n01rcu_getSearchResults(data?.payload?.from, data?.payload?.to, data?.payload?.cam);
         const me = n01rcu_getPlayer();
-    
+
         // // Hide myself
         // if (me && me.pid) {
         //     $(`.user_list_item[id="${me.pid}"]`).hide();
         // }
-    
+
         // // Hide all who not passed filter
         // search.notPassedFilter.forEach((user) => {
         //     $(`.user_list_item[id="${user.id}"]`).hide();
         // });
-    
+
         // // Show all who passed
         // search.passedFilter.forEach((user) => {
         //     $(`.user_list_item[id="${user.id}"]`).show();
@@ -606,6 +709,7 @@ function n01rcu_shouldConnect() {
 }
 
 
+
 /**
  * Validates player id
  *
@@ -624,4 +728,22 @@ function n01rcu_isValidPlayerId(id) {
     }
 
     return splitId[0].length === 8 && splitId[1].length === 13;
+}
+
+
+/**
+ * Sends connection status to Popup
+ *
+ */
+function n01rcu_reportConnectionStatusToPopup() {
+    n01rcu_dispatchToPopup({
+        type: 'SET_CONNECTION_STATUS',
+        server: n01rcu_ws.open ?? false,
+        paired: n01rcu_PAIRED,
+        searching: n01rcu_JOIN,
+        close: {
+            code: n01rcu_ws.__closeCode,
+            reason: n01rcu_ws.__closeReason,
+        }
+    });
 }

@@ -9,6 +9,9 @@
 class n01rcu_WebSocketClient {
     constructor() {
         this.__url = 'ws://localhost:3000/ws';
+        this.__accessCode = 'TEST';
+        this.__closeCode = null;
+        this.__closeReason = null;
     }
 
     connect = () => {
@@ -18,7 +21,7 @@ class n01rcu_WebSocketClient {
             const player = n01rcu_getPlayer();
 
             if (player && player.sid && player.pid && player.playerName) {
-                const params = `?client=true&id=${player.sid}&name=${player.playerName}&playerId=${player.pid}&accessCode=TEST`;
+                const params = `?client=true&id=${player.sid}&name=${player.playerName}&playerId=${player.pid}&accessCode=${this.__accessCode}`;
 
                 console.log(
                     `[n01.rcu.ws] connecting to ${this.__url} (name: ${player.playerName}, id: ${player.sid})`
@@ -53,51 +56,54 @@ class n01rcu_WebSocketClient {
      * @param {*} data
      */
     send = (data) => {
-        const msg = JSON.stringify(data);
+        try {
+            const msg = JSON.stringify(data);
 
-        if (this.open) {
-            console.log('[n01.rcu.ws] send message', data['type']);
-
-            this.__socket.send(msg);
-
-            return true;
-        } else {
-            console.log('[n01.rcu.ws][error] send message: no connection to server', data['type']);
+            if (this.open) {
+                console.log('[n01.rcu.ws] send message', data['type']);
+    
+                this.__socket.send(msg);
+    
+                return true;
+            } else {
+                console.log('[n01.rcu.ws][error] send message: no connection to server', data['type']);
+            }
+    
+        } catch (error) {
+            console.log('[n01.rcu.ws][error] send message:', error);
         }
 
         return false;
     };
 
-    /**
-     * Receives data from websocket server
-     *
-     * @param {*} event message event
-     */
     __onMessage = (event) => {
         console.log('[n01.rcu.ws] received message', event.data);
         
         this.onmessage?.(event);
-        n01rcu_onWsMessage(JSON.parse(event.data), this);
     };
 
     __onOpen = () => {
         console.log('[n01.rcu.ws] connected');
+        
+        this.__closeCode = null;
+        this.__closeReason = null;
 
         this.onopen?.();
-        n01rcu_changeExtensionIcon('connected');
     };
 
     __onClose = (event) => {
         console.log('[n01.rcu.ws] closed connection', event?.code, event?.reason);
         
+        this.__closeCode = event.code;
+        this.__closeReason = event.reason;
+
         this.onclose?.(event);
     };
 
-    __onError = () => {
+    __onError = (event) => {
         console.log('[n01.rcu.ws] connection failed');
 
-        this.onerror?.();
-        n01rcu_changeExtensionIcon('failed');
+        this.onerror?.(event);
     };
 
     get open() {
