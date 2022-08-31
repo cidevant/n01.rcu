@@ -5,15 +5,6 @@
     "background": {
         "service_worker": "sw.js"
     },
-
-    "action": {
-        "default_icon": {
-            "16": "icons/default.png",
-            "36": "icons/default.png",
-            "48": "icons/default.png",
-            "120": "icons/default.png"
-        }
-    },
     "content_scripts": [
         {
             "matches": [
@@ -38,6 +29,16 @@
             ]
         }
     ],
+    "action": {
+        "default_popup": "popup/index.html",
+        "default_title": "[n01.online] RCU Client",
+        "default_icon": {
+            "16": "icons/default.png",
+            "36": "icons/default.png",
+            "48": "icons/default.png",
+            "120": "icons/default.png"
+        }
+    },
     "permissions": [
         "tabs",
         "activeTab",
