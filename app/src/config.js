@@ -1,3 +1,3 @@
 export const config = {
-    defaultServerUrl: 'ws://localhost:3000/ws',
+    defaultServerUrl: 'ws://n01.devant.cz:4000/ws',
 };

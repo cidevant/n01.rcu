@@ -23,6 +23,7 @@ module.exports = {
         semi: [2, 'always'],
         'default-case': 'off',
         'no-undef': 'off',
+        'no-unused-vars': 'off',
         'prettier/prettier': [
             'error',
             {

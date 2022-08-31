@@ -3,7 +3,7 @@
     "name": "[n01.RCU] CLIENT",
     "version": "1.0.1",
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "service-worker.js"
     },
     "content_scripts": [
         {
@@ -11,7 +11,7 @@
                 "https://nakka.com/n01/online/",
                 "https://nakka.com/n01/online/n01.php"
             ],
-            "js": ["content.js"],
+            "js": ["state.service.js", "helpers.js", "content.js"],
             "run_at": "document_end"
         }
     ],
@@ -39,6 +39,7 @@
     "permissions": [
         "tabs",
         "activeTab",
-        "scripting"
+        "scripting",
+        "storage"
     ]
 }

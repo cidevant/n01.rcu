@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+importScripts('state.service.js', 'helpers.js');
 
 chrome.runtime.onMessage.addListener(({ __type, ...msg }, _sender, _sendResponse) => {
     if (__type === 'n01rcu.Event.Background') {
@@ -17,6 +17,8 @@ chrome.runtime.onMessage.addListener(({ __type, ...msg }, _sender, _sendResponse
 
 function n01rcu_setIcon(msg) {
     if (msg?.icon?.length > 0) {
+        console.log('===================> AppState.icon', AppState.icon);
+        AppState.icon = msg.icon;
         chrome.action.setIcon({
             path: {
                 16: `icons/${msg.icon}.png`,

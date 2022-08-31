@@ -148,7 +148,7 @@ class n01rcu_WebSocketClient {
     }
 
     __isValidAccessCode = (input) => {
-        return input?.length === 4;
+        return /^[A-Z0-9]{4}$/i.test(`${input}`);
     };
 
     __isValidUrl = (input) => {

@@ -222,7 +222,7 @@ function isValidUrlFormat(input) {
  * @returns {boolean} has valid format?
  */
 function isValidAccessCodeFormat(input) {
-    return input?.length === 4;
+    return /^[a-z0-9]{4}$/i.test(`${input}`);
 }
 
 /**
