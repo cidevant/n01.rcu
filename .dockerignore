@@ -1,6 +1,6 @@
 **/node_modules
 app/build
-n01_js_scripts
-old_app
+_old
 .idea
+.vscode
 n01.rcu.code-workspace
