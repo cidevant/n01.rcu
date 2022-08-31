@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
+/* eslint-disable no-fallthrough, no-unused-vars, no-undef */
 
 let n01rcu_JOIN = false;
 let n01rcu_PAIRED = false;
