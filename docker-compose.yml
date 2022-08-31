@@ -1,6 +1,7 @@
 version: '3'
 services:
-  n01rcu_composed:
+  n01rcu:
+    container_name: n01rcu-prod
     build:
       context: .
       dockerfile: 'Dockerfile'

@@ -1,19 +1,25 @@
 version: '3'
 services:
-  n01rcu_app:
-    stdin_open: true
+  app:
+    container_name: n01rcu-app-dev
     build:
       context: ./app
       dockerfile: 'Dockerfile'
+    stdin_open: true
+    environment:
+      - PORT=7000
     ports:
-      - '7001:7001'
+      - '7000:7000'
     volumes:
         - './app:/app:cached'
-  n01rcu_server:
+  server:
+    container_name: n01rcu-server-dev
     build:
       context: ./server
       dockerfile: 'Dockerfile'
+    environment:
+      - PORT=7001
     ports:
-      - '3000:3000'
+      - '7001:7001'
     volumes:
       - './server:/server:cached'
