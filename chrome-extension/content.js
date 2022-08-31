@@ -44,7 +44,8 @@ function n01rcu_FromContentEventsListener(event) {
 n01rcu_scriptInjector('content/helpers.js')
     .then(() => n01rcu_scriptInjector('content/websocket.js'))
     .then(() => n01rcu_scriptInjector('content/index.js'));
-    
+
+// @TODO use only 1 event for passing messages between "Content - Popup - Background"
 document.removeEventListener('n01rcu.Event.ToBackground', n01rcu_FromContentEventsListener);
 document.addEventListener('n01rcu.Event.ToBackground', n01rcu_FromContentEventsListener, false);
 document.removeEventListener('n01rcu.Event.ToPopup', n01rcu_FromContentEventsListener);
