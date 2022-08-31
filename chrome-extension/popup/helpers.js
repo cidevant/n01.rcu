@@ -1,10 +1,13 @@
 /* eslint-disable no-unused-vars */
 
 let __connection = {
-    url: '-url-',
+    // internal state
     urlValid: false,
-    accessCode: '-accessCode-',
     accessCodeValid: false,
+
+    // provided by content
+    url: null,
+    accessCode: null,
     server: false,
     paired: false,
     searching: false,
@@ -13,22 +16,15 @@ let __connection = {
 };
 
 function receivedEventsHandler({ __type, ...action }, _sender, _sendResponse) {
+    const { type, ...payload } = action;
+
     if (__type === 'n01rcu.Event.Popup') {
         console.log('[n01.rcu.popup]', JSON.stringify(action));
-
-        const { type, ...payload } = action;
 
         switch (type) {
             case 'SET_CONNECTION':
                 {
-                    const newPayload = { ...payload };
-
-                    if (payload.server === true || payload.paired === true) {
-                        newPayload.urlValid = true;
-                        newPayload.accessCodeValid = true;
-                    }
-
-                    setConnection(newPayload);
+                    setConnection(payload);
                     updateConnectionInfo();
                 }
                 break;
@@ -43,7 +39,24 @@ function getConnection() {
 }
 
 function setConnection(payload) {
-    __connection = Object.assign(__connection, payload);
+    const newPayload = { ...payload };
+
+    // ===========================================
+    // Ensure valid transitions of internal state
+    // ===========================================
+
+    // 1. when `connected` or `paired` or `searching` -> `url` & `accessCode` are valid
+    if (payload.server === true || payload.paired === true || payload.searching === true) {
+        newPayload.urlValid = true;
+        newPayload.accessCodeValid = true;
+    }
+
+    // 2. `url` was valid and became invalid -> invalidate `accessCode`
+    if (__connection.urlValid === true && newPayload.urlValid !== true) {
+        newPayload.accessCodeValid = 'invalid url';
+    }
+
+    __connection = Object.assign(__connection, newPayload);
 }
 
 function updateConnectionInfo() {
@@ -79,14 +92,14 @@ function validateUrl(input) {
                         if (resp?.ok === true) {
                             resolve(true);
                         } else {
-                            reject(`url fetch response error ${JSON.stringify(resp)}`);
+                            reject(`fetch response error ${JSON.stringify(resp)}`);
                         }
                     })
                     .catch((error) => {
-                        reject(`url fetch error ${error.message}`);
+                        reject(`fetch error ${error.message}`);
                     });
             } catch (error) {
-                reject(`url fetch error ${error.message}`);
+                reject(`fetch error ${error.message}`);
             }
         } else {
             reject('invalid url format');
@@ -104,14 +117,14 @@ function validateAccessCode(url, input) {
                         if (resp.ok === true) {
                             resolve();
                         } else {
-                            reject(`access code fetch result error ${JSON.stringify(resp)}`);
+                            reject(`fetch result error ${JSON.stringify(resp)}`);
                         }
                     })
                     .catch((error) => {
-                        reject(`access code fetch error ${error.message}`);
+                        reject(`fetch error ${error.message}`);
                     });
             } catch (error) {
-                reject(`access code fetch error ${error.message}`);
+                reject(`fetch error ${error.message}`);
             }
         } else {
             reject('invalid access code format');

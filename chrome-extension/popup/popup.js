@@ -42,7 +42,7 @@ function onPopupLoadedListener() {
             setConnection({
                 url,
                 urlValid: errorUrl,
-                accessCode: '',
+                accessCode: null,
                 accessCodeValid: false,
             });
             setInputValidation('#server_url_input', false);
@@ -61,12 +61,16 @@ function onPopupLoadedListener() {
                     accessCode: newAccessCode,
                     accessCodeValid: true,
                 });
+                updateConnectionInfo();
                 setInputValidation('#access_code_input', true);
             } catch (errorCode) {
                 // accessCode generation failed
-                console.error('[n01.rcu.popup][error] generateAccessCode', errorCode);
+                setConnection({ accessCodeValid: errorCode });
+                setInputValidation('#access_code_input', false);
             }
         } else {
+            // invalid url
+            setConnection({ urlValid: 'url is invalid or not validated yet' });
             setInputValidation('#server_url_input', false);
         }
     });
