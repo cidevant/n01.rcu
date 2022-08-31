@@ -24,10 +24,8 @@ function n01rcu_receiveEventsListener() {
         return;
     }
 
-    chrome.runtime.onMessage.addListener(({ __type, ...data}) => {
-        
+    chrome.runtime.onMessage.addListener(({ __type, ...data }) => {
         if (__type === 'n01rcu.Event.Content') {
-            console.log('--------------->', __type, data);
             document.dispatchEvent(new CustomEvent(__type, { detail: data }));
         }
     });

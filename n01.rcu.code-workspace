@@ -1,5 +1,5 @@
 {
-	"folders": [
+    "folders": [
         {
             "path": "app"
         },
@@ -9,5 +9,14 @@
         {
             "path": "chrome-extension"
         }
-    ]
+    ],
+    "extensions": {
+        "recommendations": [
+            "ms-vscode.js-debug-companion",
+            "jonkwheeler.styled-components-snippets",
+            "dsznajder.es7-react-js-snippets",
+            "ms-vscode.js-debug",
+            "styled-components.vscode-styled-components"
+        ]
+    }
 }

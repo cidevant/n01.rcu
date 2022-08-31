@@ -78,7 +78,7 @@ function n01rcu_ToContentEventsHandler({ detail: data }) {
  * Sends connection status to Popup
  *
  */
- function n01rcu_reportConnectionStatusToPopup() {
+function n01rcu_reportConnectionStatusToPopup() {
     n01rcu_dispatchToPopup({
         type: 'SET_CONNECTION_STATUS',
         server: n01rcu_ws.open ?? false,
