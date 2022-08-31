@@ -5,10 +5,12 @@ const n01rcu_ws = new n01rcu_WebSocketClient();
 
 // When window loaded
 window.onload = () => {
+    // received events
+    document.addEventListener('n01rcu.Event.Content', n01rcu_ToContentEventsHandler(n01rcu_ws));
+    
     // ws setup
     n01rcu_ws.onopen = () => {
         n01rcu_changeExtensionIcon('connected');
-        n01rcu_addFunctionsWrappers(n01rcu_wrapperFunctions, n01rcu_backupFunctions);
         n01rcu_startMatchUpdater(n01rcu_ws);
         n01rcu_reportConnectionToPopup(n01rcu_ws);
     };
@@ -22,15 +24,15 @@ window.onload = () => {
         n01rcu_changeExtensionIcon('failed');
     };
 
-    // events
-    document.addEventListener('n01rcu.Event.Content', n01rcu_ToContentEventsHandler(n01rcu_ws));
-
-    // ws connect
+    // connect
     if (n01rcu_shouldConnect()) {
-        setTimeout(() => {
+        setTimeout(() => {   
             n01rcu_ws.connect();
         }, 100);
     }
+
+    // wrap
+    n01rcu_addFunctionsWrappers(n01rcu_wrapperFunctions, n01rcu_backupFunctions);
 };
 
 // Before window close

@@ -24,13 +24,11 @@ function receivedEventsHandler({ __type, ...data }, _sender, _sendResponse) {
     }
 }
 
-function setConnectionFromContent() {
+function setConnectionFromContent({ type, ...data}) {
     __connection = {
         ...__connection,
         ...data,
     };
-
-    delete __connection.type;
 
     updateConnectionInfo();
 }
@@ -40,6 +38,16 @@ function updateConnectionInfo() {
     $('#controllers_status').text(__connection.paired ? 'PAIRED' : 'UNPAIRED');
     $('#server_url_input').val(__connection.url).attr('disabled', __connection.server);
     $('#access_code_input').val(__connection.accessCode).attr('disabled', __connection.server);
+
+    if (__connection.server) {
+        $('#connect_button').hide();
+        $('#reset_button').hide();
+        $('#disconnect_button').show();
+    } else {
+        $('#connect_button').show();
+        $('#reset_button').show();
+        $('#disconnect_button').hide();
+    }
 }
 
 function setInputValidation(selector, isValid = false) {
