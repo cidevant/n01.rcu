@@ -15,11 +15,18 @@ let __connection = {
     accessCodeValid: false,
 };
 
-function receivedEventsHandler({ __type, ...action }, _sender, _sendResponse) {
-    const { type, ...payload } = action;
-
+/**
+ * Handles received events (messages) from `Popup` and `Background`
+ *
+ * @param {*} { __type, ...data }
+ * @param {*} _sender
+ * @param {*} _sendResponse
+ */
+function receivedEventsHandler({ __type, ...data }, _sender, _sendResponse) {
     if (__type === 'n01rcu.Event.Popup') {
-        console.log('[n01.rcu.popup]', JSON.stringify(action));
+        const { type, ...payload } = data;
+
+        console.log('[n01.rcu.popup]', JSON.stringify(data));
 
         switch (type) {
             case 'SET_CONNECTION':
@@ -34,15 +41,25 @@ function receivedEventsHandler({ __type, ...action }, _sender, _sendResponse) {
     }
 }
 
+/**
+ * Returns connection state
+ *
+ * @returns {object} connection
+ */
 function getConnection() {
     return __connection;
 }
 
+/**
+ * Updates connection state and ensures proper transitions
+ *
+ * @param {object} payload values to update
+ */
 function setConnection(payload) {
     const newPayload = { ...payload };
 
     // ===========================================
-    // Ensure valid transitions of internal state
+    // Ensures valid transitions of internal state
     // ===========================================
 
     // 1. when `connected` or `paired` or `searching` -> `url` & `accessCode` are valid
@@ -51,14 +68,12 @@ function setConnection(payload) {
         newPayload.accessCodeValid = true;
     }
 
-    // 2. `url` was valid and became invalid -> invalidate `accessCode`
-    if (__connection.urlValid === true && newPayload.urlValid !== true) {
-        newPayload.accessCodeValid = 'invalid url';
-    }
-
     __connection = Object.assign(__connection, newPayload);
 }
 
+/**
+ * Updates UI to reflect actual state of connection
+ */
 function updateConnectionInfo() {
     $('#server_status').text(__connection.server ? 'CONNECTED' : 'DISCONNECTED');
     $('#controllers_status').text(__connection.paired ? 'PAIRED' : 'UNPAIRED');
@@ -84,6 +99,12 @@ function updateConnectionInfo() {
     updateErrorsMessages();
 }
 
+/**
+ * Checks if provided url is valid
+ *
+ * @param {string} input url to check
+ * @returns {boolean} result
+ */
 function validateUrl(input) {
     return new Promise((resolve, reject) => {
         if (isValidUrlFormat(input)) {
@@ -94,7 +115,7 @@ function validateUrl(input) {
                         if (resp?.ok === true) {
                             resolve(true);
                         } else {
-                            reject(`response ${JSON.stringify(resp)}`);
+                            reject(`response: ${JSON.stringify(resp)}`);
                         }
                     })
                     .catch((error) => {
@@ -109,6 +130,13 @@ function validateUrl(input) {
     });
 }
 
+/**
+ * Checks if accessCode is free to use (unused on backend)
+ *
+ * @param {string} url backend server url
+ * @param {string} input code to check
+ * @returns {boolean} result
+ */
 function validateAccessCode(url, input) {
     return new Promise((resolve, reject) => {
         if (isValidAccessCodeFormat(input)) {
@@ -119,7 +147,7 @@ function validateAccessCode(url, input) {
                         if (resp.ok === true) {
                             resolve();
                         } else {
-                            reject(`response ${JSON.stringify(resp)}`);
+                            reject(`response: ${JSON.stringify(resp)}`);
                         }
                     })
                     .catch((error) => {
@@ -148,7 +176,7 @@ function generateAccessCode() {
                     if (resp?.ok === true && resp?.code?.length === 4) {
                         resolve(resp.code);
                     } else {
-                        reject(resp.error);
+                        reject(`response: ${JSON.stringify(resp)}`);
                     }
                 })
                 .catch((error) => {
