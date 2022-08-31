@@ -37,15 +37,17 @@ function updateConnectionInfo() {
     $('#server_status').text(__connection.server ? 'CONNECTED' : 'DISCONNECTED');
     $('#controllers_status').text(__connection.paired ? 'PAIRED' : 'UNPAIRED');
     $('#server_url_input').val(__connection.url).attr('disabled', __connection.server);
-    $('#access_code_input').val(__connection.accessCode).attr('disabled', __connection.server);
+    $('#access_code_input').val(__connection.accessCode);
 
     if (__connection.server) {
         $('#connect_button').hide();
         $('#reset_button').hide();
+        $('#generate_button').hide();
         $('#disconnect_button').show();
     } else {
         $('#connect_button').show();
         $('#reset_button').show();
+        $('#generate_button').show();
         $('#disconnect_button').hide();
     }
 }
