@@ -18,6 +18,8 @@ window.onload = () => {
         n01rcu_onWsMessage(JSON.parse(event.data), n01rcu_ws);
     };
     n01rcu_ws.onclose = () => {
+        n01rcu_stopMatchUpdater();
+        n01rcu_PAIRED = false;
         n01rcu_reportConnectionToPopup(n01rcu_ws);
     };
     n01rcu_ws.onerror = () => {

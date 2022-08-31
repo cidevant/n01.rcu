@@ -68,6 +68,12 @@ function setConnection(payload) {
         newPayload.accessCodeValid = true;
     }
 
+    // 2. ensure paired is deactivated when disconnected
+    if (payload.server === false) {
+        newPayload.paired = false;
+        newPayload.searching = false;
+    }
+
     __connection = Object.assign(__connection, newPayload);
 }
 
@@ -75,30 +81,39 @@ function setConnection(payload) {
  * Updates UI to reflect actual state of connection
  */
 function updateConnectionInfo() {
-    $('#server_status').text(__connection.server ? 'CONNECTED' : 'DISCONNECTED');
-    $('#controllers_status').text(__connection.paired ? 'PAIRED' : 'UNPAIRED');
     $('#server_url_input').val(__connection.url).attr('disabled', __connection.server);
     $('#access_code_input').text(__connection.accessCode);
 
     if (__connection.server) {
+        $('#server_status').text('CONNECTED').addClass('ok');
         $('#access_code_input').addClass('disabled');
         $('#connect_button').hide();
         $('#reset_button').hide();
         $('#generate_button').hide();
         $('#disconnect_button').show();
     } else {
+        $('#server_status').text('DISCONNECTED').removeClass('ok');
         $('#access_code_input').removeClass('disabled');
         $('#reset_button').show();
+        $('#connect_button').show();
+        $('#disconnect_button').hide();
 
         if (__connection.urlValid) {
             $('#generate_button').show();
         }
+    }
 
-        $('#connect_button').show();
-        $('#disconnect_button').hide();
+    if (__connection.paired) {
+        $('#pairing_status').text('PAIRED').addClass('ok');
+    } else {
+        $('#pairing_status').text('UNPAIRED').removeClass('ok');
     }
 
     updateErrorsMessages();
+}
+
+function updatePaired(params) {
+    
 }
 
 /**

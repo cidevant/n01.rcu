@@ -61,16 +61,12 @@ h1 {
 }
 
 .settings_error_label {
-
-
     background-color: rgb(160, 2, 2);
-
     color: white;
     padding: 3px 6px 3px 0;
     text-transform: lowercase;
     font: bold 12px sans-serif;
 }
-
 
 .settings_error_label::before {
     content: "error";
@@ -88,7 +84,6 @@ h1 {
     text-transform: lowercase;
     font: bold 12px sans-serif;
 }
-
 
 
 /* ----------------------------------------------- */
@@ -113,6 +108,11 @@ h1 {
     font-size: 18px;
     padding: 5px 10px;
     min-width: 100px;
+}
+
+
+.table>thead .center {
+    text-align: center;
 }
 
 .table>thead .last {
@@ -144,7 +144,7 @@ h1 {
     min-width: 100px;
 }
 
-.table tbody .label > div { 
+.table tbody .label>div {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -168,8 +168,38 @@ h1 {
 
 .table tbody .status {
     min-width: 140px;
+    text-align: center;
     font-weight: bold;
 }
+
+#server_status.ok {
+    
+    background-color: #46c420;
+
+    display: inline-block;
+    padding: 3px 6px;
+
+    color: white;
+    text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.4),
+        0px 8px 13px rgba(0, 0, 0, 0.1),
+        0px 18px 23px rgba(0, 0, 0, 0.1);
+
+}
+
+#pairing_status {
+
+}
+
+#pairing_status.ok {
+    display: inline-block;
+    padding: 3px 6px;
+    background-color: #1E9EE8;
+    color: white;
+    text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.4),
+        0px 8px 13px rgba(0, 0, 0, 0.1),
+        0px 18px 23px rgba(0, 0, 0, 0.1);
+}
+
 
 /* ACTION */
 
@@ -219,7 +249,7 @@ h1 {
 
 #server_url_input.ok {
     border: 1px solid green;
-    background-color:  rgb(0, 249, 0);
+    background-color: rgb(0, 249, 0);
     font-weight: bold;
     color: black;
 }
@@ -251,7 +281,7 @@ h1 {
 
 #access_code_input.ok {
     border: 1px solid green;
-    background-color:  rgb(0, 249, 0);
+    background-color: rgb(0, 249, 0);
     color: black;
 }
 
