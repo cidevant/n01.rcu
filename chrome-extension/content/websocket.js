@@ -60,8 +60,6 @@ class n01rcu_WebSocketClient {
     };
 
     resetSettings = () => {
-        console.log('[n01.rcu.ws] resetSettings');
-
         this.updateSettings(n01rcu_DEFAULT_SERVER_URL, n01rcu_DEFAULT_ACCESS_CODE);
     };
 
@@ -88,14 +86,16 @@ class n01rcu_WebSocketClient {
 
             if (this.open) {
                 console.log('[n01.rcu.ws] send message', data['type']);
-    
+
                 this.__socket.send(msg);
-    
+
                 return true;
             } else {
-                console.log('[n01.rcu.ws][error] send message: no connection to server', data['type']);
+                console.log(
+                    '[n01.rcu.ws][error] send message: no connection to server',
+                    data['type']
+                );
             }
-    
         } catch (error) {
             console.log('[n01.rcu.ws][error] send message:', error);
         }
@@ -105,13 +105,13 @@ class n01rcu_WebSocketClient {
 
     __onMessage = (event) => {
         console.log('[n01.rcu.ws] received message', event.data);
-        
+
         this.onmessage?.(event);
     };
 
     __onOpen = () => {
         console.log('[n01.rcu.ws] connected');
-        
+
         this.__closeCode = null;
         this.__closeReason = null;
 
@@ -120,7 +120,7 @@ class n01rcu_WebSocketClient {
 
     __onClose = (event) => {
         console.log('[n01.rcu.ws] closed connection', event?.code, event?.reason);
-        
+
         this.__closeCode = event.code;
         this.__closeReason = event.reason;
 

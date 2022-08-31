@@ -51,33 +51,38 @@ function n01rcu_onWsMessage(data, ws) {
  */
 function n01rcu_ToContentEventsHandler(ws) {
     return ({ detail: data }) => {
-        console.log('[ToContent]', data.type, data, ws);
-
         switch (data?.type) {
-            case 'GET_CONNECTION': {
-                n01rcu_reportConnectionToPopup(ws);
-            } break;
-            case 'RESET_CONNECTION_SETTINGS': {
-                ws.resetSettings();
-                n01rcu_reportConnectionToPopup(ws);
-            } break;
-            case 'SERVER_CONNECT': {
-                ws.updateSettings(data?.url, data?.accessCode);
-    
-                if (ws.open) {
-                    ws.disconnect(1000, 'user wants to connect');
+            case 'GET_CONNECTION':
+                {
+                    n01rcu_reportConnectionToPopup(ws);
                 }
-    
-                ws.connect();
-            } break;
-            case 'SERVER_DISCONNECT': {
-                ws.disconnect(1000, 'user wants to disconnect');
-            } break;
+                break;
+            case 'RESET_CONNECTION_SETTINGS':
+                {
+                    ws.resetSettings();
+                    n01rcu_reportConnectionToPopup(ws);
+                }
+                break;
+            case 'SERVER_CONNECT':
+                {
+                    ws.updateSettings(data?.url, data?.accessCode);
+
+                    if (ws.open) {
+                        ws.disconnect(1000, 'user wants to connect');
+                    }
+
+                    ws.connect();
+                }
+                break;
+            case 'SERVER_DISCONNECT':
+                {
+                    ws.disconnect(1000, 'user wants to disconnect');
+                }
+                break;
             default:
                 break;
         }
     };
-
 }
 
 /**
@@ -95,13 +100,11 @@ function n01rcu_reportConnectionToPopup(ws) {
         closeCode: ws?.__closeCode,
         closeReason: ws?.__closeReason,
     };
-    
-    console.log('[toPopup] SET_CONNECTION', values);
 
     n01rcu_dispatchToPopup(values);
 }
 
-/** 
+/**
  * Wrap native n01 functions
  */
 const n01rcu_backupFunctions = {};
@@ -212,7 +215,7 @@ function n01rcu_getSearchResults(from, to, cam = true) {
     const me = n01rcu_getPlayer();
     const returnValue = {
         passedFilter: [],
-        notPassedFilter: []
+        notPassedFilter: [],
     };
     const isValid = (value) => {
         if (isNaN(value) || (isNaN(from) && isNaN(to))) {
@@ -238,10 +241,14 @@ function n01rcu_getSearchResults(from, to, cam = true) {
     // Filter by avg score value
     $(`.user_list_item${notMeSelector}`).each((_index, user) => {
         const userEl = $(user);
-        const avgValue = parseFloat(userEl.find('.avg_text').text().replace(' (', '').replace(')', ''));
+        const avgValue = parseFloat(
+            userEl.find('.avg_text').text().replace(' (', '').replace(')', '')
+        );
         const average = isNaN(avgValue) ? null : avgValue;
         const playerId = userEl.attr('id');
-        const isSearching = userEl.find('input[type="button"][value="Play"].play_button').is(':visible');
+        const isSearching = userEl
+            .find('input[type="button"][value="Play"].play_button')
+            .is(':visible');
         const camEnabled = userEl.find('.webcam').is(':visible');
         const camFilter = cam === false ? true : camEnabled;
         const legsMessage = userEl.find('.legs_msg').text();
@@ -291,7 +298,7 @@ function n01rcu_getSearchResults(from, to, cam = true) {
     });
 
     return returnValue;
-};
+}
 
 /**
  * Filters opponents by avg score
@@ -301,7 +308,11 @@ function n01rcu_getSearchResults(from, to, cam = true) {
  */
 function n01rcu_searchFilterByAverageAndHide(data, ws) {
     if (join === true) {
-        const search = n01rcu_getSearchResults(data?.payload?.from, data?.payload?.to, data?.payload?.cam);
+        const search = n01rcu_getSearchResults(
+            data?.payload?.from,
+            data?.payload?.to,
+            data?.payload?.cam
+        );
         const me = n01rcu_getPlayer();
 
         // // Hide myself
@@ -324,7 +335,7 @@ function n01rcu_searchFilterByAverageAndHide(data, ws) {
             payload: [...search.passedFilter].reverse(),
         });
     }
-};
+}
 
 /**
  * Scrolls down on search page
@@ -351,7 +362,10 @@ function n01rcu_searchStartGame(data, ws) {
     if (playButton.is(':visible')) {
         playButton.click();
     } else {
-        console.log('[n01.rcu][searchStartGame][error] cant start game with player', data['payload']);
+        console.log(
+            '[n01.rcu][searchStartGame][error] cant start game with player',
+            data['payload']
+        );
     }
 }
 
@@ -359,7 +373,7 @@ function n01rcu_searchStartGame(data, ws) {
  * Sends `ON_SEARCH_PAGE`
  *
  * @param {*} ws
- * @returns {*} 
+ * @returns {*}
  */
 function n01rcu_sendOnSearchPage(ws) {
     const pageType = n01rcu_detectPageType();
@@ -593,7 +607,7 @@ function n01rcu_setPaired(paired = false, ws) {
  * Sends `MATCH_STARTED` event to controllers
  *
  * @param {*} ws
- * @returns {*} 
+ * @returns {*}
  */
 function n01rcu_sendMatchStarted(ws) {
     const pageType = n01rcu_detectPageType();
@@ -603,7 +617,7 @@ function n01rcu_sendMatchStarted(ws) {
     if (pageType === 'game') {
         result = ws.send({
             type: 'CONTROLLERS:MATCH_START',
-            payload: n01rcu_getLocalStorage('n01_net.setData')
+            payload: n01rcu_getLocalStorage('n01_net.setData'),
         });
     }
 
@@ -717,7 +731,7 @@ function n01rcu_detectPageType() {
 /**
  * Checks if we should connect to websocket server
  *
- * @returns {*} 
+ * @returns {*}
  */
 function n01rcu_shouldConnect() {
     const player = n01rcu_getPlayer();

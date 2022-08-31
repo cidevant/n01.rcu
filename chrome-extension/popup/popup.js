@@ -4,19 +4,70 @@ function onPopupLoadedListener() {
     $('#connect_button').on('click', async () => {
         const url = $('#server_url_input').val();
         const accessCode = $('#access_code_input').text();
-        const validUrl = isValidUrl(url);
 
-        if (validUrl) {
-            isValidAccessCode(accessCode, url).then((validCode) => {
-                if (validCode) {
-                    dispatchToContent({
-                        type: 'SERVER_CONNECT',
-                        url,
-                        accessCode,
-                    });
-                }
-                setInputValidation('#server_url_input', validUrl);
+        try {
+            // set url valid
+            await validateUrl(url);
+            setInputValidation('#server_url_input', true);
+            setConnection({
+                url,
+                urlValid: true,
             });
+
+            try {
+                // set accessCode valid
+                await validateAccessCode(url, accessCode);
+                setInputValidation('#access_code_input', true);
+                setConnection({
+                    accessCode,
+                    accessCodeValid: true,
+                });
+
+                // connect to server
+                dispatchToContent({
+                    type: 'SERVER_CONNECT',
+                    url,
+                    accessCode,
+                });
+            } catch (errorCode) {
+                // set accessCode invalid
+                setInputValidation('#access_code_input', false);
+                setConnection({
+                    accessCode,
+                    accessCodeValid: errorCode,
+                });
+            }
+        } catch (errorUrl) {
+            // set url invalid
+            setConnection({
+                url,
+                urlValid: errorUrl,
+                accessCode: '',
+                accessCodeValid: false,
+            });
+            setInputValidation('#server_url_input', false);
+        }
+    });
+
+    $('#generate_button').on('click', async () => {
+        const connection = getConnection();
+
+        if (connection.urlValid === true) {
+            try {
+                // generate valid accessCode
+                const newAccessCode = await generateAccessCode(connection.url);
+
+                setConnection({
+                    accessCode: newAccessCode,
+                    accessCodeValid: true,
+                });
+                setInputValidation('#access_code_input', true);
+            } catch (errorCode) {
+                // accessCode generation failed
+                console.error('[n01.rcu.popup][error] generateAccessCode', errorCode);
+            }
+        } else {
+            setInputValidation('#server_url_input', false);
         }
     });
 
@@ -26,25 +77,6 @@ function onPopupLoadedListener() {
 
     $('#reset_button').on('click', async () => {
         dispatchToContent({ type: 'RESET_CONNECTION_SETTINGS' });
-    });
-
-    $('#generate_button').on('click', async () => {
-        const url = $('#server_url_input').val();
-        const validUrl = isValidUrl(url);
-
-        if (validUrl) {
-            generateAccessCode()
-                .then((code) => {
-                    setConnectionFromContent({ accessCode: code });
-                    setInputValidation('#access_code_input', true);
-                })
-                .catch(() => {
-                    console.error('[n01.rcu.popup][error] generateAccessCode', error);
-                    setInputValidation('#access_code_input', false);
-                });
-        } else {
-            setInputValidation('#server_url_input', false);
-        }
     });
 }
 

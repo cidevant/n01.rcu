@@ -2,7 +2,9 @@
 
 let __connection = {
     url: '-url-',
+    urlValid: false,
     accessCode: '-accessCode-',
+    accessCodeValid: false,
     server: false,
     paired: false,
     searching: false,
@@ -10,14 +12,24 @@ let __connection = {
     closeReason: null,
 };
 
-function receivedEventsHandler({ __type, ...data }, _sender, _sendResponse) {
+function receivedEventsHandler({ __type, ...action }, _sender, _sendResponse) {
     if (__type === 'n01rcu.Event.Popup') {
-        console.log('[n01.rcu.popup]', JSON.stringify(data));
+        console.log('[n01.rcu.popup]', JSON.stringify(action));
 
-        switch (data?.type) {
+        const { type, ...payload } = action;
+
+        switch (type) {
             case 'SET_CONNECTION':
                 {
-                    setConnectionFromContent(data);
+                    const newPayload = { ...payload };
+
+                    if (payload.server === true || payload.paired === true) {
+                        newPayload.urlValid = true;
+                        newPayload.accessCodeValid = true;
+                    }
+
+                    setConnection(newPayload);
+                    updateConnectionInfo();
                 }
                 break;
             default:
@@ -26,13 +38,12 @@ function receivedEventsHandler({ __type, ...data }, _sender, _sendResponse) {
     }
 }
 
-function setConnectionFromContent({ type, ...data }) {
-    __connection = {
-        ...__connection,
-        ...data,
-    };
+function getConnection() {
+    return __connection;
+}
 
-    updateConnectionInfo();
+function setConnection(payload) {
+    __connection = Object.assign(__connection, payload);
 }
 
 function updateConnectionInfo() {
@@ -49,10 +60,8 @@ function updateConnectionInfo() {
     } else {
         $('#reset_button').show();
 
-        if (isValidUrl(__connection.url)) {
+        if (__connection.urlValid) {
             $('#generate_button').show();
-        } else {
-            setInputValidation('#server_url_input', false);
         }
 
         $('#connect_button').show();
@@ -60,45 +69,52 @@ function updateConnectionInfo() {
     }
 }
 
-function setInputValidation(selector, isValid = false) {
-    const el = $(selector);
-
-    if (el) {
-        const className = isValid === true ? 'ok' : 'error';
-
-        el.addClass(className);
-
-        setTimeout(() => {
-            el.removeClass(className);
-        }, 400);
-    }
-}
-
-function isValidUrl(input) {
-    return input?.startsWith('ws') && input?.endsWith('/ws');
-}
-
-function isValidAccessCode(input, url) {
+function validateUrl(input) {
     return new Promise((resolve, reject) => {
-        if (input?.length === 4) {
+        if (isValidUrlFormat(input)) {
             try {
-                fetch(`${`${url}`.replace('/ws', '')}/check-access-code`)
+                fetch(getWebServerUrl(input, '/is-alive'))
+                    .then((resp) => resp.json())
+                    .then((resp) => {
+                        if (resp?.ok === true) {
+                            resolve(true);
+                        } else {
+                            reject(`url fetch response error ${JSON.stringify(resp)}`);
+                        }
+                    })
+                    .catch((error) => {
+                        reject(`url fetch error ${error.message}`);
+                    });
+            } catch (error) {
+                reject(`url fetch error ${error.message}`);
+            }
+        } else {
+            reject('invalid url format');
+        }
+    });
+}
+
+function validateAccessCode(url, input) {
+    return new Promise((resolve, reject) => {
+        if (isValidAccessCodeFormat(input)) {
+            try {
+                fetch(getWebServerUrl(url, `/check-access-code?access-code=${input}`))
                     .then((resp) => resp.json())
                     .then((resp) => {
                         if (resp.ok === true) {
                             resolve();
                         } else {
-                            reject(resp.error);
+                            reject(`access code fetch result error ${JSON.stringify(resp)}`);
                         }
                     })
                     .catch((error) => {
-                        reject(`fetch error ${error.message}`);
+                        reject(`access code fetch error ${error.message}`);
                     });
             } catch (error) {
-                reject(`fetch error ${error.message}`);
+                reject(`access code fetch error ${error.message}`);
             }
         } else {
-            reject('bad length');
+            reject('invalid access code format');
         }
     });
 }
@@ -106,7 +122,7 @@ function isValidAccessCode(input, url) {
 function generateAccessCode() {
     return new Promise((resolve, reject) => {
         try {
-            fetch(`${`${__connection.url}`.replace('/ws', '')}/generate-access-code`)
+            fetch(getWebServerUrl(__connection.url, '/generate-access-code'))
                 .then((resp) => resp.json())
                 .then((resp) => {
                     if (resp?.ok === true && resp?.code?.length === 4) {
@@ -122,6 +138,33 @@ function generateAccessCode() {
             reject(`fetch error ${error.message}`);
         }
     });
+}
+
+function isValidUrlFormat(input) {
+    return input?.startsWith('ws') && input?.endsWith('/ws');
+}
+
+function isValidAccessCodeFormat(input) {
+    return input?.length === 4;
+}
+
+function setInputValidation(selector, isValid = false) {
+    const className = isValid === true ? 'ok' : 'error';
+
+    // toggle state
+    $(selector).addClass(className);
+    setTimeout(() => {
+        $(selector).removeClass(className);
+    }, 400);
+
+    // toggle access code state
+    if (selector === '#server_url_input') {
+        if (isValid === true) {
+            $('#settings_access_code').show();
+        } else {
+            $('#settings_access_code').hide();
+        }
+    }
 }
 
 /**
@@ -167,4 +210,8 @@ function dispatchToBackground(payload) {
         __type: 'n01rcu.Event.Background',
         ...payload,
     });
+}
+
+function getWebServerUrl(url, path) {
+    return `${url}`.replace('wss://', 'https://').replace('ws://', 'http://').replace('/ws', path);
 }

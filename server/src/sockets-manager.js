@@ -292,6 +292,14 @@ class SocketsManager {
     return result;
   }
 
+  findSocketByMeta(comparator = () => true) {
+    for (const [socket, meta] of this.sockets) {
+      if (comparator(meta)) {
+        return socket;
+      }
+    }
+  }
+
   getSerializedInfo(socket) {
     const meta = this.getMeta(socket);
 
@@ -327,8 +335,25 @@ class SocketsManager {
     return clientSocket != null && controllers?.length > 0;
   }
 
-  get listMetaSafe() {
-    return [...this.sockets.values()].map(this.__makeMetaSafe);
+  generateAccessCode(retry = 0) {
+    if (retry >= SocketsManager.maxAccessCodeGenerationRetries) {
+      return null;
+    }
+
+    const accessCode = SocketsManager.generateRandomAccessCode();
+
+    if (this.isAccessCodeAvailable(accessCode)) {
+      return accessCode;
+    } else {
+      return this.generateAccessCode(retry + 1);
+    }
+  }
+
+  isAccessCodeAvailable(accessCode) {
+    return (
+      this.findSocketByMeta((meta) => meta.isClient === true && meta.accessCode === accessCode) ==
+      null
+    );
   }
 
   __makeMetaSafe = (meta) => {
@@ -340,6 +365,25 @@ class SocketsManager {
 
     return safeMeta;
   };
+
+  static generateRandomAccessCode() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const charactersLength = characters.length;
+
+    let result = '';
+
+    for (let i = 0; i < 4; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+
+    return result;
+  }
+
+  static maxAccessCodeGenerationRetries = 15;
+
+  get listMetaSafe() {
+    return [...this.sockets.values()].map(this.__makeMetaSafe);
+  }
 }
 
 export const sockets = new SocketsManager();
