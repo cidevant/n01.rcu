@@ -188,8 +188,11 @@ function setInputValidation(selector, isValid = false) {
 
 function updateErrorsMessages() {
     const hasMessage = (key) => __connection[key] !== true && __connection[key]?.length > 0;
-    let anyMessage = false;
 
+    // clear old
+    $('#settings_errors').empty();
+
+    // add new
     [
         ['urlValid', 'Server URL'],
         ['accessCodeValid', 'Pairing Code'],
@@ -200,12 +203,8 @@ function updateErrorsMessages() {
             $('<div>', { class: 'settings_error_label' }).text(label).appendTo($wrapper);
             $('<div>', { class: 'settings_error_text' }).text(__connection[key]).appendTo($wrapper);
             $('#settings_errors').append($wrapper);
-            anyMessage = true;
         }
     });
-    if (!anyMessage) {
-        $('#settings_errors').empty();
-    }
 }
 
 /**

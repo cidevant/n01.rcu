@@ -50,6 +50,8 @@ function n01rcu_onWsMessage(data, ws) {
  */
 function n01rcu_ToContentEventsHandler(ws) {
     return ({ detail: data }) => {
+        console.log('[n01.rcu]', JSON.stringify(data));
+
         switch (data?.type) {
             case 'GET_CONNECTION':
                 {
