@@ -8,8 +8,8 @@
  */
 class n01rcu_WebSocketClient {
     constructor() {
-        this.__url = 'ws://localhost:3000/ws';
-        this.__accessCode = 'TEST';
+        this.__url = n01rcu_DEFAULT_SERVER_URL;
+        this.__accessCode = n01rcu_DEFAULT_ACCESS_CODE;
         this.__closeCode = null;
         this.__closeReason = null;
     }

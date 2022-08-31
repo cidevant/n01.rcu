@@ -4,6 +4,9 @@
 let n01rcu_JOIN = false;
 let n01rcu_PAIRED = false;
 
+const n01rcu_DEFAULT_SERVER_URL = 'ws://localhost:3000/ws';
+const n01rcu_DEFAULT_ACCESS_CODE = 'TEST';
+
 /**
  * Process commands from websocket server
  *
@@ -48,26 +51,42 @@ function n01rcu_onWsMessage(data, ws) {
  */
 function n01rcu_ToContentEventsHandler({ detail: data }) {
     switch (data?.type) {
-        case 'GET_CONNECTION_STATUS':
+        case 'GET_CONNECTION_STATUS': {
             n01rcu_reportConnectionStatusToPopup();
+        }
             break;
-        case 'GET_CONNECTION_SETTINGS':
+        case 'GET_CONNECTION_SETTINGS': {
+            
             n01rcu_dispatchToPopup({
                 type: 'SET_CONNECTION_SETTINGS',
                 url: n01rcu_ws.__url,
                 accessCode: n01rcu_ws.__accessCode,
             });
+        }
             break;
-        case 'SET_CONNECTION_SETTINGS':
+        case 'RESET_CONNECTION_SETTINGS': {
+            n01rcu_ws.__url = n01rcu_DEFAULT_SERVER_URL;
+            n01rcu_ws.__accessCode = n01rcu_DEFAULT_ACCESS_CODE;
+
+            n01rcu_dispatchToPopup({
+                type: 'SET_CONNECTION_SETTINGS',
+                url: n01rcu_ws.__url,
+                accessCode: n01rcu_ws.__accessCode,
+            });
+        }
+            break;
+        case 'SERVER_CONNECT': {
+            n01rcu_ws.disconnect(1000, 'user disconnect-connect');
+
             n01rcu_ws.__url = data?.url;
             n01rcu_ws.__accessCode = data?.accessCode;
-            break;
-        case 'CONNECT':
-            n01rcu_ws.disconnect(1000, 'user disconnect-connect');
+
             n01rcu_ws.connect();
+        }
             break;
-        case 'DISCONNECT':
+        case 'SERVER_DISCONNECT': {
             n01rcu_ws.disconnect(1000, 'user disconnect');
+        }
             break;
         default:
             break;
@@ -322,8 +341,8 @@ function n01rcu_searchFilterByAverageAndHide(data, ws) {
  *
  */
 function n01rcu_searchScrollBottom() {
-    $("#schedule_button").hide();
-    $("#menu_button").hide();
+    $('#schedule_button').hide();
+    $('#menu_button').hide();
     $('#article').css('padding-bottom', 0);
     $('#article').css('margin-bottom', 0);
     scroll_bottom();
@@ -446,13 +465,13 @@ function n01rcu_getPlayer() {
         const user = n01rcu_getLocalStorage('n01_net.onlineOptions');
 
         if (!user) {
-            throw new Error('no player info')
+            throw new Error('no player info');
         }
 
         return {
             ...user,
             playerName: n01rcu_getPlayerName(user),
-        }
+        };
     } catch (error) {
         console.log('[n01.rcu][error] getPlayer: ', error);
 
@@ -664,7 +683,7 @@ function n01rcu_startMatchUpdater(ws) {
                         console.log('[n01.rcu][error] startMatchUpdater:', error);
                     }
 
-                    n01rcu_matchUpdaterLastMessage = matchResultString
+                    n01rcu_matchUpdaterLastMessage = matchResultString;
                 }
             }, 5000);
         }
@@ -725,8 +744,6 @@ function n01rcu_shouldConnect() {
 
     return false;
 }
-
-
 
 /**
  * Validates player id
