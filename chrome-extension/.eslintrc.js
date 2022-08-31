@@ -5,8 +5,8 @@ module.exports = {
         node: true,
         es2022: true,
     },
-    // plugins: ['react', 'prettier', 'jsdoc'],
-    // extends: ['react-app', 'eslint:recommended', 'plugin:prettier/recommended', 'prettier'],
+    plugins: ['react', 'prettier', 'jsdoc'],
+    extends: ['react-app', 'eslint:recommended', 'plugin:prettier/recommended', 'prettier'],
     globals: {
         describe: 'readonly',
         it: 'readonly',
@@ -31,7 +31,17 @@ module.exports = {
                 ignoreRestSiblings: true,
             },
         ],
-
+        'prettier/prettier': [
+            'error',
+            {
+                trailingComma: 'es5',
+                singleQuote: true,
+                tabWidth: 4,
+                semi: true,
+                printWidth: 100,
+                endOfLine: 'auto',
+            },
+        ],
         'no-extra-boolean-cast': 'off',
         'comma-spacing': [
             'error',
