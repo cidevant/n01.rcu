@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
 chrome.runtime.onMessage.addListener(({ __type, ...msg }, _sender, _sendResponse) => {
-    if (__type === 'n01rcu.Event.Background') {
+    if (__type === 'n01rcu.Event.ToBackground') {
         console.log('[n01.rcu.background]', JSON.stringify(msg));
 
         switch (msg?.type) {

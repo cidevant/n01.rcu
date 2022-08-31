@@ -281,7 +281,7 @@ function n01rcu_sendScoreLeft(ws, value) {
 function n01rcu_changeExtensionIcon(icon = 'default') {
     setTimeout(function () {
         document.dispatchEvent(
-            new CustomEvent('n01rcu.Event.Background', {
+            new CustomEvent('n01rcu.Event.ToBackground', {
                 detail: {
                     type: 'SET_ICON',
                     icon,
@@ -603,10 +603,10 @@ function n01rcu_isValidPlayerId(id) {
 }
 
 function n01rcu_sendMessageToPopup(msg) {
-    document.dispatchEvent(new CustomEvent('n01rcu.Event.Popup.Out', { detail: msg }));
+    document.dispatchEvent(new CustomEvent('n01rcu.Event.ToPopup', { detail: msg }));
 }
 
 function n01rcu_inPopupsEventsListener(event) {
-    console.log('===================> n01rcu.Event.Popup.In', event);
+    console.log('===================> n01rcu.Event.FromPopup', event);
     n01rcu_sendMessageToPopup(n01rcu_getPlayer());
 }

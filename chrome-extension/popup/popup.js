@@ -4,7 +4,7 @@ window.addEventListener('DOMContentLoaded', () => {
     })
 
     chrome.runtime.onMessage.addListener(({ __type, ...msg }, _sender, _sendResponse) => {
-        if (__type === 'n01rcu.Event.Popup.Out') {
+        if (__type === 'n01rcu.Event.ToPopup') {
             console.log('[n01.rcu.popup]', JSON.stringify(msg));
     
             switch (msg?.type) {
