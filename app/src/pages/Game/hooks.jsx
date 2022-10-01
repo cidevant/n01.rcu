@@ -27,17 +27,7 @@ export function useGameUpdater() {
 
 export function useGameHandlers(scores) {
     const [showFinishDarts, setShowFinishDarts] = useState(false);
-    const { dispatchInputScore, finishDarts, scoreLeft } = useGameInfo();
-
-    // score input
-    const longPressHandlers = useLongPress(
-        (e) => {
-            e.target.classList.add('ok');
-            dispatchInputScore(parseInt(e.target.id, 10));
-        },
-        (e) => e.target.classList.remove('ok'),
-        400
-    );
+    const { finishDarts, scoreLeft } = useGameInfo();
 
     // list of scores
     const scoresList = useMemo(() => {
@@ -83,7 +73,6 @@ export function useGameHandlers(scores) {
 
     return {
         scoresList,
-        longPressHandlers,
         showFinishDarts,
         closeFinishDartsModal,
     };

@@ -1,25 +1,37 @@
-import { useMemo } from 'react';
-import styled from 'styled-components';
+import { useMemo, useEffect, useState } from 'react';
 import { isOneDartCheckout } from '../../utils/game';
 import { useGameInfo } from '../../hooks/useGameInfo';
+import Touchable from 'rc-touchable';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Table, TableRow, TableCell, TableDivider, Button } from './index.style';
 
-export function GameScoreList({ scores, longPressHandlers }) {
+export function GameScoreList({ scores, handlers }) {
+    function disableContextMenuOnButtonPress(e) {
+        e.preventDefault();
+    }
+
+    useEffect(() => {
+        window.addEventListener('contextmenu', disableContextMenuOnButtonPress);
+
+        return () => {
+            window.removeEventListener('contextmenu', disableContextMenuOnButtonPress);
+        };
+    }, []);
+
     return (
-        <Table>
-            <tbody>
-                {scores.map((row, index1) => (
-                    <RenderTableRowByValueType
-                        row={row}
-                        longPressHandlers={longPressHandlers}
-                        key={index1}
-                    />
-                ))}
-            </tbody>
-        </Table>
+        <div {...handlers}>
+            <Table>
+                <tbody>
+                    {scores.map((row, index1) => (
+                        <RenderTableRowByValueType row={row} key={index1} />
+                    ))}
+                </tbody>
+            </Table>
+        </div>
     );
 }
 
-function RenderTableRowByValueType({ row, longPressHandlers }) {
+function RenderTableRowByValueType({ row }) {
     // Divider
     if (row?.type === 'divider') {
         return <RenderTableDivider />;
@@ -29,40 +41,26 @@ function RenderTableRowByValueType({ row, longPressHandlers }) {
         return (
             <TableRow>
                 {row.map((num, index) => (
-                    <RenderTableCell
-                        num={num}
-                        row={row}
-                        key={index}
-                        longPressHandlers={longPressHandlers}
-                    />
+                    <RenderTableCell num={num} row={row?.length} key={index} />
                 ))}
             </TableRow>
         );
     }
 }
 
-function RenderTableCell({ num, row, longPressHandlers }) {
-    const { scoreLeft } = useGameInfo();
-
-    function getColspan() {
+function RenderTableCell({ num, rowLength }) {
+    const { scoreLeft, dispatchInputScore } = useGameInfo();
+    const [value, setValue] = useState(getValueOutput(num));
+    const colSpan = useMemo(() => {
         if (num?.colspan > 0) {
             return num?.colspan;
         }
-        if (row?.length === 1) {
+        if (rowLength === 1) {
             return 3;
         }
 
         return 1;
-    }
-
-    const value = useMemo(() => {
-        if (!isNaN(num)) {
-            return num;
-        }
-
-        return num?.value;
-    }, [num]);
-
+    }, [num?.colspan, rowLength]);
     const buttonStyle = useMemo(() => {
         if (value === scoreLeft && isOneDartCheckout(value)) {
             return 'finish';
@@ -77,11 +75,45 @@ function RenderTableCell({ num, row, longPressHandlers }) {
         return style;
     }, [num, value, scoreLeft]);
 
+    function getValueOutput(num) {
+        if (!isNaN(num)) {
+            return num;
+        }
+
+        return num?.value;
+    }
+
+    function onLongPress(event) {
+        event.target.classList.add('confirmed');
+        setValue(<FontAwesomeIcon icon="fa-solid fa-check" />);
+        dispatchInputScore(event.target.id);
+    }
+
+    function onPressOut(event) {
+        event.target.classList.remove('confirmed');
+        event.target.classList.remove('touching');
+
+        setValue(getValueOutput(num));
+    }
+
+    function onPressIn(event) {
+        event.target.classList.add('touching');
+    }
+
     return (
-        <TableCell colSpan={getColspan()}>
-            <Button id={value} buttonStyle={buttonStyle} {...longPressHandlers}>
-                {value}
-            </Button>
+        <TableCell colSpan={colSpan}>
+            <Touchable
+                longPressCancelsPress
+                activeStopPropagation
+                onLongPress={onLongPress}
+                delayLongPress={300}
+                onPressIn={onPressIn}
+                onPressOut={onPressOut}
+            >
+                <Button id={value} buttonStyle={buttonStyle}>
+                    {value}
+                </Button>
+            </Touchable>
         </TableCell>
     );
 }
@@ -95,59 +127,3 @@ function RenderTableDivider() {
         </TableRow>
     );
 }
-
-const Table = styled.table`
-    width: 100%;
-    padding: 10px;
-`;
-
-const TableRow = styled.tr`
-    width: 100%;
-`;
-
-const TableCell = styled.td`
-    width: 33%;
-    border: 14px solid transparent;
-`;
-
-const TableDivider = styled(TableCell)`
-    width: 100%;
-`;
-
-const Button = styled.button`
-    color: black;
-    background-color: #eee;
-    border: 2px solid #aaa;
-    box-shadow: 2px 2px 6px 1px #666;
-    width: 100%;
-    font-size: 100px;
-    padding: 20px 0;
-    display: block;
-    text-align: center;
-    opacity: 1;
-    user-select: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    font-weight: bolder;
-
-    ${({ buttonStyle }) => {
-        switch (buttonStyle) {
-            case 'zero':
-                return 'background-color: red; border-color: #b30000; color: white;';
-            case 'good':
-                return 'background-color: #ddffcc; border-color: #4ce600;';
-            case 'outs':
-                return 'background-color: #faf5a7; border-color: #c06d00;';
-            case 'finish':
-                return 'background-color: #22ff34; border-color: #2d8600;';
-        }
-    }}
-
-    &.ok {
-        background-color: #ccff33;
-        border-color: #99cc00;
-        color: black;
-    }
-`;

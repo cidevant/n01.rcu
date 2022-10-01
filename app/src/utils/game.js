@@ -1,4 +1,4 @@
-const commonScores = [
+export const SCORES_COMMON = [
     [26, 58, 43],
     [
         45,
@@ -20,9 +20,11 @@ const commonScores = [
     { type: 'divider' },
     [55, 24, 22],
     [35, 36, 28],
+    [35, 36, 28],
+    [35, 36, 28],
 ];
 
-const lowScores = [
+export const SCORES_OUTS = [
     [
         {
             value: 8,
@@ -73,8 +75,6 @@ const lowScores = [
     ],
     [55, 57, 59],
 ];
-
-export const SCORES = [...commonScores];
 
 const CHECKOUTS = [
     {
