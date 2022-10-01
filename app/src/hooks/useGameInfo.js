@@ -17,7 +17,7 @@ export function useGameInfo() {
     }
 
     return {
-        scoreLeft: 232,
+        scoreLeft: 32,
         finishDarts,
         dispatchInputScore,
         dispatchSetFinishDarts,

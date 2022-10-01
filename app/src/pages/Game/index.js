@@ -10,15 +10,15 @@ import { GameScoreList } from '../../components/GameScoreList';
 
 function Game() {
     const { showFinishDarts, closeFinishDartsModal } = useGameHandlers();
-    const { scoreList, changeScoreList } = useSwipeableScoreList();
+    const { scoreList, swipeScoreList, setScoreList } = useSwipeableScoreList();
     const scores = useScores(scoreList);
 
     useEndGameWatcher();
-    useGameUpdater();
+    useGameUpdater(scoreList, setScoreList);
 
     return (
         <>
-            <GameScoreList scores={scores} swipeHandlers={changeScoreList} />
+            <GameScoreList scores={scores} swipeHandlers={swipeScoreList} />
             <FinishDartsModal show={showFinishDarts} close={closeFinishDartsModal} />
         </>
     );

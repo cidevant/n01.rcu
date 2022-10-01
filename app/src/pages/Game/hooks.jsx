@@ -3,9 +3,8 @@ import { useData } from '../../hooks/useData';
 import { useNavigate } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 import { useGameInfo } from '../../hooks/useGameInfo';
-import { isOneDartCheckout } from '../../utils/game';
+import { isOneDartCheckout, SCORES, SCORE_LISTS } from '../../utils/game';
 import { useInterval } from '../../hooks/useInterval';
-import { SCORES_COMMON, SCORES_OUTS } from '../../utils/game';
 
 export function useEndGameWatcher() {
     const navigate = useNavigate();
@@ -18,17 +17,24 @@ export function useEndGameWatcher() {
     }, [activity, navigate]);
 }
 
-export function useGameUpdater() {
+export function useGameUpdater(scoreList, setScoreList) {
     const { dispatchGetData } = useData();
+    const { scoreLeft } = useGameInfo();
 
     useInterval(() => {
         dispatchGetData();
     }, 5000);
+
+    useEffect(() => {
+        if (scoreList === SCORE_LISTS.COMMON && scoreLeft < 100) {
+            setScoreList(SCORE_LISTS.OUTS);
+        }
+    }, [scoreLeft, scoreList, setScoreList]);
 }
 
 export function useGameHandlers(scores) {
     const [showFinishDarts, setShowFinishDarts] = useState(false);
-    const { finishDarts, scoreLeft } = useGameInfo();
+    const { finishDarts } = useGameInfo();
 
     // finish darts
     useEffect(() => {
@@ -47,18 +53,32 @@ export function useGameHandlers(scores) {
         closeFinishDartsModal,
     };
 }
-function getScoresByPage(scoreList) {
-    if (scoreList === 'outs') {
-        return SCORES_OUTS;
-    }
 
-    return SCORES_COMMON;
+export function useSwipeableScoreList() {
+    const [scoreList, setScoreList] = useState(SCORE_LISTS.COMMON);
+    const swipeScoreList = useSwipeable({
+        onSwiped: (ev) => {
+            if (ev.dir === 'Left') {
+                setScoreList(SCORE_LISTS.OUTS);
+            }
+
+            if (ev.dir === 'Right') {
+                setScoreList(SCORE_LISTS.COMMON);
+            }
+        },
+    });
+
+    return {
+        scoreList,
+        setScoreList,
+        swipeScoreList,
+    };
 }
 
 export function useScores(scoreList) {
     const { scoreLeft } = useGameInfo();
     const scores = useMemo(() => {
-        const result = [...getScoresByPage(scoreList)];
+        const result = [...SCORES[scoreList]];
 
         if (scoreLeft <= 180) {
             if (isOneDartCheckout(scoreLeft)) {
@@ -87,24 +107,4 @@ export function useScores(scoreList) {
     }, [scoreLeft, scoreList]);
 
     return scores;
-}
-
-export function useSwipeableScoreList() {
-    const [scoreList, setScoreList] = useState('common');
-    const changeScoreList = useSwipeable({
-        onSwiped: (ev) => {
-            if (ev.dir === 'Left') {
-                setScoreList('outs');
-            }
-
-            if (ev.dir === 'Right') {
-                setScoreList('common');
-            }
-        },
-    });
-
-    return {
-        scoreList,
-        changeScoreList,
-    };
 }

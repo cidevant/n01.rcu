@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const TableWrapper = styled.div`
     height: 100%;
     min-height: 100%;
-    background-color: red;
+    /* background-color: red; */
 `;
 
 export const Table = styled.table`
