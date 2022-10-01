@@ -120,7 +120,7 @@ const Button = styled.button`
     border: 2px solid #aaa;
     box-shadow: 2px 2px 6px 1px #666;
     width: 100%;
-    font-size: 140px;
+    font-size: 100px;
     padding: 20px 0;
     display: block;
     text-align: center;

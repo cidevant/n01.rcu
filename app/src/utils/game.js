@@ -1,5 +1,4 @@
-export const SCORES = [
-    // COMMON
+const commonScores = [
     [26, 58, 43],
     [
         45,
@@ -18,21 +17,12 @@ export const SCORES = [
         81,
     ],
     [95, 98, 83],
-
-    // HIGH
     { type: 'divider' },
-    [
-        80,
-        {
-            value: 140,
-            style: 'good',
-        },
-        120,
-    ],
-    [121, 123, 135],
+    [55, 24, 22],
+    [35, 36, 28],
+];
 
-    // LOW
-    { type: 'divider' },
+const lowScores = [
     [
         {
             value: 8,
@@ -47,14 +37,7 @@ export const SCORES = [
             style: 'outs',
         },
     ],
-    [
-        22,
-        23,
-        {
-            value: 24,
-            style: 'outs',
-        },
-    ],
+
     [
         28,
         30,
@@ -79,8 +62,19 @@ export const SCORES = [
         },
         51,
     ],
+    { type: 'divider' },
+    [
+        22,
+        23,
+        {
+            value: 24,
+            style: 'outs',
+        },
+    ],
     [55, 57, 59],
 ];
+
+export const SCORES = [...commonScores];
 
 const CHECKOUTS = [
     {
