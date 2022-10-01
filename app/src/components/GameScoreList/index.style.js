@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 
 export const TableWrapper = styled.div`
-    height: 100%;
-    min-height: 100%;
-    /* background-color: red; */
+    height: calc(100% - 180px);
 `;
 
 export const Table = styled.table`
