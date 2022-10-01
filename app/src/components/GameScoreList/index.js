@@ -32,8 +32,6 @@ export function GameScoreList({ scores, swipeHandlers }) {
 }
 
 function Row({ row }) {
-    console.log('===================> row', row);
-
     // Divider
     if (row?.type === 'divider') {
         return <RenderTableDivider />;
