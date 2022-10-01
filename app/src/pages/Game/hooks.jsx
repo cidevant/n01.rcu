@@ -3,9 +3,16 @@ import { useData } from '../../hooks/useData';
 import { useNavigate } from 'react-router-dom';
 import { useSwipeable, LEFT, RIGHT } from 'react-swipeable';
 import { useGameInfo } from '../../hooks/useGameInfo';
-import { isOneDartCheckout, SCORES, SCORE_LIST } from '../../utils/game';
+import { isOneDartCheckout, SCORES, SCORES_LIST } from '../../utils/game';
 import { useInterval } from '../../hooks/useInterval';
 
+/**
+ * Polls game info and switches SCORES_LIST if score is less than 100
+ *
+ * @export
+ * @param {*} scoreList
+ * @param {*} setScoreList
+ */
 export function useGameUpdater(scoreList, setScoreList) {
     const { dispatchGetData } = useData();
     const { scoreLeft } = useGameInfo();
@@ -15,8 +22,8 @@ export function useGameUpdater(scoreList, setScoreList) {
     }, 5000);
 
     useEffect(() => {
-        if (scoreList === SCORE_LIST.COMMON && scoreLeft < 100) {
-            setScoreList(SCORE_LIST.OUTS);
+        if (scoreList === SCORES_LIST.COMMON && scoreLeft < 100) {
+            setScoreList(SCORES_LIST.OUTS);
         }
     }, [scoreLeft, scoreList, setScoreList]);
 }
@@ -37,21 +44,27 @@ export function useEndGameWatcher() {
     }, [activity, navigate]);
 }
 
+/**
+ * Swiping gesture handlers to change SCORES_LIST
+ *
+ * @export
+ * @returns {*}
+ */
 export function useSwipeableScoreList() {
     const { scoreLeft } = useGameInfo();
-    const [scoreList, setScoreList] = useState(SCORE_LIST.COMMON);
+    const [scoreList, setScoreList] = useState(SCORES_LIST.COMMON);
     const swipeScoreList = useSwipeable({
         onSwiped: (ev) => {
-            if (scoreList === SCORE_LIST.OUTS && scoreLeft < 100) {
+            if (scoreList === SCORES_LIST.OUTS && scoreLeft < 100) {
                 return;
             }
 
             if (ev.dir === LEFT) {
-                setScoreList(SCORE_LIST.OUTS);
+                setScoreList(SCORES_LIST.OUTS);
             }
 
             if (ev.dir === RIGHT) {
-                setScoreList(SCORE_LIST.COMMON);
+                setScoreList(SCORES_LIST.COMMON);
             }
         },
     });
@@ -63,6 +76,13 @@ export function useSwipeableScoreList() {
     };
 }
 
+/**
+ * Returns scores based on current SCORES_LIST
+ *
+ * @export
+ * @param {*} scoreList
+ * @returns {Array<any>}
+ */
 export function useScores(scoreList) {
     return SCORES[scoreList];
 

@@ -6,8 +6,8 @@ function Game() {
     const { scoreList, swipeScoreList, setScoreList } = useSwipeableScoreList();
     const scores = useScores(scoreList);
 
-    useEndGameWatcher();
     useGameUpdater(scoreList, setScoreList);
+    useEndGameWatcher();
 
     return (
         <>

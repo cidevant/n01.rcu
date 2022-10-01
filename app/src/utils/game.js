@@ -74,14 +74,14 @@ const SCORES_OUTS = [
     [55, 57, 59],
 ];
 
-export const SCORE_LIST = {
+export const SCORES_LIST = {
     COMMON: 'COMMON',
     OUTS: 'OUTS',
 };
 
 export const SCORES = {
-    [SCORE_LIST.COMMON]: SCORES_COMMON,
-    [SCORE_LIST.OUTS]: SCORES_OUTS,
+    [SCORES_LIST.COMMON]: SCORES_COMMON,
+    [SCORES_LIST.OUTS]: SCORES_OUTS,
 };
 
 const CHECKOUTS = [

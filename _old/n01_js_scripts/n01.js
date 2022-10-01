@@ -1556,7 +1556,7 @@ function scrollRound(round) {
 	if ($('.score_table th').is(':visible')) {
 		top += $('#score_table th').height();
 	}
-	if ($('#score_list_start').is(':visible')) {
+	if ($('#SCORES_LIST_start').is(':visible')) {
 		top += $('#round_' + round).height() * (round + 1);
 	} else {
 		top += $('#round_' + round).height() * round;
@@ -1713,7 +1713,7 @@ function initScore() {
 	$('#score_body').empty();
 
 	// é–‹ĺ§‹ă‚ąă‚łă‚˘ă®č¨­ĺ®š
-	var objStart = $('#score_list_start').clone(false).appendTo('#score_body');
+	var objStart = $('#SCORES_LIST_start').clone(false).appendTo('#score_body');
 	objStart.find('.p1left').text(currentLegData().playerData[0][0].left);
 	objStart.find('.p2left').text(currentLegData().playerData[1][0].left);
 
@@ -1803,7 +1803,7 @@ function initScore() {
 }
 
 function addRound(round) {
-	var obj = $('#score_list_score').clone(true).appendTo('#score_body');
+	var obj = $('#SCORES_LIST_score').clone(true).appendTo('#score_body');
 	obj.attr('id', 'round_' + round);
 	if (n01_data.options.roundDarts === 1) {
 		obj.find('.score_round').text((round + 1) * 3);
