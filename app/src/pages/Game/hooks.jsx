@@ -1,10 +1,11 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useData } from '../../hooks/useData';
 import { useNavigate } from 'react-router-dom';
+import { useSwipeable } from 'react-swipeable';
 import { useGameInfo } from '../../hooks/useGameInfo';
-import { useLongPress } from '../../hooks/useLongPress';
 import { isOneDartCheckout } from '../../utils/game';
 import { useInterval } from '../../hooks/useInterval';
+import { SCORES_COMMON, SCORES_OUTS } from '../../utils/game';
 
 export function useEndGameWatcher() {
     const navigate = useNavigate();
@@ -29,9 +30,35 @@ export function useGameHandlers(scores) {
     const [showFinishDarts, setShowFinishDarts] = useState(false);
     const { finishDarts, scoreLeft } = useGameInfo();
 
-    // list of scores
-    const scoresList = useMemo(() => {
-        const result = [...scores];
+    // finish darts
+    useEffect(() => {
+        if (finishDarts?.length > 0) {
+            setShowFinishDarts(true);
+        }
+    }, [finishDarts, showFinishDarts, setShowFinishDarts]);
+
+    // close finish darts modal
+    const closeFinishDartsModal = useCallback(() => {
+        setShowFinishDarts(false);
+    }, [setShowFinishDarts]);
+
+    return {
+        showFinishDarts,
+        closeFinishDartsModal,
+    };
+}
+function getScoresByPage(scoreList) {
+    if (scoreList === 'outs') {
+        return SCORES_OUTS;
+    }
+
+    return SCORES_COMMON;
+}
+
+export function useScores(scoreList) {
+    const { scoreLeft } = useGameInfo();
+    const scores = useMemo(() => {
+        const result = [...getScoresByPage(scoreList)];
 
         if (scoreLeft <= 180) {
             if (isOneDartCheckout(scoreLeft)) {
@@ -57,23 +84,27 @@ export function useGameHandlers(scores) {
         }
 
         return result;
-    }, [scoreLeft, scores]);
+    }, [scoreLeft, scoreList]);
 
-    // finish darts
-    useEffect(() => {
-        if (finishDarts?.length > 0) {
-            setShowFinishDarts(true);
-        }
-    }, [finishDarts, showFinishDarts, setShowFinishDarts]);
+    return scores;
+}
 
-    // close finish darts modal
-    const closeFinishDartsModal = useCallback(() => {
-        setShowFinishDarts(false);
-    }, [setShowFinishDarts]);
+export function useSwipeableScoreList() {
+    const [scoreList, setScoreList] = useState('common');
+    const changeScoreList = useSwipeable({
+        onSwiped: (ev) => {
+            if (ev.dir === 'Left') {
+                setScoreList('outs');
+            }
+
+            if (ev.dir === 'Right') {
+                setScoreList('common');
+            }
+        },
+    });
 
     return {
-        scoresList,
-        showFinishDarts,
-        closeFinishDartsModal,
+        scoreList,
+        changeScoreList,
     };
 }

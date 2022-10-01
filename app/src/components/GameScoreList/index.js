@@ -3,9 +3,9 @@ import { isOneDartCheckout } from '../../utils/game';
 import { useGameInfo } from '../../hooks/useGameInfo';
 import Touchable from 'rc-touchable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Table, TableRow, TableCell, TableDivider, Button } from './index.style';
+import { TableWrapper, Table, TableRow, TableCell, TableDivider, Button } from './index.style';
 
-export function GameScoreList({ scores, handlers }) {
+export function GameScoreList({ scores, swipeHandlers }) {
     function disableContextMenuOnButtonPress(e) {
         e.preventDefault();
     }
@@ -19,36 +19,41 @@ export function GameScoreList({ scores, handlers }) {
     }, []);
 
     return (
-        <div {...handlers}>
+        <TableWrapper {...swipeHandlers}>
             <Table>
                 <tbody>
                     {scores.map((row, index1) => (
-                        <RenderTableRowByValueType row={row} key={index1} />
+                        <Row row={row} key={index1} />
                     ))}
                 </tbody>
             </Table>
-        </div>
+        </TableWrapper>
     );
 }
 
-function RenderTableRowByValueType({ row }) {
+function Row({ row }) {
+    console.log('===================> row', row);
+
     // Divider
     if (row?.type === 'divider') {
         return <RenderTableDivider />;
     }
+
     // Normal row
     else if (Array.isArray(row)) {
         return (
             <TableRow>
                 {row.map((num, index) => (
-                    <RenderTableCell num={num} row={row?.length} key={index} />
+                    <Cell num={num} row={row?.length} key={index} />
                 ))}
             </TableRow>
         );
     }
+
+    return <div></div>;
 }
 
-function RenderTableCell({ num, rowLength }) {
+function Cell({ num, rowLength }) {
     const { scoreLeft, dispatchInputScore } = useGameInfo();
     const [value, setValue] = useState(getValueOutput(num));
     const colSpan = useMemo(() => {
@@ -100,12 +105,17 @@ function RenderTableCell({ num, rowLength }) {
         event.target.classList.add('touching');
     }
 
+    useEffect(() => {
+        setValue(getValueOutput(num));
+    }, [num]);
+
     return (
         <TableCell colSpan={colSpan}>
             <Touchable
                 longPressCancelsPress
                 activeStopPropagation
                 onLongPress={onLongPress}
+                delayPressIn={100}
                 delayLongPress={300}
                 onPressIn={onPressIn}
                 onPressOut={onPressOut}

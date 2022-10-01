@@ -4,3 +4,10 @@ $offcanvas-horizontal-width: 720px;
 // Import Bootstrap and its default variables
 @import '~bootstrap/scss/bootstrap.scss';
 @import '~bootstrap-icons/font/bootstrap-icons.scss';
+
+
+html, 
+body,
+#root {
+    min-height: 100%;
+}

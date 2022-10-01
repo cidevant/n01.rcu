@@ -20,8 +20,6 @@ export const SCORES_COMMON = [
     { type: 'divider' },
     [55, 24, 22],
     [35, 36, 28],
-    [35, 36, 28],
-    [35, 36, 28],
 ];
 
 export const SCORES_OUTS = [
