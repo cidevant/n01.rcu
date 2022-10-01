@@ -6,17 +6,6 @@ import { useGameInfo } from '../../hooks/useGameInfo';
 import { isOneDartCheckout, SCORES, SCORE_LISTS } from '../../utils/game';
 import { useInterval } from '../../hooks/useInterval';
 
-export function useEndGameWatcher() {
-    const navigate = useNavigate();
-    const { activity } = useData();
-
-    useEffect(() => {
-        if (activity !== 'game') {
-            navigate('/');
-        }
-    }, [activity, navigate]);
-}
-
 export function useGameUpdater(scoreList, setScoreList) {
     const { dispatchGetData } = useData();
     const { scoreLeft } = useGameInfo();
@@ -32,7 +21,7 @@ export function useGameUpdater(scoreList, setScoreList) {
     }, [scoreLeft, scoreList, setScoreList]);
 }
 
-export function useGameHandlers(scores) {
+export function useFinishDartModal(scores) {
     const [showFinishDarts, setShowFinishDarts] = useState(false);
     const { finishDarts } = useGameInfo();
 
@@ -49,15 +38,31 @@ export function useGameHandlers(scores) {
     }, [setShowFinishDarts]);
 
     return {
-        showFinishDarts,
-        closeFinishDartsModal,
+        show: showFinishDarts,
+        close: closeFinishDartsModal,
     };
 }
 
+export function useEndGameWatcher() {
+    const navigate = useNavigate();
+    const { activity } = useData();
+
+    useEffect(() => {
+        if (activity !== 'game') {
+            navigate('/');
+        }
+    }, [activity, navigate]);
+}
+
 export function useSwipeableScoreList() {
+    const { scoreLeft } = useGameInfo();
     const [scoreList, setScoreList] = useState(SCORE_LISTS.COMMON);
     const swipeScoreList = useSwipeable({
         onSwiped: (ev) => {
+            if (scoreList === SCORE_LISTS.OUTS && scoreLeft < 100) {
+                return;
+            }
+
             if (ev.dir === 'Left') {
                 setScoreList(SCORE_LISTS.OUTS);
             }
@@ -76,35 +81,44 @@ export function useSwipeableScoreList() {
 }
 
 export function useScores(scoreList) {
-    const { scoreLeft } = useGameInfo();
-    const scores = useMemo(() => {
-        const result = [...SCORES[scoreList]];
+    return SCORES[scoreList];
 
-        if (scoreLeft <= 180) {
-            if (isOneDartCheckout(scoreLeft)) {
-                result.push([
-                    {
-                        value: scoreLeft,
-                        style: 'finish',
-                    },
-                    {
-                        colspan: 2,
-                        value: 0,
-                        style: 'zero',
-                    },
-                ]);
-            } else {
-                result.push([
-                    {
-                        value: 0,
-                        style: 'zero',
-                    },
-                ]);
-            }
-        }
+    // const { scoreLeft } = useGameInfo();
+    // const scores = useMemo(() => {
+    //     const result = [...SCORES[scoreList]];
 
-        return result;
-    }, [scoreLeft, scoreList]);
+    //     if (scoreLeft <= 180) {
+    //         // result.unshift([
+    //         //     {
+    //         //         value: 0,
+    //         //         style: 'zero',
+    //         //         colspan: 3,
+    //         //     },
+    //         // ]);
+    //         if (isOneDartCheckout(scoreLeft)) {
+    //             result.push([
+    //                 {
+    //                     value: scoreLeft,
+    //                     style: 'finish',
+    //                 },
+    //                 {
+    //                     colspan: 2,
+    //                     value: 0,
+    //                     style: 'zero',
+    //                 },
+    //             ]);
+    //         } else {
+    //             result.push([
+    //                 {
+    //                     value: 0,
+    //                     style: 'zero',
+    //                 },
+    //             ]);
+    //         }
+    //     }
 
-    return scores;
+    //     return result;
+    // }, [scoreLeft, scoreList]);
+
+    // return scores;
 }

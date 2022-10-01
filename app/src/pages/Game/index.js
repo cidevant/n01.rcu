@@ -1,7 +1,7 @@
 import { FinishDartsModal } from '../../components/FinishDartsModal';
 import {
     useEndGameWatcher,
-    useGameHandlers,
+    useFinishDartModal,
     useGameUpdater,
     useScores,
     useSwipeableScoreList,
@@ -9,7 +9,7 @@ import {
 import { GameScoreList } from '../../components/GameScoreList';
 
 function Game() {
-    const { showFinishDarts, closeFinishDartsModal } = useGameHandlers();
+    const { show, close } = useFinishDartModal();
     const { scoreList, swipeScoreList, setScoreList } = useSwipeableScoreList();
     const scores = useScores(scoreList);
 
@@ -19,7 +19,7 @@ function Game() {
     return (
         <>
             <GameScoreList scores={scores} swipeHandlers={swipeScoreList} />
-            <FinishDartsModal show={showFinishDarts} close={closeFinishDartsModal} />
+            <FinishDartsModal show={show} close={close} />
         </>
     );
 }
