@@ -1,7 +1,13 @@
 import styled from 'styled-components';
 
 export const TableWrapper = styled.div`
-    height: calc(100% - 180px);
+    height: 100%;
+    background-color: red;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
 `;
 
 export const Table = styled.table`
@@ -20,6 +26,10 @@ export const TableCell = styled.td`
 
 export const TableDivider = styled(TableCell)`
     width: 100%;
+
+    & > hr {
+        margin: 0;
+    }
 `;
 
 export const Button = styled.div`

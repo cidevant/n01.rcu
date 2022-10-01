@@ -18,8 +18,24 @@ const SCORES_COMMON = [
     ],
     [95, 98, 83],
     { type: 'divider' },
-    [55, 24, 22],
+    [
+        22,
+        23,
+        {
+            value: 24,
+            style: 'outs',
+        },
+    ],
     [35, 36, 28],
+    [
+        35,
+        {
+            value: 36,
+            style: 'outs',
+        },
+        38,
+    ],
+    [55, 57, 59],
 ];
 
 const SCORES_OUTS = [
@@ -37,7 +53,14 @@ const SCORES_OUTS = [
             style: 'outs',
         },
     ],
-
+    [
+        22,
+        23,
+        {
+            value: 24,
+            style: 'outs',
+        },
+    ],
     [
         28,
         30,
@@ -61,15 +84,6 @@ const SCORES_OUTS = [
             style: 'outs',
         },
         51,
-    ],
-    { type: 'divider' },
-    [
-        22,
-        23,
-        {
-            value: 24,
-            style: 'outs',
-        },
     ],
     [55, 57, 59],
 ];
