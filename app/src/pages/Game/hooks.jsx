@@ -47,11 +47,11 @@ export function useGameHandlers(scores) {
             if (isOneDartCheckout(scoreLeft)) {
                 result.push([
                     {
-                        colspan: 2,
                         value: scoreLeft,
                         style: 'finish',
                     },
                     {
+                        colspan: 2,
                         value: 0,
                         style: 'zero',
                     },
