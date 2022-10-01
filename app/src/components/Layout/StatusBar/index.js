@@ -3,12 +3,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { LeftButtons } from './Left';
 import { RightButtons } from './Right';
-import { useGameInfo } from '../../../hooks/useGameInfo';
+import { useData } from '../../../hooks/useData';
 
 export function StatusBar() {
-    const { gameStarted } = useGameInfo();
+    const { activity } = useData();
 
-    if (gameStarted) {
+    if (activity === 'game') {
         return null;
     }
 

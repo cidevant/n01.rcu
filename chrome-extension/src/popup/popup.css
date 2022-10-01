@@ -1,0 +1,331 @@
+@font-face {
+    font-family: 'Roboto Flex';
+    font-style: normal;
+    src: url('RobotoFlex-Regular.ttf') format('truetype');
+}
+
+body,
+html,
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Roboto Flex', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.wrapper {
+    background-color: #ddd;
+    padding: 10px;
+}
+
+
+/* ----------------------------------------------- */
+/* --------------- DISABLED UI */
+
+
+
+#UI_disabled {
+    width: 712px;
+}
+
+#UI_disabled h2 {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 1rem;
+}
+
+#UI_disabled div {
+    margin: 10px 0;
+    text-align: center;
+    font-size: 1.6rem;
+}
+
+#UI_disabled button {
+    margin-top: 10px;
+    padding: 15px 10px;
+    width: 100%;
+    color: rgb(100, 100, 100);
+    font-size: 1.4rem;
+    cursor: pointer;
+    text-transform: uppercase;
+
+}
+
+/* ----------------------------------------------- */
+/* --------------- TOP HEADER */
+
+
+#top_title {
+    margin: 0px 0 8px 0;
+}
+
+h1 {
+    font: bolder 24px sans-serif;
+    color: rgba(0, 0, 0, 0.584);
+    text-shadow: 1px 2px 3px #fff, 0 0 0 #000;
+}
+
+.d-flex {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-center {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+#settings_errors {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.settings_error {
+    margin-bottom: 2px;
+    flex-direction: row;
+}
+
+.settings_error_label {
+    background-color: rgb(160, 2, 2);
+    color: white;
+    padding: 3px 6px 3px 0;
+    text-transform: lowercase;
+    font: bold 12px sans-serif;
+}
+
+.settings_error_label::before {
+    content: "error";
+    padding: 3px 6px;
+    margin-right: 6px;
+    color: white;
+    font: bold 12px sans-serif;
+    background-color: rgb(220, 0, 0);
+}
+
+.settings_error_text {
+    background-color: black;
+    color: white;
+    padding: 3px 6px;
+    text-transform: lowercase;
+    font: bold 12px sans-serif;
+}
+
+
+/* ----------------------------------------------- */
+/* --------------- TABLE */
+
+
+.table {
+    width: 100%;
+    border-width: 0;
+    border-spacing: 0px;
+    border-collapse: collapse;
+    display: none;
+}
+
+
+/* ----------------------------------------------- */
+/* --------------- HEAD */
+
+
+.table>thead .titles {
+    background-color: black;
+    color: white;
+    font-size: 18px;
+    padding: 5px 10px;
+    min-width: 100px;
+}
+
+
+.table>thead .center {
+    text-align: center;
+}
+
+.table>thead .last {
+    text-align: right;
+}
+
+
+/* ----------------------------------------------- */
+/* -------------- BODY */
+
+
+/* VALUE, STATUS, ACTION */
+
+.table>tbody .value,
+.table>tbody .status,
+.table>tbody .action {
+    padding: 5px 10px;
+    min-width: 250px;
+    min-height: 50px;
+}
+
+.table tbody #settings_server_url td {
+    padding-top: 10px;
+}
+
+/* LABEL */
+
+.table tbody .label {
+    min-width: 100px;
+}
+
+.table tbody .label>div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#reset_button {
+    margin-left: 5px;
+    cursor: pointer !important;
+    width: 16px;
+    height: 16px;
+}
+
+/* VALUE */
+
+.table tbody .value {
+    padding-left: 0;
+    min-width: 300px;
+}
+
+/* STATUS */
+
+.table tbody .status {
+    min-width: 140px;
+    text-align: center;
+    font-weight: bold;
+}
+
+#server_status.ok {
+    
+    background-color: #46c420;
+
+    display: inline-block;
+    padding: 3px 6px;
+
+    color: white;
+    text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.4),
+        0px 8px 13px rgba(0, 0, 0, 0.1),
+        0px 18px 23px rgba(0, 0, 0, 0.1);
+
+}
+
+#pairing_status {
+
+}
+
+#pairing_status.ok {
+    display: inline-block;
+    padding: 3px 6px;
+    background-color: #1E9EE8;
+    color: white;
+    text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.4),
+        0px 8px 13px rgba(0, 0, 0, 0.1),
+        0px 18px 23px rgba(0, 0, 0, 0.1);
+}
+
+
+/* ACTION */
+
+.table tbody .action {
+    padding-left: 10px;
+    padding-right: 0;
+    min-width: 170px;
+}
+
+.table tbody .action.left {
+    padding-left: 0;
+    padding-right: 10px;
+}
+
+
+/* ----------------------------------------------- */
+/* -------------- GENERAL */
+
+
+.table tbody input {
+    width: 100%;
+    padding: 5px 10px;
+    min-height: 30px;
+    height: 30px;
+    border: 1px solid #666;
+    outline: unset;
+
+}
+
+.table tbody button {
+    width: 100%;
+    padding: 4px 6px;
+    font: bold 12px sans-serif;
+    color: rgba(0, 0, 0, 0.5);
+    text-shadow: 1px 2px 3px #fff, 0 0 0 #000;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+
+/* ----------------------------------------------- */
+/* -------------- FORM */
+
+
+/*  SERVER  */
+
+#server_url_input.error {
+    border: 1px solid red;
+    background-color: rgba(255, 0, 0, 0.15);
+    color: black;
+    font-weight: bold;
+}
+
+#server_url_input.ok {
+    border: 1px solid green;
+    background-color: rgb(0, 249, 0);
+    font-weight: bold;
+    color: black;
+}
+
+/*  ACCESS CODE  */
+
+#access_code_input {
+    border: 1px solid #666;
+    background-color: white;
+    color: rgba(0, 0, 0, 0.5);
+    text-shadow: 1px 2px 3px #fff, 0 0 0 #000;
+    font: bold 16px sans-serif;
+    display: inline-block;
+    padding: 3px 7px;
+    min-width: 70px;
+    text-align: center;
+}
+
+#access_code_input.disabled {
+    background-color: #ddd;
+    color: #666;
+}
+
+#access_code_input.error {
+    border: 1px solid red;
+    background-color: rgba(255, 0, 0, 0.15);
+    color: black;
+}
+
+#access_code_input.ok {
+    border: 1px solid green;
+    background-color: rgb(0, 249, 0);
+    color: black;
+}
+
+#access_code_hint {
+    display: inline-block;
+    margin-left: 5px;
+    color: #777;
+}

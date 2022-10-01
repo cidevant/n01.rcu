@@ -27,7 +27,7 @@ export function LeftButtons() {
 export default LeftButtons;
 
 function NetworkButton({ open }) {
-    const [isConnected, isPaired, client] = useNetworkInfo();
+    const { isConnected, isPaired, client } = useNetworkInfo();
     const icon = useMemo(() => {
         if (isConnected) {
             if (isPaired) {

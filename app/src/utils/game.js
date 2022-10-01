@@ -1,35 +1,88 @@
-export function validInputValue(value, leftScore) {
-    return value >= 0 && value <= 180 && notGreaterThanLeftScore(value, leftScore);
-}
+export const SCORES = [
+    // COMMON
+    [26, 58, 43],
+    [
+        45,
+        {
+            value: 60,
+            style: 'good',
+        },
+        41,
+    ],
+    [
+        85,
+        {
+            value: 100,
+            style: 'good',
+        },
+        81,
+    ],
+    [95, 98, 83],
 
-export function notGreaterThanLeftScore(value, leftScore) {
-    if (leftScore == null) {
-        return false;
-    }
+    // HIGH
+    { type: 'divider' },
+    [
+        80,
+        {
+            value: 140,
+            style: 'good',
+        },
+        120,
+    ],
+    [121, 123, 135],
 
-    return leftScore > 0 && value <= leftScore;
-}
+    // LOW
+    { type: 'divider' },
+    [
+        {
+            value: 8,
+            style: 'outs',
+        },
+        {
+            value: 16,
+            style: 'outs',
+        },
+        {
+            value: 20,
+            style: 'outs',
+        },
+    ],
+    [
+        22,
+        23,
+        {
+            value: 24,
+            style: 'outs',
+        },
+    ],
+    [
+        28,
+        30,
+        {
+            value: 32,
+            style: 'outs',
+        },
+    ],
+    [
+        35,
+        {
+            value: 36,
+            style: 'outs',
+        },
+        38,
+    ],
+    [
+        39,
+        {
+            value: 40,
+            style: 'outs',
+        },
+        51,
+    ],
+    [55, 57, 59],
+];
 
-/**
- * Returns list of checkouts
- *
- * @export
- * @param {*} score
- * @returns {Array<Array<string>>} list of checkouts
- */
-export function getCheckouts(score) {
-    const result = [];
-
-    checkouts.forEach((possibility) => {
-        if (possibility[score] != null) {
-            result.push(possibility[score]);
-        }
-    });
-
-    return result;
-}
-
-const checkouts = [
+const CHECKOUTS = [
     {
         170: ['T20', 'T20', 'BULL'],
         161: ['T20', 'T17', 'BULL'],
@@ -179,3 +232,38 @@ const checkouts = [
         5: ['1', 'D2'],
     },
 ];
+
+export function validInputValue(value, leftScore) {
+    return value >= 0 && value <= 180 && notGreaterThanLeftScore(value, leftScore);
+}
+
+export function notGreaterThanLeftScore(value, leftScore) {
+    if (leftScore == null) {
+        return false;
+    }
+
+    return leftScore > 0 && value <= leftScore;
+}
+
+export function isOneDartCheckout(leftScore) {
+    return leftScore > 0 && leftScore <= 60 && leftScore % 2 === 0;
+}
+
+/**
+ * Returns list of CHECKOUTS
+ *
+ * @export
+ * @param {*} score
+ * @returns {Array<Array<string>>} list of CHECKOUTS
+ */
+export function getCheckouts(score) {
+    const result = [];
+
+    CHECKOUTS.forEach((possibility) => {
+        if (possibility[score] != null) {
+            result.push(possibility[score]);
+        }
+    });
+
+    return result;
+}

@@ -1,18 +1,16 @@
 import { WS_IN_PREFIX, WS_OUT_PREFIX } from '../utils/ws';
-import { ACTIONS as GAME_ACTIONS } from './game.reducer';
 
 const ACTIONS = {
     SET_FILTER: 'SET_FILTER',
     SET_KEEP_SCROLLING_BOTTOM: 'SET_KEEP_SCROLLING_BOTTOM',
 
     // in
-    ON_SEARCH_PAGE: `${WS_IN_PREFIX}:ON_SEARCH_PAGE`,
     SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT: `${WS_IN_PREFIX}:SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT`,
 
     // out
     SEARCH_PAGE_SCROLL_BOTTOM: `${WS_OUT_PREFIX}:CLIENT:SEARCH_PAGE_SCROLL_BOTTOM`,
     SEARCH_PAGE_FILTER_BY_AVERAGE: `${WS_OUT_PREFIX}:CLIENT:SEARCH_PAGE_FILTER_BY_AVERAGE`,
-    SEARCH_PAGE_START_GAME: `${WS_OUT_PREFIX}:CLIENT:SEARCH_PAGE_START_GAME`,
+    START_GAME: `${WS_OUT_PREFIX}:CLIENT:START_GAME`,
 };
 
 export function sendScrollBottom() {
@@ -44,7 +42,7 @@ export function setKeepScrollingBottom(payload) {
 
 export function sendStartGame(payload) {
     return {
-        type: ACTIONS.SEARCH_PAGE_START_GAME,
+        type: ACTIONS.START_GAME,
         payload,
     };
 }
@@ -61,17 +59,15 @@ try {
     filterValue = {
         from: 0,
         to: 180,
-        cam: true,
+        cam: true, // @TODO rename to CAM_ONLY
     };
 }
 
 const initialState = {
-    onSearchPage: false,
-    joinedSearch: false,
-    lastGamePlayerId: '',
+    loading: false,
     players: [],
     filter: filterValue,
-    keepScrollingBottom: false,
+    keepScrollingBottom: true,
 };
 
 export default function homeReducer(state, action) {
@@ -80,23 +76,7 @@ export default function homeReducer(state, action) {
     }
 
     switch (action.type) {
-        // Page transitions
-        case ACTIONS.ON_SEARCH_PAGE: // in
-            state = {
-                ...state,
-                onSearchPage: true,
-                joinedSearch: action.payload['payload'],
-            };
-            break;
-        case GAME_ACTIONS.MATCH_START: // in
-            state = {
-                ...state,
-                onSearchPage: false,
-            };
-            break;
-
-        // Filter
-
+        // Filter & search
         case ACTIONS.SET_FILTER:
             localStorage.setItem('filter', JSON.stringify(action.payload));
             state = {
@@ -107,9 +87,16 @@ export default function homeReducer(state, action) {
                 },
             };
             break;
+        case ACTIONS.SEARCH_PAGE_FILTER_BY_AVERAGE:
+            state = {
+                ...state,
+                loading: true,
+            };
+            break;
         case ACTIONS.SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT:
             state = {
                 ...state,
+                loading: false,
                 players: action.payload['payload'],
             };
             break;

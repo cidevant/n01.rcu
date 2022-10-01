@@ -17,6 +17,21 @@ class SocketsManager {
    * @returns {Boolean} is valid connection
    */
   validateSocketConnectionInfo(connectionInfo) {
+    // ID
+    if (!connectionInfo.id) {
+      console.error(
+        chalk.red('[sockets][validateSocketConnectionInfo][error] missing id'),
+        connectionInfo
+      );
+
+      return {
+        valid: false,
+        code: 4003,
+        reason: 'missing id',
+      };
+    }
+
+    // ACCESS CODE
     if (!connectionInfo.accessCode) {
       console.error(
         chalk.red('[sockets][validateSocketConnectionInfo][error] missing accessCode'),
@@ -25,12 +40,27 @@ class SocketsManager {
 
       return {
         valid: false,
-        code: 3000,
+        code: 4000,
         reason: 'missing accessCode',
       };
     }
 
+    // CLIENT ONLY
     if (connectionInfo.client === 'true') {
+      // NAME
+      if (!connectionInfo.name) {
+        console.error(
+          chalk.red('[sockets][validateSocketConnectionInfo][error] missing name'),
+          connectionInfo
+        );
+
+        return {
+          valid: false,
+          code: 4004,
+          reason: 'missing name',
+        };
+      }
+
       const existingClients = this.filterSocketsByMeta(
         (meta) => meta.client === true && meta.accessCode === connectionInfo.accessCode
       );
@@ -38,10 +68,10 @@ class SocketsManager {
       if (existingClients.length > 0) {
         let replace = false;
 
-        existingClients.forEach((client) => {
-          const meta = this.getMeta(client);
+        existingClients.forEach((socket) => {
+          const meta = this.getMeta(socket);
 
-          if (meta.playerId === connectionInfo.playerId) {
+          if (meta.id === connectionInfo.id) {
             console.error(
               chalk.bgYellow('[sockets][validateSocketConnectionInfo] replace existing client'),
               JSON.stringify(connectionInfo)
@@ -49,8 +79,8 @@ class SocketsManager {
 
             replace = true;
 
-            client.close(3005, 'new client connected');
-            this.onClose(client);
+            socket.close(4002, 'replaced by new client');
+            this.onClose(socket);
           }
         });
 
@@ -67,8 +97,8 @@ class SocketsManager {
 
         return {
           valid: false,
-          code: 3000,
-          reason: 'client already exists',
+          code: 4001,
+          reason: 'accessCode already in use',
         };
       }
     }
@@ -84,17 +114,20 @@ class SocketsManager {
    * @returns {Boolean} is socket and connection info valid?
    */
   onConnect(socket, request) {
+    socket.isAlive = true;
+
     const [, params] = request.url.split('?') ?? [];
     const connectionInfo = queryString.parse(params);
     const { valid, code, reason } = this.validateSocketConnectionInfo(connectionInfo);
 
     if (!valid) {
       socket.close(code, reason);
+
+      return;
     }
 
     this.sockets.set(socket, {
       id: connectionInfo.id,
-      playerId: connectionInfo.playerId,
       name: connectionInfo.name,
       client: connectionInfo.client === 'true',
       accessCode: connectionInfo.accessCode,
@@ -123,9 +156,6 @@ class SocketsManager {
           controllerMeta.client === false && controllerMeta.accessCode === meta.accessCode
       );
 
-      // Delete socket from pool
-      this.sockets.delete(socket);
-
       // Notify all controllers if no client
       if (isClient) {
         console.log(chalk.yellowBright('[sockets][onClose][unpair] no client'), socketInfo);
@@ -144,12 +174,13 @@ class SocketsManager {
         if (controllersLeft.length === 0) {
           console.log(chalk.yellowBright('[sockets][onClose][unpair] no controllers'), socketInfo);
 
-          this.send(clientSocket, {
-            type: 'UNPAIRED',
-          });
+          this.send(clientSocket, { type: 'UNPAIRED' });
         }
       }
     }
+
+    // Delete socket from pool
+    this.sockets.delete(socket);
   }
 
   /**
@@ -250,6 +281,7 @@ class SocketsManager {
       if (clients.length === 1) {
         return clients[0];
       } else if (clients.length > 1) {
+        // @TODO send ping-pong to all clients
         console.error(
           chalk.red(`[sockets][getPairedClient] too many clients (${clients.length})`),
           socketInfo
@@ -304,9 +336,9 @@ class SocketsManager {
     const meta = this.getMeta(socket);
 
     if (meta) {
-      const playerId = meta.playerId != null && `[${meta.playerId}]`;
+      const id = meta.id != null && `[${meta.id}]`;
 
-      return `[${meta.client ? 'client' : 'controller'}][${meta.name}]${playerId}`;
+      return `[${meta.client ? 'client' : 'controller'}][${meta.name}]${id}`;
     }
   }
 
@@ -334,6 +366,8 @@ class SocketsManager {
 
     return clientSocket != null && controllers?.length > 0;
   }
+
+  static maxAccessCodeGenerationRetries = 15;
 
   generateAccessCode(retry = 0) {
     if (retry >= SocketsManager.maxAccessCodeGenerationRetries) {
@@ -378,8 +412,6 @@ class SocketsManager {
 
     return result;
   }
-
-  static maxAccessCodeGenerationRetries = 15;
 
   get listMetaSafe() {
     return [...this.sockets.values()].map(this.__makeMetaSafe);

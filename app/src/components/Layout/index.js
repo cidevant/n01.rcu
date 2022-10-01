@@ -1,15 +1,15 @@
 import { StatusBar } from './StatusBar';
 import { InputKeyboard } from './InputKeyboard';
-import { useGameInfo } from '../../hooks/useGameInfo';
+import { useData } from '../../hooks/useData';
 
 export function Layout(props) {
-    const { gameStarted } = useGameInfo();
+    const { activity } = useData();
 
     return (
         <>
             <StatusBar />
             {props.children}
-            {gameStarted && <InputKeyboard />}
+            {activity === 'game' && <InputKeyboard />}
         </>
     );
 }

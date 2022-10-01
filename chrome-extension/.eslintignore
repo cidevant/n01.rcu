@@ -1,6 +1,0 @@
-**/node_modules
-dist
-popup/jquery-3.6.1.min.js
-build
-coverage
-jsconfig.json

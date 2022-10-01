@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
     sendScrollBottom,
@@ -7,27 +7,13 @@ import {
     setFilterByAverage,
     setKeepScrollingBottom,
 } from '../store/home.reducer';
-import { useNetworkInfo } from './useNetworkInfo';
-import { useGameInfo } from './useGameInfo';
 
 export function useHomeInfo() {
     const dispatch = useDispatch();
-    const [isConnected, isPaired] = useNetworkInfo();
-    const { gameStarted } = useGameInfo();
-    const info = useSelector((state) => state.home);
-    const searchAvailable = useMemo(
-        () =>
-            gameStarted === false &&
-            isConnected &&
-            isPaired &&
-            info.onSearchPage === true &&
-            info.joinedSearch,
-        [isConnected, isPaired, info.onSearchPage, gameStarted, info.joinedSearch]
-    );
-
+    const { players, filter, keepScrollingBottom, loading } = useSelector((state) => state.home);
     const dispatchFilter = useCallback(() => {
-        dispatch(sendFilterByAverage(info.filter));
-    }, [dispatch, info.filter]);
+        dispatch(sendFilterByAverage(filter));
+    }, [dispatch, filter]);
 
     function dispatchSetFilter(filter) {
         dispatch(setFilterByAverage(filter));
@@ -46,12 +32,10 @@ export function useHomeInfo() {
     }
 
     return {
-        searchAvailable,
-        players: info.players,
-        filter: info.filter,
-        joinedSearch: info.joinedSearch,
-        lastGamePlayerId: info.lastGamePlayerId,
-        keepScrollingBottom: info.keepScrollingBottom,
+        loading,
+        players,
+        filter,
+        keepScrollingBottom,
         dispatchSetFilter,
         dispatchFilter,
         dispatchScrollBottom,

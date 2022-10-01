@@ -45,9 +45,16 @@ const handlers = {
 export function handleActions(_message, ws) {
   const message = _message.toString();
 
+  // when received `pong` message:
+  //    * set `isAlive: true` to socket
+  //    * stop further processing of incoming message
+  if (handlePingPong.handleMessage(ws, message)) {
+    return;
+  }
+
   try {
     const jsonMessage = JSON.parse(message);
-    const serverHandler = handlers.server[jsonMessage['type']];
+    const serverHandler = handlers.server[jsonMessage?.['type']];
 
     console.log(
       chalk.blueBright('[ws.server][action]'),
@@ -73,3 +80,62 @@ export function handleActions(_message, ws) {
     );
   }
 }
+
+/**
+ * PING-PONG
+ *
+ * Every socket connected to server must implement "ping-pong" functionality:
+ *    1) Server sends "ping" message (interval `connectionTimeout`) and marks socket as "dead".
+ *    2) If socket responds with "pong" message it will be marked as "alive"
+ *    3) All "dead" sockets are terminated by server (interval `connectionTimeout`)
+ */
+
+export const handlePingPong = {
+  __connectionTimeout: 30000,
+  __pingPongInterval: null,
+
+  handleMessage(ws, message) {
+    if (message === 'pong') {
+      ws.isAlive = true;
+
+      return true;
+    }
+
+    return false;
+  },
+
+  start(wss) {
+    console.log('[ws.server][ping-pong] started');
+
+    this.__pingPongInterval = setInterval(() => {
+      wss.clients.forEach((ws) => {
+        // closes "dead" socket
+        if (!ws.isAlive) {
+          console.log('[ws.server][ping-pong] closing dead sockets', sockets.getMetaSafe(ws));
+
+          ws.close(4054, 'connection timeout (ping-pong, server)');
+
+          return;
+        }
+
+        /**
+         * 1. mark socket as `dead`
+         * 2. send `ping` request to socket
+         * 3. wait for socket `pong` response to mark it `alive`
+         */
+        ws.isAlive = false;
+        ws.send('ping');
+      });
+    }, this.__connectionTimeout);
+  },
+
+  stop() {
+    console.log('[ws.server][ping-pong] stopped');
+
+    if (this.__pingPongInterval != null) {
+      clearInterval(this.__pingPongInterval);
+
+      this.__pingPongInterval = null;
+    }
+  },
+};

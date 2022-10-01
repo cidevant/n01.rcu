@@ -1,0 +1,5 @@
+**/node_modules
+**/jquery-3.6.1.min.js
+_old
+.idea
+.vscode

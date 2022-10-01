@@ -1,26 +1,39 @@
 {
     "manifest_version": 3,
     "name": "[n01.RCU] CLIENT",
-    "version": "1.0.1",
+    "description": "Accepts and handles requests from RCU",
+    "version": "2.0.0",
     "background": {
-        "service_worker": "service-worker.js"
+        "service_worker": "src/background.js"
     },
     "content_scripts": [
         {
             "matches": [
-                "https://nakka.com/n01/online/",
-                "https://nakka.com/n01/online/n01.php"
+                "https://nakka.com/n01/online/*"
             ],
-            "js": ["state.service.js", "helpers.js", "content.js"],
-            "run_at": "document_end"
+            "js": [
+                "src/shared.js",
+                "src/content/websocket.js",
+                "src/content/events.js",
+                "src/content.js"
+            ],
+            "all_frames": true
         }
     ],
     "web_accessible_resources": [
         {
             "resources": [
-                "content/helpers.js",
-                "content/websocket.js",
-                "content/index.js"
+                "src/shared.js",
+                                
+                "src/content/websocket.js",
+                "src/content/events.js",
+
+                "src/spy/providers/data.js",
+                "src/spy/providers/search.js",
+                "src/spy/providers/game.js",
+                "src/spy/providers/user.js",
+                "src/spy/events.js",
+                "src/spy/spy.js"
             ],
             "matches": [
                 "<all_urls>"
@@ -28,18 +41,17 @@
         }
     ],
     "action": {
-        "default_popup": "popup/index.html",
+        "default_popup": "src/popup/index.html",
         "default_icon": {
-            "16": "icons/default.png",
-            "36": "icons/default.png",
-            "48": "icons/default.png",
-            "120": "icons/default.png"
+            "16": "assets/icons/default.png",
+            "36": "assets/icons/default.png",
+            "48": "assets/icons/default.png",
+            "120": "assets/icons/default.png"
         }
     },
     "permissions": [
         "tabs",
         "activeTab",
-        "scripting",
         "storage"
     ]
 }

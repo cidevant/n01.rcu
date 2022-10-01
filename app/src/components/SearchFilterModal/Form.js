@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import useHomeInfo from '../../hooks/useHomeInfo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from 'react-bootstrap/Button';
+import useData from '../../hooks/useData';
 
 function SearchFilterForm(props) {
-    const [from, setFrom] = useState(useSelector((state) => state.home.filter.from));
-    const [to, setTo] = useState(useSelector((state) => state.home.filter.to));
-    const [cam, setCam] = useState(useSelector((state) => state.home.filter.cam));
-    const [scroll, setScroll] = useState(useSelector((state) => state.home.keepScrollingBottom));
-    const { searchAvailable, dispatchKeepScrollingBottom } = useHomeInfo();
+    const { activity } = useData();
+    const { filter, keepScrollingBottom, dispatchKeepScrollingBottom } = useHomeInfo();
+    const [scroll, setScroll] = useState(keepScrollingBottom);
+    const [from, setFrom] = useState(filter.from);
+    const [to, setTo] = useState(filter.to);
+    const [cam, setCam] = useState(filter.cam);
 
     function updateFrom(event) {
         event.preventDefault();
@@ -67,7 +68,7 @@ function SearchFilterForm(props) {
                 <FormInputWrapper className="mt-4">
                     <TitleForm>AVERAGE FROM</TitleForm>
                     <FormInput
-                        disabled={!searchAvailable}
+                        disabled={activity !== 'search'}
                         type="number"
                         value={from}
                         onChange={updateFrom}
@@ -76,7 +77,7 @@ function SearchFilterForm(props) {
                 <FormInputWrapper className="mt-4">
                     <TitleForm>AVERAGE TO</TitleForm>
                     <FormInput
-                        disabled={!searchAvailable}
+                        disabled={activity !== 'search'}
                         type="number"
                         value={to}
                         onChange={updateTo}

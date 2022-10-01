@@ -5,7 +5,7 @@ import { CornerButton } from '../CornerButton';
 import { Filter } from './Filter';
 
 export function RightButtons() {
-    const [isConnected, isPaired] = useNetworkInfo();
+    const { isConnected, isPaired } = useNetworkInfo();
 
     if (isConnected && isPaired) {
         return <Filter />;

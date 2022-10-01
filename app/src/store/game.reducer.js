@@ -1,9 +1,8 @@
 import { WS_IN_PREFIX, WS_OUT_PREFIX } from '../utils/ws';
+import { ACTIONS as CLIENT_ACTIONS } from './client.reducer';
 
 export const ACTIONS = {
     // in
-    MATCH_START: `${WS_IN_PREFIX}:MATCH_START`,
-    MATCH_END: `${WS_IN_PREFIX}:MATCH_END`,
     SET_SCORE_LEFT: `${WS_IN_PREFIX}:SET_SCORE_LEFT`,
     GET_FINISH_DARTS: `${WS_IN_PREFIX}:GET_FINISH_DARTS`,
 
@@ -27,7 +26,6 @@ export function setFinishDarts(payload) {
 }
 
 const initialState = {
-    match: null,
     scoreLeft: null,
     finishDarts: null,
     lastScore: null,
@@ -39,12 +37,28 @@ export default function gameReducer(state, action) {
     }
 
     switch (action.type) {
-        case ACTIONS.MATCH_START:
-            state = {
-                ...state,
-                match: action.payload['payload'],
-            };
+        // Extract `scoreLeft` from initial data
+        case CLIENT_ACTIONS.SET_DATA: {
+            const data = action.payload['payload'];
+
+            if (data?.activity === 'game') {
+                const game = data?.game;
+                const rounds = game?.leg?.playerData?.[game?.playerIndex];
+
+                if (rounds?.length > 0) {
+                    const { left } = rounds[rounds.length - 1];
+
+                    if (left > 0) {
+                        state = {
+                            ...state,
+                            scoreLeft: left,
+                        };
+                    }
+                }
+            }
+
             break;
+        }
         case ACTIONS.MATCH_END:
             state = { ...initialState };
             break;

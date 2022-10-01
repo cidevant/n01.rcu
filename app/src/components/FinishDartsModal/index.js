@@ -32,7 +32,7 @@ export function FinishDartsModal({ show, close }) {
             <Content>
                 {finishDarts.map((dart) => {
                     return (
-                        <OptionWrapper>
+                        <OptionWrapper key={`${dart}`}>
                             <Option
                                 onClick={setFinishDarts}
                                 id={dart}

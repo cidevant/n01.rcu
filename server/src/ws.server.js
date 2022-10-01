@@ -1,27 +1,36 @@
-import { handleActions } from './ws.handlers.js';
+import { handleActions, handlePingPong } from './ws.handlers.js';
 import { sockets } from './sockets-manager.js';
 import { WebSocketServer } from 'ws';
 import chalk from 'chalk';
 
 /**
- * WebSocket server
+ * WebSocket server with ping/pong
  */
 
 export function attachWebsocketServer(server) {
-  const wsServer = new WebSocketServer({
+  // create server
+  const wss = new WebSocketServer({
     noServer: true,
     path: '/ws',
   });
 
-  wsServer.on('connection', (ws, req) => {
+  // setup handlers
+  wss.on('connection', (ws, req) => {
+    sockets.onConnect(ws, req);
     ws.on('message', (msg) => handleActions(msg, ws));
     ws.on('close', () => sockets.onClose(ws));
-    sockets.onConnect(ws, req);
   });
 
+  // setup `ping-pong`
+  handlePingPong.start(wss);
+  wss.on('close', () => {
+    handlePingPong.stop();
+  });
+
+  // attach websocket server to web server
   server.on('upgrade', (request, socket, head) => {
-    wsServer.handleUpgrade(request, socket, head, (ws) => {
-      wsServer.emit('connection', ws, request);
+    wss.handleUpgrade(request, socket, head, (ws) => {
+      wss.emit('connection', ws, request);
     });
   });
 

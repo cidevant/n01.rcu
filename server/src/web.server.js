@@ -34,7 +34,7 @@ export function initWebServer(port) {
   app.get('/generate-access-code', function (_req, res) {
     const accessCode = sockets.generateAccessCode();
 
-    if (accessCode?.length === 4) {
+    if (accessCode) {
       res.json({
         ok: true,
         code: accessCode,
