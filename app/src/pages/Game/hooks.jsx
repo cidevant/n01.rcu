@@ -1,9 +1,9 @@
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useData } from '../../hooks/useData';
 import { useNavigate } from 'react-router-dom';
-import { useSwipeable } from 'react-swipeable';
+import { useSwipeable, LEFT, RIGHT } from 'react-swipeable';
 import { useGameInfo } from '../../hooks/useGameInfo';
-import { isOneDartCheckout, SCORES, SCORE_LISTS } from '../../utils/game';
+import { isOneDartCheckout, SCORES, SCORE_LIST } from '../../utils/game';
 import { useInterval } from '../../hooks/useInterval';
 
 export function useGameUpdater(scoreList, setScoreList) {
@@ -15,34 +15,17 @@ export function useGameUpdater(scoreList, setScoreList) {
     }, 5000);
 
     useEffect(() => {
-        if (scoreList === SCORE_LISTS.COMMON && scoreLeft < 100) {
-            setScoreList(SCORE_LISTS.OUTS);
+        if (scoreList === SCORE_LIST.COMMON && scoreLeft < 100) {
+            setScoreList(SCORE_LIST.OUTS);
         }
     }, [scoreLeft, scoreList, setScoreList]);
 }
 
-export function useFinishDartModal(scores) {
-    const [showFinishDarts, setShowFinishDarts] = useState(false);
-    const { finishDarts } = useGameInfo();
-
-    // finish darts
-    useEffect(() => {
-        if (finishDarts?.length > 0) {
-            setShowFinishDarts(true);
-        }
-    }, [finishDarts, showFinishDarts, setShowFinishDarts]);
-
-    // close finish darts modal
-    const closeFinishDartsModal = useCallback(() => {
-        setShowFinishDarts(false);
-    }, [setShowFinishDarts]);
-
-    return {
-        show: showFinishDarts,
-        close: closeFinishDartsModal,
-    };
-}
-
+/**
+ * Watches when game is finished
+ *
+ * @export
+ */
 export function useEndGameWatcher() {
     const navigate = useNavigate();
     const { activity } = useData();
@@ -56,19 +39,19 @@ export function useEndGameWatcher() {
 
 export function useSwipeableScoreList() {
     const { scoreLeft } = useGameInfo();
-    const [scoreList, setScoreList] = useState(SCORE_LISTS.COMMON);
+    const [scoreList, setScoreList] = useState(SCORE_LIST.COMMON);
     const swipeScoreList = useSwipeable({
         onSwiped: (ev) => {
-            if (scoreList === SCORE_LISTS.OUTS && scoreLeft < 100) {
+            if (scoreList === SCORE_LIST.OUTS && scoreLeft < 100) {
                 return;
             }
 
-            if (ev.dir === 'Left') {
-                setScoreList(SCORE_LISTS.OUTS);
+            if (ev.dir === LEFT) {
+                setScoreList(SCORE_LIST.OUTS);
             }
 
-            if (ev.dir === 'Right') {
-                setScoreList(SCORE_LISTS.COMMON);
+            if (ev.dir === RIGHT) {
+                setScoreList(SCORE_LIST.COMMON);
             }
         },
     });

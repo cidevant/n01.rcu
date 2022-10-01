@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import styled from 'styled-components';
 import { useGameInfo } from '../../hooks/useGameInfo';
@@ -9,13 +9,17 @@ const i18n = {
     finish_third: '3RD DART',
 };
 
-export function FinishDartsModal({ show, close }) {
+export function FinishDartsModal() {
     const { finishDarts, dispatchSetFinishDarts } = useGameInfo();
-    const anyFinishDart = finishDarts?.length > 0;
+    const [show, setShowFinishDarts] = useState(false);
 
-    if (!anyFinishDart) {
-        return null;
-    }
+    useEffect(() => {
+        if (finishDarts?.length > 0) {
+            setShowFinishDarts(true);
+        }
+    }, [finishDarts, setShowFinishDarts]);
+
+    const close = useCallback(() => {}, [setShowFinishDarts]);
 
     function setFinishDarts(e) {
         const value = e.target.id;
@@ -30,7 +34,7 @@ export function FinishDartsModal({ show, close }) {
                 FINISH DARTS
             </Header>
             <Content>
-                {finishDarts.map((dart) => {
+                {finishDarts?.map((dart) => {
                     return (
                         <OptionWrapper key={`${dart}`}>
                             <Option
@@ -44,6 +48,16 @@ export function FinishDartsModal({ show, close }) {
                         </OptionWrapper>
                     );
                 })}
+                <OptionWrapper key="finish_cancel">
+                    <Option
+                        onClick={setFinishDarts}
+                        id="finish_cancel"
+                        variant="danger"
+                        className="d-flex align-items-center justify-content-center"
+                    >
+                        Cancel
+                    </Option>
+                </OptionWrapper>
             </Content>
         </Modal>
     );
