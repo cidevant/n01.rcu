@@ -9,8 +9,46 @@ export const ButtonWrapper = styled.div`
         font-size: 80px;
     }
 `;
-export const Wrapper = styled.div``;
+export const Wrapper = styled.div`
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background-color: #eee;
+    margin-bottom: 20px;
+`;
 
-export const Title = styled.div``;
+export const Title = styled.div`
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    color: #999;
+`;
 
-export const StatValue = styled.div``;
+export const StatValue = styled.div`
+    width: 100%;
+    text-align: center;
+    font-size: 60px;
+    font-weight: bolder;
+`;
+
+export const Flex = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
+export const FlexItem = styled.div`
+    flex-grow: 1;
+    min-width: 150px;
+
+    ${(props) =>
+        props.nav &&
+        `
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        font-size: 80px;
+        flex-grow: 0;
+    `};
+
+    ${({ disabled }) => disabled && 'color: #ccc;'};
+`;

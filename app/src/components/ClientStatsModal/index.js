@@ -6,18 +6,22 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useHomeInfo from '../../hooks/useHomeInfo';
 import { getDayStats, getDays, dayToTimestamp } from '../../utils/stats';
-import { ButtonWrapper, StatValue, Title, Wrapper } from './index.style';
+import { ButtonWrapper, Flex, FlexItem, StatValue, Title, Wrapper } from './index.style';
+import { Alert } from 'react-bootstrap';
 
 export function ClientStatsModal({ show, close }) {
     const daysExist = useRef(false);
-    const [day, setDay] = useState();
+    const [dayIndex, setDayIndex] = useState();
     const { stats } = useHomeInfo();
     const days = useMemo(() => getDays(stats), [stats]);
-    const dayStats = useMemo(() => getDayStats(stats, dayToTimestamp(day)), [stats, day]);
+    const dayStats = useMemo(
+        () => getDayStats(stats, dayToTimestamp(days[dayIndex])),
+        [stats, days, dayIndex]
+    );
 
     useEffect(() => {
         if (!_.isEmpty(days) !== daysExist.current) {
-            setDay(days[0]);
+            setDayIndex(0);
 
             daysExist.current = true;
         }
@@ -31,11 +35,7 @@ export function ClientStatsModal({ show, close }) {
                     STATS
                 </Button>
             </ButtonWrapper>
-
-            {day}
-
-            <hr />
-
+            <DaySelector days={days} dayIndex={dayIndex} setDayIndex={setDayIndex} />
             <Stats stats={dayStats} />
         </Offcanvas>
     );
@@ -43,59 +43,73 @@ export function ClientStatsModal({ show, close }) {
 
 export default ClientStatsModal;
 
+function DaySelector({ days, dayIndex }) {
+    const day = days[dayIndex];
+    const disabledLeft = dayIndex === 0;
+    const disabledRight = dayIndex === days.length - 1;
+
+    return (
+        <Wrapper>
+            <Flex>
+                <FlexItem nav disabled={disabledLeft}>
+                    <FontAwesomeIcon icon="fa-solid fa-chevron-left" className="me-4" />
+                </FlexItem>
+                <FlexItem>
+                    <Title>Day</Title>
+                    <StatValue>{day}</StatValue>
+                </FlexItem>
+                <FlexItem nav disabled={disabledRight}>
+                    <FontAwesomeIcon icon="fa-solid fa-chevron-right" className="me-4" />
+                </FlexItem>
+            </Flex>
+        </Wrapper>
+    );
+}
+
 function Stats({ stats }) {
+    if (!stats) {
+        return <Alert>No stats</Alert>;
+    }
+
     return (
         <>
-            <Wrapper>
-                <Title>Average</Title>
-                <StatValue>{stats?.average?.score?.toFixed?.(2)}</StatValue>
-            </Wrapper>
-            <Wrapper>
-                <Title>First 9</Title>
-                <StatValue>{stats?.average?.first9?.toFixed?.(2)}</StatValue>
-            </Wrapper>
+            <Title>Average</Title>
+            <StatValue>{stats?.average?.score?.toFixed?.(2)}</StatValue>
+
+            <Title>First 9</Title>
+            <StatValue>{stats?.average?.first9?.toFixed?.(2)}</StatValue>
+
+            <hr />
+            <Title>100+</Title>
+            <StatValue>{stats?.['100']}</StatValue>
+
+            <Title>140+</Title>
+            <StatValue>{stats?.['140']}</StatValue>
+
+            <Title>180's</Title>
+            <StatValue>{stats?.['180']}</StatValue>
+
+            <hr />
+            <Title>Sets</Title>
+            <StatValue>
+                {stats?.sets.win} / {stats?.sets.total}
+            </StatValue>
+
+            <Title>Legs</Title>
+            <StatValue>
+                {stats?.legs.win} / {stats?.legs.total}
+            </StatValue>
 
             <hr />
 
-            <Wrapper>
-                <Title>Sets</Title>
-                <StatValue>
-                    {stats?.sets.win} / {stats?.sets.total}
-                </StatValue>
-            </Wrapper>
-            <Wrapper>
-                <Title>Legs</Title>
-                <StatValue>
-                    {stats?.legs.win} / {stats?.legs.total}
-                </StatValue>
-            </Wrapper>
+            <Title>High Finish </Title>
+            <StatValue>{stats?.highFinish}</StatValue>
 
-            <hr />
+            <Title>Best Leg </Title>
+            <StatValue>{stats?.bestLeg}</StatValue>
 
-            <Wrapper>
-                <Title>100+</Title>
-                <StatValue>{stats?.['100']}</StatValue>
-            </Wrapper>
-            <Wrapper>
-                <Title>140+</Title>
-                <StatValue>{stats?.['140']}</StatValue>
-            </Wrapper>
-            <Wrapper>
-                <Title>180's</Title>
-                <StatValue>{stats?.['180']}</StatValue>
-            </Wrapper>
-            <Wrapper>
-                <Title>High Finish </Title>
-                <StatValue>{stats?.highFinish}</StatValue>
-            </Wrapper>
-            <Wrapper>
-                <Title>Best Leg </Title>
-                <StatValue>{stats?.bestLeg}</StatValue>
-            </Wrapper>
-            <Wrapper>
-                <Title>Worst Leg </Title>
-                <StatValue>{stats?.worstLeg}</StatValue>
-            </Wrapper>
+            <Title>Worst Leg </Title>
+            <StatValue>{stats?.worstLeg}</StatValue>
         </>
     );
 }
