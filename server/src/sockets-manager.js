@@ -274,6 +274,13 @@ class SocketsManager {
 
     if (this.isController(socket)) {
       const meta = this.getMeta(socket);
+
+      if (!meta) {
+        this.sockets.delete(socket);
+
+        return;
+      }
+
       const clients = this.filterSocketsByMeta(
         (clientMeta) => clientMeta.client === true && clientMeta.accessCode === meta.accessCode
       );
