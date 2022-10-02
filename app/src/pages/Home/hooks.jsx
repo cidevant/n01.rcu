@@ -4,8 +4,13 @@ import { config } from '../../config';
 import useData from '../../hooks/useData';
 import useHomeInfo from '../../hooks/useHomeInfo';
 import useInterval from '../../hooks/useInterval';
-import { useNetworkInfo } from '../../hooks/useNetworkInfo';
 
+/**
+ * Watches game start and redirects to game page
+ *
+ * @export
+ * @param {*} activity
+ */
 export function useStartGameWatcher(activity) {
     const navigate = useNavigate();
 
@@ -16,6 +21,12 @@ export function useStartGameWatcher(activity) {
     }, [activity, navigate]);
 }
 
+/**
+ * Searches for opponents each 5 seconds
+ *
+ * @export
+ * @param {*} activity
+ */
 export function useSearchPolling(activity) {
     const { dispatchFilter, dispatchScrollBottom, keepScrollingBottom } = useHomeInfo();
 
