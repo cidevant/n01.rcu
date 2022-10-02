@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import React, { useMemo, useCallback, useEffect, useState, useRef } from 'react';
-import styled from 'styled-components';
+import React, { useMemo, useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useHomeInfo from '../../hooks/useHomeInfo';
 import { getDayStats, getDays, dayToTimestamp } from '../../utils/stats';
 import { ButtonWrapper, Flex, FlexItem, StatValue, Title, Wrapper } from './index.style';
 import { Alert } from 'react-bootstrap';
+import { useSwipeable, LEFT, RIGHT } from 'react-swipeable';
 
 export function ClientStatsModal({ show, close }) {
     const daysExist = useRef(false);
@@ -43,13 +43,24 @@ export function ClientStatsModal({ show, close }) {
 
 export default ClientStatsModal;
 
-function DaySelector({ days, dayIndex }) {
+function DaySelector({ days, dayIndex, setDayIndex }) {
     const day = days[dayIndex];
     const disabledLeft = dayIndex === 0;
     const disabledRight = dayIndex === days.length - 1;
+    const swipeDays = useSwipeable({
+        onSwiped: (ev) => {
+            if (ev.dir === RIGHT && !disabledLeft) {
+                setDayIndex(dayIndex - 1);
+            }
+
+            if (ev.dir === LEFT && !disabledRight) {
+                setDayIndex(dayIndex + 1);
+            }
+        },
+    });
 
     return (
-        <Wrapper>
+        <Wrapper {...swipeDays}>
             <Flex>
                 <FlexItem nav disabled={disabledLeft}>
                     <FontAwesomeIcon icon="fa-solid fa-chevron-left" className="me-4" />
