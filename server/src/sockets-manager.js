@@ -171,7 +171,7 @@ class SocketsManager {
           (controllerSocket) => controllerSocket !== socket
         );
 
-        if (controllersLeft.length === 0) {
+        if (controllersLeft?.length === 0 && clientSocket) {
           console.log(chalk.yellowBright('[sockets][onClose][unpair] no controllers'), socketInfo);
 
           this.send(clientSocket, { type: 'UNPAIRED' });
