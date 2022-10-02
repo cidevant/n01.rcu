@@ -1,11 +1,15 @@
+import _ from 'lodash';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import React, { useMemo, useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useHomeInfo from '../../hooks/useHomeInfo';
+import { getDayStats } from '../../utils/stats';
 
 export function ClientStatsModal({ show, close }) {
     const { stats } = useHomeInfo();
+
+    console.log('===================> ', getDayStats(stats, 1664644619000));
 
     return (
         <Offcanvas placement="start" show={show} onHide={close}>
