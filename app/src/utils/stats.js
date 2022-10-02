@@ -3,6 +3,22 @@ import moment from 'moment';
 
 export const DAY_FORMAT = 'DD/MM/YYYY';
 
+export function getDays(data) {
+    if (!_.isArray(data) || _.isEmpty(data)) {
+        return [];
+    }
+
+    const days = {};
+
+    data.forEach((game) => {
+        const day = moment(game.time * 1000).format(DAY_FORMAT);
+
+        days[day] = true;
+    });
+
+    return Object.keys(days);
+}
+
 export function getDayStats(data, time) {
     const stats = data?.filter((game) => {
         const start = new Date(time);
@@ -74,24 +90,13 @@ export function getDayStats(data, time) {
 }
 
 export function getAverage(score, darts) {
+    if (score == null || score === 0 || darts == null || darts === 0) {
+        return 0;
+    }
+
     return (score / darts) * 3;
 }
 
-export function getDays(data) {
-    if (!_.isArray(data) || _.isEmpty(data)) {
-        return [];
-    }
-
-    const days = {};
-
-    data.forEach((game) => {
-        const day = moment(game.time * 1000).format(DAY_FORMAT);
-
-        days[day] = true;
-    });
-
-    return Object.keys(days);
-}
 export function dayToTimestamp(formattedDay) {
     return moment(formattedDay, DAY_FORMAT).valueOf();
 }

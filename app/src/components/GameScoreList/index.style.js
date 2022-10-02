@@ -1,13 +1,5 @@
 import styled from 'styled-components';
 
-export const TableWrapper = styled.div`
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-`;
-
 export const Table = styled.table`
     width: 100%;
     padding: 10px;

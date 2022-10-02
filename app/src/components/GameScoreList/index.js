@@ -3,9 +3,9 @@ import { isOneDartCheckout } from '../../utils/game';
 import { useGameInfo } from '../../hooks/useGameInfo';
 import Touchable from 'rc-touchable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { TableWrapper, Table, TableRow, TableCell, TableDivider, Button } from './index.style';
+import { Table, TableRow, TableCell, TableDivider, Button } from './index.style';
 
-export function GameScoreList({ scores, swipeHandlers }) {
+export function GameScoreList({ scores }) {
     function disableContextMenuOnButtonPress(e) {
         e.preventDefault();
     }
@@ -19,15 +19,13 @@ export function GameScoreList({ scores, swipeHandlers }) {
     }, []);
 
     return (
-        <TableWrapper {...swipeHandlers}>
-            <Table>
-                <tbody>
-                    {scores.map((row, index1) => (
-                        <Row row={row} key={index1} />
-                    ))}
-                </tbody>
-            </Table>
-        </TableWrapper>
+        <Table>
+            <tbody>
+                {scores.map((row, index1) => (
+                    <Row row={row} key={index1} />
+                ))}
+            </tbody>
+        </Table>
     );
 }
 
