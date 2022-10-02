@@ -1,6 +1,6 @@
 import useData from '../../hooks/useData';
 import SearchResults from '../../components/SearchResult';
-import { useStartGameWatcher, useSearchPolling } from './hooks';
+import { useStartGameWatcher, useSearchPolling, useStats } from './hooks';
 import Idle from './Idle';
 import { useNetworkInfo } from '../../hooks/useNetworkInfo';
 import WaitingForPairing from './WaitingForPairing';
@@ -12,6 +12,7 @@ function Home() {
 
     useStartGameWatcher(activity);
     useSearchPolling(activity);
+    useStats();
 
     if (activity === 'search') {
         return <SearchResults />;

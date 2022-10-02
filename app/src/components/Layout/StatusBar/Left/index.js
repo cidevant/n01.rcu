@@ -5,6 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import styled from 'styled-components';
 import { CornerButton } from '../CornerButton';
 import { useNetworkInfo } from '../../../../hooks/useNetworkInfo';
+import ClientStatsModal from '../../../ClientStatsModal';
 
 export function LeftButtons() {
     const [modalShow, setModalShow] = useState(false);
@@ -52,6 +53,17 @@ function NetworkButton({ open }) {
     }, [isConnected, isPaired, client]);
     const color = isConnected ? (isPaired ? 'green' : '#ffa029') : '#444';
     const textColor = isConnected ? (isPaired ? 'rgb(33, 237, 40)' : '#ffa029') : 'white';
+    const [showStats, setShowStats] = useState(false);
+
+    function openStatsModal() {
+        if (isPaired) {
+            setShowStats(true);
+        }
+    }
+
+    function closeStatsModal() {
+        setShowStats(false);
+    }
 
     return (
         <div className="d-flex align-items-center">
@@ -60,14 +72,19 @@ function NetworkButton({ open }) {
                     {icon}
                 </Button>
             </div>
-            <Title textColor={textColor}>{text}</Title>
+            <Title onClick={openStatsModal} textColor={textColor}>
+                {text}
+            </Title>
+            <ClientStatsModal show={showStats} close={closeStatsModal} />
         </div>
     );
 }
 
 const Title = styled.div`
     font-size: 40px;
+    width: 100%;
     font-weight: bold;
+    text-align: center;
     color: ${(props) => props.textColor};
 `;
 

@@ -11,10 +11,11 @@ export function useData() {
 
     return {
         data,
-        // activity: 'game',
-        // game: {},
+        player: data?.player,
         activity: data?.activity ?? 'idle',
         game: data?.game,
+        // activity: 'game',
+        // game: {},
         dispatchGetData,
     };
 }
