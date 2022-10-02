@@ -8,8 +8,7 @@ import { getDayStats } from '../../utils/stats';
 
 export function ClientStatsModal({ show, close }) {
     const { stats } = useHomeInfo();
-
-    console.log('===================> ', getDayStats(stats, 1664644619000));
+    const dayStats = useMemo(() => getDayStats(stats, 1664644619000), [stats]);
 
     return (
         <Offcanvas placement="start" show={show} onHide={close}>

@@ -61,7 +61,6 @@ export function getDayStats(data, time) {
             }
         );
 
-        // average
         dayStats.average.score = getAverage(dayStats.score, dayStats.darts);
         dayStats.average.first9 = getAverage(dayStats.first9Score, dayStats.first9Darts);
 
