@@ -1,23 +1,61 @@
 const SCORES_COMMON = [
-    [26, 58, 43],
     [
-        45,
+        {
+            value: 26,
+            style: 'yellow',
+        },
+        {
+            value: 58,
+            style: 'yellow',
+        },
+        {
+            value: 43,
+            style: 'yellow',
+        },
+    ],
+    [
+        {
+            value: 45,
+            style: 'yellow',
+        },
         {
             value: 60,
             style: 'good',
         },
-        41,
+        {
+            value: 41,
+            style: 'yellow',
+        },
     ],
     [
-        85,
+        {
+            value: 85,
+            style: 'yellow',
+        },
         {
             value: 100,
             style: 'good',
         },
-        81,
+
+        {
+            value: 81,
+            style: 'yellow',
+        },
     ],
-    [95, 98, 83],
-    { type: 'divider' },
+    [
+        {
+            value: 95,
+            style: 'yellow',
+        },
+        {
+            value: 98,
+            style: 'yellow',
+        },
+        {
+            value: 83,
+            style: 'yellow',
+        },
+    ],
     [
         22,
         23,

@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
 export const TableWrapper = styled.div`
-    /* height: 100%; */
-    background-color: red;
     position: absolute;
     left: 0;
     right: 0;
@@ -53,6 +51,7 @@ export const Button = styled.div`
             case 'good':
                 return 'background-color: #ddffcc; border-color: #4ce600;';
             case 'outs':
+            case 'yellow':
                 return 'background-color: #faf5a7; border-color: #c06d00;';
             case 'finish':
                 return 'background-color: #22ff34; border-color: #2d8600;';

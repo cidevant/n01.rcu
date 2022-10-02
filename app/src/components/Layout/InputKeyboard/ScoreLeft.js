@@ -32,6 +32,7 @@ export function ScoreLeft() {
             >
                 <div>
                     <ScoreLeftTitle active={anyCheckout}>SCORE LEFT</ScoreLeftTitle>
+
                     <ScoreLeftValue active={anyCheckout}>{scoreLeft}</ScoreLeftValue>
                 </div>
             </ScoreLeftWrapper>
