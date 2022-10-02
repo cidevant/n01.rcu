@@ -31,28 +31,15 @@ function Opponent() {
     const { game } = useData();
     const [opponentStats, setOpponentStats] = useState();
     const opponent = game?.opponent;
-    const statsId = useMemo(() => {
-        if (opponent) {
-            if (opponent.fid) {
-                return `fid=${opponent.fid}`;
-            }
-
-            if (opponent.gid) {
-                return `gid=${opponent.gid}`;
-            }
-
-            if (opponent.tid) {
-                return `tid=${opponent.tid}`;
-            }
-        }
-
-        return null;
-    }, [opponent]);
 
     useEffect(() => {
-        if (statsId) {
+        if (!_.isEmpty(opponent?.name)) {
             fetch(
-                `${config.nakkaApiEndpoint}/n01/online/n01_history.php?cmd=history_list&skip=0&count=60&${statsId}`
+                `${
+                    config.nakkaApiEndpoint
+                }/n01/online/n01_history.php?cmd=history_list&skip=0&count=60&keyword=~${encodeURIComponent(
+                    `"${opponent?.name}"`
+                )}`
             )
                 .then((data) => data.json())
                 .then((data) => {
@@ -79,11 +66,13 @@ function Opponent() {
                     setOpponentStats(stats);
                 });
         }
-    }, [statsId, opponent?.name]);
+    }, [opponent?.name]);
+
+    const average = getAverage(opponentStats?.score, opponentStats?.darts);
 
     return (
         <OpponentName>
-            {opponent?.name} ({getAverage(opponentStats.score, opponentStats.darts)})
+            {opponent?.name} ({average?.toFixed?.(2)})
         </OpponentName>
     );
 }
