@@ -63,7 +63,6 @@ function Opponent() {
 
                             if (isP1 || isP2) {
                                 const key = isP1 ? 'p1' : 'p2';
-                                const scoreKey = `${key}allScore`;
 
                                 acc.score += stat[`${key}allScore`];
                                 acc.darts += stat[`${key}allDarts`];
