@@ -11,15 +11,17 @@ const i18n = {
 
 export function FinishDartsModal() {
     const { finishDarts, dispatchSetFinishDarts } = useGameInfo();
-    const [show, setShowFinishDarts] = useState(false);
+    const [show, setShow] = useState(false);
 
     useEffect(() => {
         if (finishDarts?.length > 0) {
-            setShowFinishDarts(true);
+            setShow(true);
         }
-    }, [finishDarts, setShowFinishDarts]);
+    }, [finishDarts, setShow]);
 
-    const close = useCallback(() => {}, [setShowFinishDarts]);
+    function close() {
+        setShow(false);
+    }
 
     function setFinishDarts(e) {
         const value = e.target.id;
