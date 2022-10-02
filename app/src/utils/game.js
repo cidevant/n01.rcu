@@ -58,7 +58,7 @@ const SCORES_COMMON = [
     ],
     [22, 23, 24],
     [36, 30, 28],
-    [35, 38, 55],
+    [39, 38, 55],
 ];
 
 const SCORES_OUTS = [
