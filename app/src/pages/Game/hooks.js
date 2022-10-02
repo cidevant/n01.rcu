@@ -5,6 +5,7 @@ import { useSwipeable, LEFT, RIGHT } from 'react-swipeable';
 import { useGameInfo } from '../../hooks/useGameInfo';
 import { isOneDartCheckout, SCORES, SCORES_LIST } from '../../utils/game';
 import { useInterval } from '../../hooks/useInterval';
+import { useMemo } from 'react';
 
 /**
  * Polls game info and switches SCORES_LIST if score is less than 100
@@ -84,44 +85,37 @@ export function useSwipeableScoreList() {
  * @returns {Array<any>}
  */
 export function useScores(scoreList) {
-    return SCORES[scoreList];
+    // return SCORES[scoreList];
 
-    // const { scoreLeft } = useGameInfo();
-    // const scores = useMemo(() => {
-    //     const result = [...SCORES[scoreList]];
+    const { scoreLeft } = useGameInfo();
+    const scores = useMemo(() => {
+        const result = [...SCORES[scoreList]];
 
-    //     if (scoreLeft <= 180) {
-    //         // result.unshift([
-    //         //     {
-    //         //         value: 0,
-    //         //         style: 'zero',
-    //         //         colspan: 3,
-    //         //     },
-    //         // ]);
-    //         if (isOneDartCheckout(scoreLeft)) {
-    //             result.push([
-    //                 {
-    //                     value: scoreLeft,
-    //                     style: 'finish',
-    //                 },
-    //                 {
-    //                     colspan: 2,
-    //                     value: 0,
-    //                     style: 'zero',
-    //                 },
-    //             ]);
-    //         } else {
-    //             result.push([
-    //                 {
-    //                     value: 0,
-    //                     style: 'zero',
-    //                 },
-    //             ]);
-    //         }
-    //     }
+        if (scoreLeft <= 180) {
+            if (isOneDartCheckout(scoreLeft)) {
+                result.push([
+                    {
+                        value: scoreLeft,
+                        style: 'finish',
+                    },
+                    {
+                        colspan: 2,
+                        value: 0,
+                        style: 'zero',
+                    },
+                ]);
+            } else {
+                result.push([
+                    {
+                        value: 0,
+                        style: 'zero',
+                    },
+                ]);
+            }
+        }
 
-    //     return result;
-    // }, [scoreLeft, scoreList]);
+        return result;
+    }, [scoreLeft, scoreList]);
 
-    // return scores;
+    return scores;
 }
