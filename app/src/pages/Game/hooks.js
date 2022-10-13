@@ -120,6 +120,7 @@ export function useScores(scoreList) {
             // } else {
             //     result.push([
             //         {
+            //             colspan: 3,
             //             value: 0,
             //             style: 'zero',
             //         },
