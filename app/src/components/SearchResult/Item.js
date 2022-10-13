@@ -1,7 +1,25 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
+import useHomeInfo from '../../hooks/useHomeInfo';
+import LongPressButton from '../LongPressButton';
 
-export function SearchResultItem({ player, longPressHandlers }) {
+export function SearchResultItem({ player }) {
+    const { dispatchStartGame } = useHomeInfo();
+
+    function onLongPress(event) {
+        event.target.classList.add('confirmed');
+        dispatchStartGame(event.target.id);
+    }
+
+    function onPressOut(event) {
+        event.target.classList.remove('confirmed');
+        event.target.classList.remove('touching');
+    }
+
+    function onPressIn(event) {
+        event.target.classList.add('touching');
+    }
+
     return (
         <PlayerWrapper key={player.id} className="d-flex flex-row">
             {player.average && (
@@ -14,10 +32,16 @@ export function SearchResultItem({ player, longPressHandlers }) {
                 {stripAverageFromName(player.name)}
             </PlayerName>
             <PlayerButtonWrapper className="d-flex align-items-center">
-                <PlayButton id={player.id} {...longPressHandlers}>
-                    PLAY <br />
-                    <SmallText>{player.legs}</SmallText>
-                </PlayButton>
+                <LongPressButton
+                    onLongPress={onLongPress}
+                    onPressOut={onPressOut}
+                    onPressIn={onPressIn}
+                >
+                    <PlayButton id={player.id}>
+                        PLAY <br />
+                        <SmallText>{player.legs}</SmallText>
+                    </PlayButton>
+                </LongPressButton>
             </PlayerButtonWrapper>
         </PlayerWrapper>
     );
@@ -67,9 +91,13 @@ const PlayButton = styled.button`
     -moz-user-select: none;
     -ms-user-select: none;
 
-    &.ok {
-        background-color: #ccff33;
-        border-color: #99cc00;
-        color: black;
+    &.touching {
+        background-color: #15c900;
+        transition: background-color 1s;
+    }
+
+    &.confirmed {
+        border-color: #fff;
+        color: white;
     }
 `;

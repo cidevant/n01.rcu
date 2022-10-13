@@ -1,22 +1,12 @@
 import useHomeInfo from '../../hooks/useHomeInfo';
 import styled from 'styled-components';
-import useLongPress from '../../hooks/useLongPress';
 import Spinner from 'react-bootstrap/Spinner';
 import { useLoadingSpinner } from './hooks';
 import { SearchResultItem } from './Item';
 
 function SearchResult() {
-    const { dispatchStartGame } = useHomeInfo();
     const { players } = useHomeInfo();
     const showSpinner = useLoadingSpinner();
-    const longPressHandlers = useLongPress(
-        (e) => {
-            e.target.classList.add('ok');
-            dispatchStartGame(e.target.id);
-        },
-        (e) => e.target.classList.remove('ok'),
-        300
-    );
 
     return (
         <div>
@@ -26,11 +16,7 @@ function SearchResult() {
                 </SpinnerWrapper>
             )}
             {players?.map?.((player) => (
-                <SearchResultItem
-                    key={player.id}
-                    longPressHandlers={longPressHandlers}
-                    player={player}
-                />
+                <SearchResultItem key={player.id} player={player} />
             ))}
         </div>
     );
