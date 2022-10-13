@@ -4,7 +4,7 @@ import { GameScoreList } from '../../components/GameScoreList';
 import { SCORES_LIST } from '../../utils/game';
 import styled from 'styled-components';
 import useData from '../../hooks/useData';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { config } from '../../config';
 import { getAverage } from '../../utils/stats';

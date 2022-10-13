@@ -25,6 +25,8 @@ export function useGameUpdater(scoreList, setScoreList) {
     useEffect(() => {
         if (scoreList === SCORES_LIST.COMMON && scoreLeft < 100) {
             setScoreList(SCORES_LIST.OUTS);
+        } else if (scoreList === SCORES_LIST.OUTS && scoreLeft === 501) {
+            setScoreList(SCORES_LIST.COMMON);
         }
     }, [scoreLeft, scoreList, setScoreList]);
 }
