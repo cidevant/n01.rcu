@@ -35,7 +35,7 @@ export function getDayStats(data, time) {
         const dayStats = stats.reduce(
             (acc, game) => {
                 acc.highFinish = Math.max(acc.highFinish, game.ho);
-                acc.bestLeg = Math.min(acc.bestLeg, game.bst);
+                acc.bestLeg = acc.bestLeg === 0 ? game.bst : Math.min(acc.bestLeg, game.bst);
                 acc.worstLeg = Math.max(acc.worstLeg, game.wst);
                 acc.sets.win += Math.round(game.leg / 2) >= game.win;
                 acc.sets.total += 1;
