@@ -94,26 +94,37 @@ export function useScores(scoreList) {
         const result = [...SCORES[scoreList]];
 
         if (scoreLeft <= 180) {
-            if (isOneDartCheckout(scoreLeft)) {
-                result.push([
-                    {
-                        value: scoreLeft,
-                        style: 'finish',
-                    },
-                    {
-                        colspan: 2,
-                        value: 0,
-                        style: 'zero',
-                    },
-                ]);
-            } else {
-                result.push([
-                    {
-                        value: 0,
-                        style: 'zero',
-                    },
-                ]);
-            }
+            result.push([
+                {
+                    value: scoreLeft,
+                    style: 'finish',
+                },
+                {
+                    colspan: 2,
+                    value: 0,
+                    style: 'zero',
+                },
+            ]);
+            // if (isOneDartCheckout(scoreLeft)) {
+            //     result.push([
+            //         {
+            //             value: scoreLeft,
+            //             style: 'finish',
+            //         },
+            //         {
+            //             colspan: 2,
+            //             value: 0,
+            //             style: 'zero',
+            //         },
+            //     ]);
+            // } else {
+            //     result.push([
+            //         {
+            //             value: 0,
+            //             style: 'zero',
+            //         },
+            //     ]);
+            // }
         }
 
         return result;
