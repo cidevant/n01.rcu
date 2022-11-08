@@ -43,10 +43,10 @@
     "action": {
         "default_popup": "src/popup/index.html",
         "default_icon": {
-            "16": "assets/icons/default.png",
-            "36": "assets/icons/default.png",
-            "48": "assets/icons/default.png",
-            "120": "assets/icons/default.png"
+            "16": "src/assets/icons/default.png",
+            "36": "src/assets/icons/default.png",
+            "48": "src/assets/icons/default.png",
+            "120": "src/assets/icons/default.png"
         }
     },
     "permissions": [
