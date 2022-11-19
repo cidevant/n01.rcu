@@ -3,7 +3,7 @@
 let n01rcu_JOIN = false;
 let n01rcu_PAIRED = false;
 
-const n01rcu_DEFAULT_SERVER_URL = 'ws://localhost:3000/ws';
+const n01rcu_DEFAULT_SERVER_URL = 'wss://n01.devant.cz/ws';
 const n01rcu_DEFAULT_ACCESS_CODE = 'TEST';
 
 /**

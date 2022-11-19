@@ -10,7 +10,7 @@ chrome.runtime.onInstalled.addListener(async (reason) => {
         $$DEBUG && console.log('[n01.RCU.background] initial storage setup');
 
         await $SHARED_STORAGE.updateConnection({
-            url: $$DEBUG ? 'ws://localhost:3000/ws' : 'ws://n01.devant.cz/ws',
+            url: $$DEBUG ? 'wss://n01.devant.cz/ws' : 'ws://n01.devant.cz/ws',
             urlValid: false,
             accessCode: null,
             accessCodeValid: false,
