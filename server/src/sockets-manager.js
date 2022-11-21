@@ -365,6 +365,11 @@ class SocketsManager {
 
   isPaired(socket) {
     const meta = this.getMeta(socket);
+
+    if (!meta) {
+      return false;
+    }
+
     const clientSocket = this.isClient(socket) ? socket : this.getPairedClient(socket);
     const controllers = this.filterSocketsByMeta(
       (controllerMeta) =>
