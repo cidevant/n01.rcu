@@ -82,6 +82,9 @@ function Stats({ stats }) {
         return <Alert>No stats</Alert>;
     }
 
+    const setsWinrate = (stats?.sets.win / stats?.sets.total).toFixed(2) * 100;
+    const legsWinrate = (stats?.legs.win / stats?.legs.total).toFixed(2) * 100;
+
     return (
         <>
             <Title>Average</Title>
@@ -103,12 +106,12 @@ function Stats({ stats }) {
             <hr />
             <Title>Sets</Title>
             <StatValue>
-                {stats?.sets.win} / {stats?.sets.total}
+                {stats?.sets.win} / {stats?.sets.total} {setsWinrate > 0 && `(${setsWinrate}%)`}
             </StatValue>
 
             <Title>Legs</Title>
             <StatValue>
-                {stats?.legs.win} / {stats?.legs.total}
+                {stats?.legs.win} / {stats?.legs.total} {legsWinrate > 0 && `(${legsWinrate}%)`}
             </StatValue>
 
             <hr />
