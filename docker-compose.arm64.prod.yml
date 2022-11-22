@@ -1,0 +1,9 @@
+version: '3'
+services:
+  n01rcu:
+    container_name: arm64-n01rcu
+    image: registry.docker.devant.cz/arm64/n01rcu
+    environment:
+      - PORT=3000
+    ports:
+      - '3000:3000'

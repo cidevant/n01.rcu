@@ -8,10 +8,11 @@ RUN npm run build
 
 FROM node:18-alpine
 ENV NODE_ENV="production"
+ENV PORT=3000
 RUN apk add --no-cache build-base nodejs icu-data-full
 WORKDIR /server
 COPY ./server .
 RUN npm ci --silent
 COPY --from=APP_BUILD /app/build /server/static
-EXPOSE 3000
+EXPOSE $PORT
 CMD ["npm", "start"]
