@@ -49,27 +49,38 @@ function DaySelector({ days, dayIndex, setDayIndex }) {
     const disabledRight = dayIndex === days.length - 1;
     const swipeDays = useSwipeable({
         onSwiped: (ev) => {
-            if (ev.dir === RIGHT && !disabledLeft) {
-                setDayIndex(dayIndex - 1);
+            if (ev.dir === RIGHT) {
+                goLeft();
             }
 
-            if (ev.dir === LEFT && !disabledRight) {
-                setDayIndex(dayIndex + 1);
+            if (ev.dir === LEFT) {
+                goRight();
             }
         },
     });
 
+    function goLeft() {
+        if (!disabledLeft) {
+            setDayIndex(dayIndex - 1);
+        }
+    }
+    function goRight() {
+        if (!disabledRight) {
+            setDayIndex(dayIndex + 1);
+        }
+    }
+
     return (
         <Wrapper {...swipeDays}>
             <Flex>
-                <FlexItem nav disabled={disabledLeft}>
+                <FlexItem onClick={goLeft} nav disabled={disabledLeft}>
                     <FontAwesomeIcon icon="fa-solid fa-chevron-left" className="me-4" />
                 </FlexItem>
                 <FlexItem>
                     <Title>Day</Title>
                     <StatValue>{day}</StatValue>
                 </FlexItem>
-                <FlexItem nav disabled={disabledRight}>
+                <FlexItem nav onClick={goRight} disabled={disabledRight}>
                     <FontAwesomeIcon icon="fa-solid fa-chevron-right" className="me-4" />
                 </FlexItem>
             </Flex>
