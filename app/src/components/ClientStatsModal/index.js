@@ -4,6 +4,7 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import React, { useMemo, useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useHomeInfo from '../../hooks/useHomeInfo';
+import Modal from 'react-bootstrap/Modal';
 import { getDayStats, getDays, dayToTimestamp } from '../../utils/stats';
 import {
     ButtonWrapper,
@@ -20,6 +21,7 @@ import {
 } from './index.style';
 import { Alert } from 'react-bootstrap';
 import { useSwipeable, LEFT, RIGHT } from 'react-swipeable';
+import { config } from '../../config';
 
 export function ClientStatsModal({ show, close }) {
     const daysExist = useRef(false);
@@ -165,12 +167,29 @@ function Stats({ stats }) {
 }
 
 function Games({ games }) {
+    const [showGameInfoModal, setShowGameInfoModal] = useState(false);
+
     if (!games || games?.length === 0) {
         return <Alert>No games</Alert>;
     }
 
+    function openGameInfo(mid) {
+        return () => {
+            setShowGameInfoModal(mid);
+        };
+    }
+
+    function closeModal() {
+        setShowGameInfoModal(false);
+    }
+
     return (
         <div>
+            <GameInfoModal
+                show={showGameInfoModal !== false}
+                mid={showGameInfoModal}
+                close={closeModal}
+            />
             {games.map((game) => {
                 const p1Stats = ((game.p1allScore / game.p1allDarts) * 3).toFixed(2);
                 const p2Stats = ((game.p2allScore / game.p2allDarts) * 3).toFixed(2);
@@ -178,7 +197,7 @@ function Games({ games }) {
                 const p2Winner = game.p2winLegs > game.p1winLegs;
 
                 return (
-                    <GameInfo>
+                    <GameInfo key={game.mid} onClick={openGameInfo(game.mid)}>
                         <GamePlayer winner={p1Winner}>
                             <GamePlayerLegs>{game.p1winLegs}</GamePlayerLegs>
                             <GamePlayerName>{game.p1name}</GamePlayerName>
@@ -194,5 +213,28 @@ function Games({ games }) {
                 );
             })}
         </div>
+    );
+}
+export function GameInfoModal({ close, mid, show }) {
+    const [gameInfo, setGameInfo] = useState(null);
+
+    useEffect(() => {
+        if (show) {
+            fetch(
+                `${config.nakkaApiEndpoint}/n01/online/n01_history.php?cmd=history_match&mid=${mid}`
+            )
+                .then((data) => data.json())
+                .then(setGameInfo);
+        }
+
+        return () => {
+            setGameInfo(null);
+        };
+    }, [setGameInfo, mid, show]);
+
+    return (
+        <Modal show={show} fullscreen={false} onHide={close}>
+            <div>{gameInfo == null ? 'Loading' : JSON.stringify(gameInfo)}</div>
+        </Modal>
     );
 }
