@@ -111,12 +111,23 @@ const SCORES_OUTS = [
     [55, 57, 59],
 ];
 
+const SCORES_HIGH = [
+    [40, 60, 80],
+    [94, 100, 120],
+    [140, 160, 180],
+    { type: 'divider' },
+    [123, 121, 125],
+    [135, 137, 138],
+];
+
 export const SCORES_LIST = {
+    HIGH: 'HIGH',
     COMMON: 'COMMON',
     OUTS: 'OUTS',
 };
 
 export const SCORES = {
+    [SCORES_LIST.HIGH]: SCORES_HIGH,
     [SCORES_LIST.COMMON]: SCORES_COMMON,
     [SCORES_LIST.OUTS]: SCORES_OUTS,
 };

@@ -14,21 +14,12 @@ import { useMemo } from 'react';
  * @param {*} scoreList
  * @param {*} setScoreList
  */
-export function useGameUpdater(scoreList, setScoreList) {
+export function useGameUpdater() {
     const { dispatchGetData } = useData();
-    const { scoreLeft } = useGameInfo();
 
     useInterval(() => {
         dispatchGetData();
     }, 5000);
-
-    useEffect(() => {
-        if (scoreList === SCORES_LIST.COMMON && scoreLeft < 100) {
-            setScoreList(SCORES_LIST.OUTS);
-        } else if (scoreList === SCORES_LIST.OUTS && scoreLeft === 501) {
-            setScoreList(SCORES_LIST.COMMON);
-        }
-    }, [scoreLeft, scoreList, setScoreList]);
 }
 
 /**
@@ -47,6 +38,9 @@ export function useEndGameWatcher() {
     }, [activity, navigate]);
 }
 
+const SCORES_SEQUENCE = Object.values(SCORES_LIST);
+const SCORES_SEQUENCE_LAST_INDEX = SCORES_SEQUENCE.length - 1;
+
 /**
  * Swiping gesture handlers to change SCORES_LIST
  *
@@ -54,27 +48,21 @@ export function useEndGameWatcher() {
  * @returns {*}
  */
 export function useSwipeableScoreList() {
-    const { scoreLeft } = useGameInfo();
-    const [scoreList, setScoreList] = useState(SCORES_LIST.COMMON);
+    const [scoreList, setScoreList] = useState(1);
     const swipeScoreList = useSwipeable({
         onSwiped: (ev) => {
-            if (scoreList === SCORES_LIST.OUTS && scoreLeft < 100) {
-                return;
+            if (ev.dir === LEFT && scoreList < SCORES_SEQUENCE_LAST_INDEX) {
+                setScoreList(scoreList + 1);
             }
 
-            if (ev.dir === LEFT) {
-                setScoreList(SCORES_LIST.OUTS);
-            }
-
-            if (ev.dir === RIGHT) {
-                setScoreList(SCORES_LIST.COMMON);
+            if (ev.dir === RIGHT && scoreList > 0) {
+                setScoreList(scoreList - 1);
             }
         },
     });
 
     return {
-        scoreList,
-        setScoreList,
+        scoreList: SCORES_LIST[SCORES_SEQUENCE[scoreList]],
         swipeScoreList,
     };
 }
@@ -93,7 +81,7 @@ export function useScores(scoreList) {
     const scores = useMemo(() => {
         const result = [...SCORES[scoreList]];
 
-        if (scoreLeft <= 180) {
+        if (scoreLeft <= 170) {
             result.push([
                 {
                     value: scoreLeft,

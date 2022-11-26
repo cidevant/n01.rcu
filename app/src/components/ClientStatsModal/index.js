@@ -93,8 +93,8 @@ function Stats({ stats }) {
         return <Alert>No stats</Alert>;
     }
 
-    const setsWinrate = (stats?.sets.win / stats?.sets.total).toFixed(2) * 100;
-    const legsWinrate = (stats?.legs.win / stats?.legs.total).toFixed(2) * 100;
+    const setsWinrate = ((stats?.sets.win / stats?.sets.total).toFixed(2) * 100).toFixed(0);
+    const legsWinrate = ((stats?.legs.win / stats?.legs.total).toFixed(2) * 100).toFixed(0);
 
     return (
         <>

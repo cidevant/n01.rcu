@@ -10,10 +10,10 @@ import { config } from '../../config';
 import { getAverage } from '../../utils/stats';
 
 function Game() {
-    const { scoreList, swipeScoreList, setScoreList } = useSwipeableScoreList();
+    const { scoreList, swipeScoreList } = useSwipeableScoreList();
     const scores = useScores(scoreList);
 
-    useGameUpdater(scoreList, setScoreList);
+    useGameUpdater();
     useEndGameWatcher();
 
     return (
