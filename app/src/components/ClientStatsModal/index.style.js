@@ -61,7 +61,7 @@ export const GameInfo = styled.div`
 
 export const GamePlayer = styled.div`
     width: 50%;
-    padding: 10px 0;
+    padding: 40px 0;
     position: relative;
 
     text-align: center;

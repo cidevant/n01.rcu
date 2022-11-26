@@ -278,19 +278,20 @@ export function GameInfoModal({ close, mid, show }) {
 
                 [0, 1].forEach((playerIndex) => {
                     const playerKey = `p${playerIndex + 1}`;
+                    const legsLength = leg.playerData[playerIndex].length;
 
-                    leg.playerData[playerIndex].forEach((p1Data, index) => {
-                        if (p1Data.score >= 100 && p1Data.score <= 140) {
+                    leg.playerData[playerIndex].forEach((pData, index) => {
+                        if (pData.score >= 100 && pData.score <= 140) {
                             stats[playerKey]['100'] += 1;
-                        } else if (p1Data.score >= 140 && p1Data.score < 180) {
+                        } else if (pData.score >= 140 && pData.score < 180) {
                             stats[playerKey]['140'] += 1;
-                        } else if (p1Data.score === 180) {
+                        } else if (pData.score === 180) {
                             stats[playerKey]['180'] += 1;
                         }
 
-                        if (p1Data.score < 0) {
+                        if (legsLength - 1 === index && pData.score < 0) {
                             stats[playerKey].highFinish = Math.max(
-                                leg?.playerData?.[0]?.[index - 1]?.left ?? 0,
+                                leg?.playerData?.[playerIndex]?.[index - 1]?.left ?? 0,
                                 stats[playerKey].highFinish
                             );
                         }
