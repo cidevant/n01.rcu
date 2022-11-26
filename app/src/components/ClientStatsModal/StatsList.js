@@ -29,8 +29,8 @@ export function StatsList() {
         return <Alert>No stats</Alert>;
     }
 
-    const setsWinrate = ((dayStats?.sets.win / dayStats?.sets.total).toFixed(2) * 100).toFixed(0);
-    const legsWinrate = ((dayStats?.legs.win / dayStats?.legs.total).toFixed(2) * 100).toFixed(0);
+    const setsWinRate = ((dayStats?.sets?.win / dayStats?.sets?.total).toFixed(2) * 100).toFixed(0);
+    const legsWinRate = ((dayStats?.legs?.win / dayStats?.legs?.total).toFixed(2) * 100).toFixed(0);
 
     return (
         <>
@@ -56,13 +56,13 @@ export function StatsList() {
             <Title>Sets</Title>
             <StatValue>
                 {dayStats?.sets.win} / {dayStats?.sets.total}{' '}
-                {setsWinrate > 0 && `(${setsWinrate}%)`}
+                {setsWinRate > 0 && `(${setsWinRate}%)`}
             </StatValue>
 
             <Title>Legs</Title>
             <StatValue>
                 {dayStats?.legs.win} / {dayStats?.legs.total}{' '}
-                {legsWinrate > 0 && `(${legsWinrate}%)`}
+                {legsWinRate > 0 && `(${legsWinRate}%)`}
             </StatValue>
 
             <hr />

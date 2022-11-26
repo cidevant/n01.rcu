@@ -14,7 +14,13 @@ export function ClientStatsModal({ show, close }) {
     }
 
     return (
-        <Offcanvas placement="start" show={show} onHide={close}>
+        <Offcanvas
+            disableScrolling={false}
+            scroll={true}
+            placement="start"
+            show={show}
+            onHide={close}
+        >
             <ButtonWrapper className="d-grid gap-2">
                 <Button onClick={toggleStatsGame} variant="warning">
                     <FontAwesomeIcon icon="fa-solid fa-ranking-star" className="text-black me-4" />

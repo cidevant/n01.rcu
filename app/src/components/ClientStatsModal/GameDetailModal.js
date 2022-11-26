@@ -22,7 +22,7 @@ const gameInfoEmptyStats = {
     worstLeg: 0,
 };
 
-export function GameInfoModal({ close, mid, show }) {
+export function GameDetailModal({ close, mid, show }) {
     const [gameInfo, setGameInfo] = useState(null);
     const [playersStats, setPlayersStats] = useState(null);
 

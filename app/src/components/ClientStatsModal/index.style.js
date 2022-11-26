@@ -87,7 +87,7 @@ export const GamePlayerStats = styled.div`
 
 export const GamePlayerLegs = styled.div`
     position: absolute;
-    top: calc(50% - 50px);
+    bottom: 0px;
     font-size: 64px;
     color: #bbb;
     z-index: -1;

@@ -74,7 +74,7 @@ export function useStats() {
                 .then(dispatchSetStats);
 
             fetch(
-                `${config.nakkaApiEndpoint}/n01/online/n01_history.php?cmd=history_list&skip=0&count=100&${statsId}`
+                `${config.nakkaApiEndpoint}/n01/online/n01_history.php?cmd=history_list&skip=0&count=20&${statsId}`
             )
                 .then((data) => data.json())
                 .then(dispatchSetGames);
