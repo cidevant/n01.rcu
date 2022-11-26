@@ -54,7 +54,7 @@ export const FlexItem = styled.div`
 `;
 
 export const GameInfo = styled.div`
-    border-bottom: 1px solid #000;
+    border-bottom: 2px solid #999;
     display: flex;
     flex-direction: row;
 `;
@@ -62,22 +62,34 @@ export const GameInfo = styled.div`
 export const GamePlayer = styled.div`
     width: 50%;
     padding: 10px 0;
+    position: relative;
+
     text-align: center;
-    border-right: 1px solid #999;
+    border-right: 2px solid #999;
 
     &:last-child {
         border-right: none;
     }
 
-    ${({ winner }) => winner && 'background-color: rgba(0, 255, 0, 0.2);'};
+    ${({ winner }) => winner && 'background-color: rgba(0, 255, 0, 0.1);'};
 `;
 
 export const GamePlayerName = styled.div`
     font-size: 32px;
-    color: #555;
+    color: #000;
 `;
 
 export const GamePlayerStats = styled.div`
-    font-size: 42px;
+    font-size: 32px;
     font-weight: bold;
+`;
+
+export const GamePlayerLegs = styled.div`
+    position: absolute;
+    top: calc(50% - 60px);
+    font-size: 84px;
+    color: #bbb;
+    z-index: -1;
+
+    ${({ second }) => `${second ? 'left' : 'right'}: 10px;`};
 `;

@@ -16,6 +16,7 @@ import {
     GamePlayer,
     GamePlayerName,
     GamePlayerStats,
+    GamePlayerLegs,
 } from './index.style';
 import { Alert } from 'react-bootstrap';
 import { useSwipeable, LEFT, RIGHT } from 'react-swipeable';
@@ -179,11 +180,13 @@ function Games({ games }) {
                 return (
                     <GameInfo>
                         <GamePlayer winner={p1Winner}>
+                            <GamePlayerLegs>{game.p1winLegs}</GamePlayerLegs>
                             <GamePlayerName>{game.p1name}</GamePlayerName>
                             <GamePlayerStats>{p1Stats}</GamePlayerStats>
                         </GamePlayer>
 
                         <GamePlayer winner={p2Winner}>
+                            <GamePlayerLegs second>{game.p2winLegs}</GamePlayerLegs>
                             <GamePlayerName>{game.p2name}</GamePlayerName>
                             <GamePlayerStats>{p2Stats}</GamePlayerStats>
                         </GamePlayer>
