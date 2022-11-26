@@ -49,7 +49,7 @@ export function useSearchPolling(activity) {
  */
 export function useStats() {
     const prevStatsId = useRef();
-    const { dispatchSetStats } = useHomeInfo();
+    const { dispatchSetStats, dispatchSetGames } = useHomeInfo();
     const { player } = useData();
     const statsId = useMemo(() => {
         if (player?.fid) {
@@ -73,7 +73,13 @@ export function useStats() {
                 .then((data) => data.json())
                 .then(dispatchSetStats);
 
+            fetch(
+                `${config.nakkaApiEndpoint}/n01/online/n01_history.php?cmd=history_list&skip=0&count=100&${statsId}`
+            )
+                .then((data) => data.json())
+                .then(dispatchSetGames);
+
             prevStatsId.current = statsId;
         }
-    }, [statsId, prevStatsId, dispatchSetStats]);
+    }, [statsId, prevStatsId, dispatchSetStats, dispatchSetGames]);
 }

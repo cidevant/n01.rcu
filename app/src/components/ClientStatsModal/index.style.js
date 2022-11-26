@@ -52,3 +52,32 @@ export const FlexItem = styled.div`
 
     ${({ disabled }) => disabled && 'color: #ccc;'};
 `;
+
+export const GameInfo = styled.div`
+    border-bottom: 1px solid #000;
+    display: flex;
+    flex-direction: row;
+`;
+
+export const GamePlayer = styled.div`
+    width: 50%;
+    padding: 10px 0;
+    text-align: center;
+    border-right: 1px solid #999;
+
+    &:last-child {
+        border-right: none;
+    }
+
+    ${({ winner }) => winner && 'background-color: rgba(0, 255, 0, 0.2);'};
+`;
+
+export const GamePlayerName = styled.div`
+    font-size: 32px;
+    color: #555;
+`;
+
+export const GamePlayerStats = styled.div`
+    font-size: 42px;
+    font-weight: bold;
+`;

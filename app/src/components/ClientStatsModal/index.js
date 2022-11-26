@@ -5,14 +5,25 @@ import React, { useMemo, useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useHomeInfo from '../../hooks/useHomeInfo';
 import { getDayStats, getDays, dayToTimestamp } from '../../utils/stats';
-import { ButtonWrapper, Flex, FlexItem, StatValue, Title, Wrapper } from './index.style';
+import {
+    ButtonWrapper,
+    Flex,
+    FlexItem,
+    StatValue,
+    Title,
+    Wrapper,
+    GameInfo,
+    GamePlayer,
+    GamePlayerName,
+    GamePlayerStats,
+} from './index.style';
 import { Alert } from 'react-bootstrap';
 import { useSwipeable, LEFT, RIGHT } from 'react-swipeable';
 
 export function ClientStatsModal({ show, close }) {
     const daysExist = useRef(false);
     const [dayIndex, setDayIndex] = useState();
-    const { stats } = useHomeInfo();
+    const { stats, games } = useHomeInfo();
     const days = useMemo(() => getDays(stats), [stats]);
     const dayStats = useMemo(
         () => getDayStats(stats, dayToTimestamp(days[dayIndex])),
@@ -27,16 +38,29 @@ export function ClientStatsModal({ show, close }) {
         }
     }, [days]);
 
+    const [showGame, setShowGame] = useState(false);
+
+    function toggleStatsGame() {
+        setShowGame(!showGame);
+    }
+
     return (
         <Offcanvas placement="start" show={show} onHide={close}>
             <ButtonWrapper className="d-grid gap-2">
-                <Button size="lg" onClick={close} variant="warning">
+                <Button size="lg" onClick={toggleStatsGame} variant="warning">
                     <FontAwesomeIcon icon="fa-solid fa-ranking-star" className="text-black me-4" />
-                    STATS
+                    {showGame ? 'GAMES' : 'STATS'}
                 </Button>
             </ButtonWrapper>
-            <DaySelector days={days} dayIndex={dayIndex} setDayIndex={setDayIndex} />
-            <Stats stats={dayStats} />
+
+            {showGame ? (
+                <Games games={games} />
+            ) : (
+                <>
+                    <DaySelector days={days} dayIndex={dayIndex} setDayIndex={setDayIndex} />
+                    <Stats stats={dayStats} />
+                </>
+            )}
         </Offcanvas>
     );
 }
@@ -136,5 +160,36 @@ function Stats({ stats }) {
             <Title>Worst Leg </Title>
             <StatValue>{stats?.worstLeg}</StatValue>
         </>
+    );
+}
+
+function Games({ games }) {
+    if (!games || games?.length === 0) {
+        return <Alert>No games</Alert>;
+    }
+
+    return (
+        <div>
+            {games.map((game) => {
+                const p1Stats = ((game.p1allScore / game.p1allDarts) * 3).toFixed(2);
+                const p2Stats = ((game.p2allScore / game.p2allDarts) * 3).toFixed(2);
+                const p1Winner = game.p1winLegs > game.p2winLegs;
+                const p2Winner = game.p2winLegs > game.p1winLegs;
+
+                return (
+                    <GameInfo>
+                        <GamePlayer winner={p1Winner}>
+                            <GamePlayerName>{game.p1name}</GamePlayerName>
+                            <GamePlayerStats>{p1Stats}</GamePlayerStats>
+                        </GamePlayer>
+
+                        <GamePlayer winner={p2Winner}>
+                            <GamePlayerName>{game.p2name}</GamePlayerName>
+                            <GamePlayerStats>{p2Stats}</GamePlayerStats>
+                        </GamePlayer>
+                    </GameInfo>
+                );
+            })}
+        </div>
     );
 }

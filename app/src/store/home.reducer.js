@@ -2,6 +2,7 @@ import { WS_IN_PREFIX, WS_OUT_PREFIX } from '../utils/ws';
 
 const ACTIONS = {
     SET_STATS: 'SET_STATS',
+    SET_GAMES: 'SET_GAMES',
     SET_FILTER: 'SET_FILTER',
     SET_KEEP_SCROLLING_BOTTOM: 'SET_KEEP_SCROLLING_BOTTOM',
 
@@ -23,6 +24,13 @@ export function sendScrollBottom() {
 export function setStats(payload) {
     return {
         type: ACTIONS.SET_STATS,
+        payload,
+    };
+}
+
+export function setGames(payload) {
+    return {
+        type: ACTIONS.SET_GAMES,
         payload,
     };
 }
@@ -77,6 +85,7 @@ const initialState = {
     filter: filterValue,
     keepScrollingBottom: true,
     stats: null,
+    games: null,
 };
 
 export default function homeReducer(state, action) {
@@ -100,6 +109,12 @@ export default function homeReducer(state, action) {
             state = {
                 ...state,
                 stats: action.payload,
+            };
+            break;
+        case ACTIONS.SET_GAMES:
+            state = {
+                ...state,
+                games: action.payload,
             };
             break;
         case ACTIONS.SEARCH_PAGE_FILTER_BY_AVERAGE:

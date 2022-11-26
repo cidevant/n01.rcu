@@ -7,11 +7,12 @@ import {
     setFilterByAverage,
     setKeepScrollingBottom,
     setStats,
+    setGames,
 } from '../store/home.reducer';
 
 export function useHomeInfo() {
     const dispatch = useDispatch();
-    const { players, filter, keepScrollingBottom, loading, stats } = useSelector(
+    const { players, filter, keepScrollingBottom, loading, stats, games } = useSelector(
         (state) => state.home
     );
     const dispatchFilter = useCallback(() => {
@@ -22,6 +23,9 @@ export function useHomeInfo() {
         dispatch(setStats(payload));
     }
 
+    function dispatchSetGames(payload) {
+        dispatch(setGames(payload));
+    }
     function dispatchSetFilter(filter) {
         dispatch(setFilterByAverage(filter));
     }
@@ -44,11 +48,13 @@ export function useHomeInfo() {
         filter,
         keepScrollingBottom,
         stats,
+        games,
         dispatchSetFilter,
         dispatchFilter,
         dispatchScrollBottom,
         dispatchStartGame,
         dispatchSetStats,
+        dispatchSetGames,
         dispatchKeepScrollingBottom,
     };
 }
