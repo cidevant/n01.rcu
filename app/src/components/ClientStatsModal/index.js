@@ -27,7 +27,7 @@ export function ClientStatsModal({ show, close }) {
                     {showGame ? 'GAMES' : 'STATS'}
                 </Button>
             </ButtonWrapper>
-            {showGame ? <GamesList /> : <StatsList />}
+            <Offcanvas.Body>{showGame ? <GamesList /> : <StatsList />}</Offcanvas.Body>
         </Offcanvas>
     );
 }
