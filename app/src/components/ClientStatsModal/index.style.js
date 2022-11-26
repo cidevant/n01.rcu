@@ -87,12 +87,12 @@ export const GamePlayerStats = styled.div`
 
 export const GamePlayerLegs = styled.div`
     position: absolute;
-    top: calc(50% - 60px);
-    font-size: 84px;
+    top: calc(50% - 50px);
+    font-size: 64px;
     color: #bbb;
     z-index: -1;
 
-    ${({ second }) => `${second ? 'left' : 'right'}: 10px;`};
+    ${({ second }) => `${second ? 'right' : 'left'}: 30px;`};
 `;
 
 export const GameInfoModalPlayers = styled.div`
