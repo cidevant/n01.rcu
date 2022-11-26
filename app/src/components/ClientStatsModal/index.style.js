@@ -82,6 +82,7 @@ export const GamePlayerName = styled.div`
 export const GamePlayerStats = styled.div`
     font-size: 32px;
     font-weight: bold;
+    text-align: center;
 `;
 
 export const GamePlayerLegs = styled.div`
@@ -92,4 +93,20 @@ export const GamePlayerLegs = styled.div`
     z-index: -1;
 
     ${({ second }) => `${second ? 'left' : 'right'}: 10px;`};
+`;
+
+export const GameInfoModalPlayers = styled.div`
+    display: flex;
+    flex-direction: row;
+    padding: 40px 10px;
+`;
+
+export const GameInfoModalPlayer = styled.div`
+    width: 50%;
+    padding: 10px;
+    border-right: 2px solid #999;
+
+    &:last-child {
+        border-right: none;
+    }
 `;

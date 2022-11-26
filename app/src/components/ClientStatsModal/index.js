@@ -18,6 +18,8 @@ import {
     GamePlayerName,
     GamePlayerStats,
     GamePlayerLegs,
+    GameInfoModalPlayer,
+    GameInfoModalPlayers,
 } from './index.style';
 import { Alert } from 'react-bootstrap';
 import { useSwipeable, LEFT, RIGHT } from 'react-swipeable';
@@ -215,6 +217,7 @@ function Games({ games }) {
         </div>
     );
 }
+
 export function GameInfoModal({ close, mid, show }) {
     const [gameInfo, setGameInfo] = useState(null);
 
@@ -232,9 +235,77 @@ export function GameInfoModal({ close, mid, show }) {
         };
     }, [setGameInfo, mid, show]);
 
+    const p1Stats = {};
+    const p2Stats = {};
+
+    if (gameInfo == null) {
+        return null;
+    }
+
     return (
-        <Modal show={show} fullscreen={false} onHide={close}>
-            <div>{gameInfo == null ? 'Loading' : JSON.stringify(gameInfo)}</div>
+        <Modal dialogClassName="XL_MODAL" show={show} fullscreen={false} onHide={close}>
+            <GameInfoModalPlayers onClick={close}>
+                <GameInfoModalPlayer>
+                    <GamePlayerStats>{gameInfo?.statsData?.[0]?.name}</GamePlayerStats>
+                    <Title>Sets</Title>
+                    <StatValue>{p1Stats?.win}</StatValue>
+
+                    <Title>Legs</Title>
+                    <StatValue>{p1Stats?.win}</StatValue>
+
+                    <hr />
+
+                    <Title>100+</Title>
+                    <StatValue>{p1Stats?.['100']}</StatValue>
+
+                    <Title>140+</Title>
+                    <StatValue>{p1Stats?.['140']}</StatValue>
+
+                    <Title>180's</Title>
+                    <StatValue>{p1Stats?.['180']}</StatValue>
+
+                    <hr />
+
+                    <Title>High Finish </Title>
+                    <StatValue>{p1Stats?.highFinish}</StatValue>
+
+                    <Title>Best Leg </Title>
+                    <StatValue>{p1Stats?.bestLeg}</StatValue>
+
+                    <Title>Worst Leg </Title>
+                    <StatValue>{p1Stats?.worstLeg}</StatValue>
+                </GameInfoModalPlayer>
+                <GameInfoModalPlayer>
+                    <GamePlayerStats>{gameInfo?.statsData?.[1]?.name}</GamePlayerStats>
+                    <Title>Sets</Title>
+                    <StatValue>{p2Stats?.win}</StatValue>
+
+                    <Title>Legs</Title>
+                    <StatValue>{p2Stats?.win}</StatValue>
+
+                    <hr />
+
+                    <Title>100+</Title>
+                    <StatValue>{p2Stats?.['100']}</StatValue>
+
+                    <Title>140+</Title>
+                    <StatValue>{p2Stats?.['140']}</StatValue>
+
+                    <Title>180's</Title>
+                    <StatValue>{p2Stats?.['180']}</StatValue>
+
+                    <hr />
+
+                    <Title>High Finish </Title>
+                    <StatValue>{p2Stats?.highFinish}</StatValue>
+
+                    <Title>Best Leg </Title>
+                    <StatValue>{p2Stats?.bestLeg}</StatValue>
+
+                    <Title>Worst Leg </Title>
+                    <StatValue>{p2Stats?.worstLeg}</StatValue>
+                </GameInfoModalPlayer>
+            </GameInfoModalPlayers>
         </Modal>
     );
 }
