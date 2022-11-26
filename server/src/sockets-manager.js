@@ -367,6 +367,8 @@ class SocketsManager {
     const meta = this.getMeta(socket);
 
     if (!meta) {
+      this.sockets.delete(socket);
+
       return false;
     }
 

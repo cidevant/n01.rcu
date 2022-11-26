@@ -31,6 +31,12 @@ export function initWebServer(port) {
     });
   });
 
+  app.get('/sockets-list', function (req, res) {
+    res.json({
+      sockets: sockets.listMetaSafe,
+    });
+  });
+
   app.get('/generate-access-code', function (_req, res) {
     const accessCode = sockets.generateAccessCode();
 
