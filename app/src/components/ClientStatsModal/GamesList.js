@@ -43,15 +43,15 @@ export function GamesList() {
 
                 return (
                     <GameInfo key={game.mid} onClick={openGameInfo(game.mid)}>
-                        <GamePlayer winner={p1Winner}>
+                        <GamePlayer>
                             <GamePlayerLegs>{game.p1winLegs}</GamePlayerLegs>
-                            <GamePlayerName>{game.p1name}</GamePlayerName>
+                            <GamePlayerName winner={p1Winner}>{game.p1name}</GamePlayerName>
                             <GamePlayerStats>{p1Stats}</GamePlayerStats>
                         </GamePlayer>
 
-                        <GamePlayer winner={p2Winner}>
+                        <GamePlayer>
                             <GamePlayerLegs second>{game.p2winLegs}</GamePlayerLegs>
-                            <GamePlayerName>{game.p2name}</GamePlayerName>
+                            <GamePlayerName winner={p2Winner}>{game.p2name}</GamePlayerName>
                             <GamePlayerStats>{p2Stats}</GamePlayerStats>
                         </GamePlayer>
                     </GameInfo>

@@ -25,6 +25,32 @@ export function StatsList() {
         }
     }, [days]);
 
+    const day = days[dayIndex];
+    const disabledLeft = dayIndex === 0;
+    const disabledRight = dayIndex === days.length - 1;
+    const swipeDays = useSwipeable({
+        onSwiped: (ev) => {
+            if (ev.dir === RIGHT) {
+                goLeft();
+            }
+
+            if (ev.dir === LEFT) {
+                goRight();
+            }
+        },
+    });
+
+    function goLeft() {
+        if (!disabledLeft) {
+            setDayIndex(dayIndex - 1);
+        }
+    }
+    function goRight() {
+        if (!disabledRight) {
+            setDayIndex(dayIndex + 1);
+        }
+    }
+
     if (!dayStats) {
         return <Alert>No stats</Alert>;
     }
@@ -33,8 +59,14 @@ export function StatsList() {
     const legsWinRate = ((dayStats?.legs?.win / dayStats?.legs?.total).toFixed(2) * 100).toFixed(0);
 
     return (
-        <>
-            <DaySelector days={days} dayIndex={dayIndex} setDayIndex={setDayIndex} />
+        <div {...swipeDays}>
+            <DaySelector
+                goLeft={goLeft}
+                goRight={goRight}
+                disabledLeft={disabledLeft}
+                disabledRight={disabledRight}
+                day={day}
+            />
 
             <Title>Average</Title>
             <StatValue>{dayStats?.average?.score?.toFixed?.(2)}</StatValue>
@@ -75,39 +107,13 @@ export function StatsList() {
 
             <Title>Worst Leg </Title>
             <StatValue>{dayStats?.worstLeg}</StatValue>
-        </>
+        </div>
     );
 }
 
-export function DaySelector({ days, dayIndex, setDayIndex }) {
-    const day = days[dayIndex];
-    const disabledLeft = dayIndex === 0;
-    const disabledRight = dayIndex === days.length - 1;
-    const swipeDays = useSwipeable({
-        onSwiped: (ev) => {
-            if (ev.dir === RIGHT) {
-                goLeft();
-            }
-
-            if (ev.dir === LEFT) {
-                goRight();
-            }
-        },
-    });
-
-    function goLeft() {
-        if (!disabledLeft) {
-            setDayIndex(dayIndex - 1);
-        }
-    }
-    function goRight() {
-        if (!disabledRight) {
-            setDayIndex(dayIndex + 1);
-        }
-    }
-
+export function DaySelector({ goLeft, goRight, disabledLeft, disabledRight, day }) {
     return (
-        <Wrapper {...swipeDays}>
+        <Wrapper>
             <Flex>
                 <FlexItem onClick={goLeft} nav disabled={disabledLeft}>
                     <FontAwesomeIcon icon="fa-solid fa-chevron-left" className="me-4" />

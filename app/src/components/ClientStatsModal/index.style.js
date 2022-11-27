@@ -61,22 +61,22 @@ export const GameInfo = styled.div`
 
 export const GamePlayer = styled.div`
     width: 50%;
-    padding: 40px 0;
+    margin: 40px 0;
     position: relative;
 
     text-align: center;
-    border-right: 2px solid #999;
+    border-right: 2px solid #ccc;
 
     &:last-child {
         border-right: none;
     }
-
-    ${({ winner }) => winner && 'background-color: rgba(0, 255, 0, 0.1);'};
 `;
 
 export const GamePlayerName = styled.div`
     font-size: 32px;
     color: #000;
+
+    ${({ winner }) => winner && 'text-decoration: underline; font-weight: bold;'}
 `;
 
 export const GamePlayerStats = styled.div`
@@ -87,12 +87,12 @@ export const GamePlayerStats = styled.div`
 
 export const GamePlayerLegs = styled.div`
     position: absolute;
-    bottom: 0px;
+    top: calc(50% - 43px);
     font-size: 64px;
     color: #bbb;
     z-index: -1;
 
-    ${({ second }) => `${second ? 'right' : 'left'}: 30px;`};
+    ${({ second }) => `${second ? 'right' : 'left'}: 0px;`};
 `;
 
 export const GameInfoModalPlayers = styled.div`

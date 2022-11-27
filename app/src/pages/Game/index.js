@@ -1,7 +1,6 @@
 import { FinishDartsModal } from '../../components/FinishDartsModal';
 import { useEndGameWatcher, useGameUpdater, useScores, useSwipeableScoreList } from './hooks';
 import { GameScoreList } from '../../components/GameScoreList';
-import { SCORES_LIST } from '../../utils/game';
 import styled from 'styled-components';
 import useData from '../../hooks/useData';
 import { useEffect, useState } from 'react';
@@ -19,7 +18,7 @@ function Game() {
     return (
         <Wrapper {...swipeScoreList}>
             <GameScoreList scores={scores} />
-            {scoreList === SCORES_LIST.COMMON && <Opponent />}
+            <Opponent />
             <FinishDartsModal />
         </Wrapper>
     );
