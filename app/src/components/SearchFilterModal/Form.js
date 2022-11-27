@@ -12,6 +12,7 @@ function SearchFilterForm(props) {
     const [scroll, setScroll] = useState(keepScrollingBottom);
     const [from, setFrom] = useState(filter.from);
     const [to, setTo] = useState(filter.to);
+    const [updateInterval, setUpdateInterval] = useState(filter.updateInterval);
     const [cam, setCam] = useState(filter.cam);
 
     function updateFrom(event) {
@@ -62,6 +63,23 @@ function SearchFilterForm(props) {
         dispatchKeepScrollingBottom(!scroll);
     }
 
+    function updateUpdateInterval(event) {
+        event.preventDefault();
+
+        const { value } = event.target;
+
+        if (value >= 0) {
+            setUpdateInterval(value);
+
+            props.applyFormValues({
+                from: parseInt(from, 10),
+                to: parseInt(to, 10),
+                updateInterval: parseInt(value, 10),
+                cam,
+            });
+        }
+    }
+
     return (
         <Form>
             <div className="d-grid">
@@ -85,7 +103,15 @@ function SearchFilterForm(props) {
                         />
                     </FormInputWrapper>
                 </Flex>
-
+                <FormInputWrapper className="mt-4">
+                    <TitleForm>UPDATE INTERVAL</TitleForm>
+                    <FormInput
+                        disabled={activity !== 'search'}
+                        type="number"
+                        value={updateInterval}
+                        onChange={updateUpdateInterval}
+                    />
+                </FormInputWrapper>
                 <Flex>
                     <ButtonWrapper className="d-grid gap-2 mt-4">
                         <TitleForm>ONLY WITH CAM</TitleForm>

@@ -75,6 +75,7 @@ try {
     filterValue = {
         from: 0,
         to: 180,
+        updateInterval: 5,
         cam: true, // @TODO rename to CAM_ONLY
     };
 }

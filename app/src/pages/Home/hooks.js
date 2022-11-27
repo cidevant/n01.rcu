@@ -29,7 +29,11 @@ export function useStartGameWatcher(activity) {
  * @param {*} activity
  */
 export function useSearchPolling(activity) {
-    const { dispatchFilter, dispatchScrollBottom, keepScrollingBottom } = useHomeInfo();
+    const { dispatchFilter, dispatchScrollBottom, keepScrollingBottom, filter } = useHomeInfo();
+    const updateInterval =
+        filter?.updateInterval > 0 && filter?.updateInterval < 1000
+            ? filter?.updateInterval * 1000
+            : 5000;
 
     useInterval(() => {
         if (activity === 'search') {
@@ -39,7 +43,7 @@ export function useSearchPolling(activity) {
                 dispatchScrollBottom();
             }
         }
-    }, 5000);
+    }, updateInterval);
 }
 
 /**
