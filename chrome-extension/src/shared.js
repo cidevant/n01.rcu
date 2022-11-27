@@ -618,10 +618,10 @@ class $SHARED_STORAGE extends $SHARED {
 // ---------------------------------------------------------------------------------------------
 
 class $SHARED_WEBSOCKET {
-    static connectionTimeout = 30000; // must be same as on server
+    static connectionTimeout = 5000; // must be same as on server
     static connectionTimeoutThreshold = 3000; // don't disconnect from server instantly
     static reconnectMaxTries = 24;
-    static reconnectDelay = 30000;
+    static reconnectDelay = 5000;
 
     // ------------------------------------------
     // PUBLIC METHODS

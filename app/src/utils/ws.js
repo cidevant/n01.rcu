@@ -141,7 +141,7 @@ class WebsocketClient {
     // RECONNECT
 
     static reconnectMaxTries = 24;
-    static reconnectDelay = 30000;
+    static reconnectDelay = 5000;
 
     #reconnectTries = 0;
     #reconnectTimeoutID;
@@ -180,7 +180,7 @@ class WebsocketClient {
 
     // PING-PONG
 
-    static connectionTimeout = 30000; // must be same as on server
+    static connectionTimeout = 5000; // must be same as on server
     static connectionTimeoutThreshold = 3000; // allow some time for data communication (ping - delay - pong)
 
     #pingPongTimeoutID;

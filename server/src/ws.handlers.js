@@ -91,8 +91,8 @@ export function handleActions(_message, ws) {
  */
 
 export const handlePingPong = {
-  __connectionTimeout: 30000,
-  __pingPongInterval: null,
+  __connectionTimeout: 5000,
+  __pingPongIntervalID: null,
 
   handleMessage(ws, message) {
     if (message === 'pong') {
@@ -107,7 +107,7 @@ export const handlePingPong = {
   start(wss) {
     console.log('[ws.server][ping-pong] started');
 
-    this.__pingPongInterval = setInterval(() => {
+    this.__pingPongIntervalID = setInterval(() => {
       wss.clients.forEach((ws) => {
         // closes "dead" socket
         if (!ws.isAlive) {
@@ -132,10 +132,10 @@ export const handlePingPong = {
   stop() {
     console.log('[ws.server][ping-pong] stopped');
 
-    if (this.__pingPongInterval != null) {
-      clearInterval(this.__pingPongInterval);
+    if (this.__pingPongIntervalID != null) {
+      clearInterval(this.__pingPongIntervalID);
 
-      this.__pingPongInterval = null;
+      this.__pingPongIntervalID = null;
     }
   },
 };
