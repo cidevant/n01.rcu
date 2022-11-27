@@ -30,7 +30,7 @@ function FilterButton({ open }) {
         <div className="d-flex align-items-center">
             <div className="ms-4">
                 <Button color={color} onClick={open}>
-                    <FontAwesomeIcon icon="fa-solid fa-filter" />
+                    <FontAwesomeIcon icon="fa-solid fa-user-gear" />
                 </Button>
             </div>
         </div>

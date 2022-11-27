@@ -65,56 +65,60 @@ function SearchFilterForm(props) {
     return (
         <Form>
             <div className="d-grid">
-                <FormInputWrapper className="mt-4">
-                    <TitleForm>AVERAGE FROM</TitleForm>
-                    <FormInput
-                        disabled={activity !== 'search'}
-                        type="number"
-                        value={from}
-                        onChange={updateFrom}
-                    />
-                </FormInputWrapper>
-                <FormInputWrapper className="mt-4">
-                    <TitleForm>AVERAGE TO</TitleForm>
-                    <FormInput
-                        disabled={activity !== 'search'}
-                        type="number"
-                        value={to}
-                        onChange={updateTo}
-                    />
-                </FormInputWrapper>
-
-                <ButtonWrapper className="d-grid gap-2 mt-4 mb-4">
-                    <Button
-                        size="lg"
-                        onClick={updateCam}
-                        variant={cam === true ? 'success' : 'secondary'}
-                    >
-                        <FontAwesomeIcon
-                            className="text-white me-4"
-                            icon={cam === true ? 'fa-solid fa-video' : 'fa-solid fa-video-slash'}
+                <Flex>
+                    <FormInputWrapper className="mt-4">
+                        <TitleForm>AVERAGE FROM</TitleForm>
+                        <FormInput
+                            disabled={activity !== 'search'}
+                            type="number"
+                            value={from}
+                            onChange={updateFrom}
                         />
-                        {cam === true ? 'ENABLED' : 'DISABLED'}
-                    </Button>
-                </ButtonWrapper>
-
-                <ButtonWrapper className="d-grid gap-2 mt-5">
-                    <Button
-                        size="lg"
-                        onClick={updateScroll}
-                        variant={scroll === true ? 'success' : 'secondary'}
-                    >
-                        <FontAwesomeIcon
-                            className="text-white me-4"
-                            icon={
-                                scroll === true
-                                    ? 'fa-solid fa-arrow-down'
-                                    : 'fa-solid fa-arrows-to-circle'
-                            }
+                    </FormInputWrapper>
+                    <FormInputWrapper className="mt-4">
+                        <TitleForm>AVERAGE TO</TitleForm>
+                        <FormInput
+                            disabled={activity !== 'search'}
+                            type="number"
+                            value={to}
+                            onChange={updateTo}
                         />
-                        {scroll === true ? 'SCROLLING' : 'STILL'}
-                    </Button>
-                </ButtonWrapper>
+                    </FormInputWrapper>
+                </Flex>
+
+                <Flex>
+                    <ButtonWrapper className="d-grid gap-2 mt-4">
+                        <TitleForm>ONLY WITH CAM</TitleForm>
+
+                        <Button
+                            size="lg"
+                            onClick={updateCam}
+                            variant={cam === true ? 'success' : 'secondary'}
+                        >
+                            <FontAwesomeIcon
+                                className="text-white me-4"
+                                icon={cam === true ? 'fa-solid fa-check' : 'fa-solid fa-xmark'}
+                            />
+                            {cam === true ? 'ENABLED' : 'DISABLED'}
+                        </Button>
+                    </ButtonWrapper>
+
+                    <ButtonWrapper className="d-grid gap-2 mt-4">
+                        <TitleForm>AUTO SCROLL</TitleForm>
+
+                        <Button
+                            size="lg"
+                            onClick={updateScroll}
+                            variant={scroll === true ? 'success' : 'secondary'}
+                        >
+                            <FontAwesomeIcon
+                                className="text-white me-4"
+                                icon={scroll === true ? 'fa-solid fa-check' : 'fa-solid fa-xmark'}
+                            />
+                            {scroll === true ? 'ENABLED' : 'DISABLED'}
+                        </Button>
+                    </ButtonWrapper>
+                </Flex>
             </div>
         </Form>
     );
@@ -129,6 +133,7 @@ const FormInputWrapper = styled.div`
 const TitleForm = styled.div`
     color: #888;
     font-size: 40px;
+    text-align: center;
 `;
 
 const FormInput = styled(Form.Control)`
@@ -137,15 +142,22 @@ const FormInput = styled(Form.Control)`
     height: 120px;
     border-radius: 0;
     outline: none;
+    text-align: center;
 `;
 
 const ButtonWrapper = styled.div`
-    height: 100px;
     z-index: 10;
     padding: 20px;
+    width: 50%;
 
     & > button {
         border-radius: 0;
-        font-size: 80px;
+        font-size: 40px;
+        height: 140px;
     }
+`;
+
+const Flex = styled.div`
+    display: flex;
+    flex-direction: row;
 `;
