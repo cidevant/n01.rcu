@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Alert } from 'react-bootstrap';
 import useHomeInfo from '../../hooks/useHomeInfo';
-import { GameDetailModal } from './GameDetailModal';
+import { GameHistoryDetail } from './Detail';
 import {
     GameInfo,
     GamePlayer,
@@ -10,7 +10,7 @@ import {
     GamePlayerStats,
 } from './index.style';
 
-export function GamesList() {
+export function GamesHistory() {
     const { games } = useHomeInfo();
     const [showGameInfoModal, setShowGameInfoModal] = useState(false);
 
@@ -30,7 +30,7 @@ export function GamesList() {
 
     return (
         <div>
-            <GameDetailModal
+            <GameHistoryDetail
                 show={showGameInfoModal !== false}
                 mid={showGameInfoModal}
                 close={closeModal}

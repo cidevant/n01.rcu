@@ -5,6 +5,7 @@ import Idle from './Idle';
 import { useNetworkInfo } from '../../hooks/useNetworkInfo';
 import WaitingForPairing from './WaitingForPairing';
 import ConnectForm from './ConnectForm';
+import TopBar from '../../components/TopBar';
 
 function Home() {
     const { activity } = useData();
@@ -14,19 +15,28 @@ function Home() {
     useSearchPolling(activity);
     useStats();
 
-    if (activity === 'search') {
-        return <SearchResults />;
+    function renderContent() {
+        if (activity === 'search') {
+            return <SearchResults />;
+        }
+
+        if (isConnected && !isPaired) {
+            return <WaitingForPairing />;
+        }
+
+        if (isPaired && activity === 'idle') {
+            return <Idle />;
+        }
+
+        return <ConnectForm />;
     }
 
-    if (isConnected && !isPaired) {
-        return <WaitingForPairing />;
-    }
-
-    if (isPaired && activity === 'idle') {
-        return <Idle />;
-    }
-
-    return <ConnectForm />;
+    return (
+        <>
+            <TopBar />
+            {renderContent()}
+        </>
+    );
 }
 
 export default Home;

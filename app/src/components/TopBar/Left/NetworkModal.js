@@ -1,6 +1,6 @@
-import { connect, disconnect, setAccessCode, setServerUrl } from '../../../../store/ws.reducer';
+import { connect, disconnect, setAccessCode, setServerUrl } from '../../../store/ws.reducer';
 import { useSelector, useDispatch } from 'react-redux';
-import { ws } from '../../../../utils/ws';
+import { ws } from '../../../utils/ws';
 import Button from 'react-bootstrap/Button';
 import Form from './Form';
 import Offcanvas from 'react-bootstrap/Offcanvas';

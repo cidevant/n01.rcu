@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { validInputValue } from '../../../utils/game';
+import { validInputValue } from '../../utils/game';
 import { useDispatch } from 'react-redux';
-import { sendInputScore } from '../../../store/game.reducer';
-import { StickyPhantom, Sticky } from '../Sticky';
+import { sendInputScore } from '../../store/game.reducer';
+import { Sticky } from '../Sticky';
 import ScoreLeft from './ScoreLeft';
 import Scenes from './Scenes';
-import { useGameInfo } from '../../../hooks/useGameInfo';
+import { useGameInfo } from '../../hooks/useGameInfo';
 
 export function InputKeyboard() {
     const dispatch = useDispatch();
@@ -30,21 +30,18 @@ export function InputKeyboard() {
     }
 
     return (
-        <>
-            <StickyPhantom size={180} />
-            <Sticky bottom>
-                <Scenes />
-                <StyledInput
-                    type="number"
-                    onKeyDown={onSubmit}
-                    min={0}
-                    max={180}
-                    maxLength={3}
-                    minLength={1}
-                />
-                <ScoreLeft />
-            </Sticky>
-        </>
+        <Sticky bottom>
+            <Scenes />
+            <StyledInput
+                type="number"
+                onKeyDown={onSubmit}
+                min={0}
+                max={180}
+                maxLength={3}
+                minLength={1}
+            />
+            <ScoreLeft />
+        </Sticky>
     );
 }
 

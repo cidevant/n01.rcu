@@ -4,8 +4,8 @@ import React, { useState, useMemo } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import styled from 'styled-components';
 import { CornerButton } from '../CornerButton';
-import { useNetworkInfo } from '../../../../hooks/useNetworkInfo';
-import ClientStatsModal from '../../../ClientStatsModal';
+import { useNetworkInfo } from '../../../hooks/useNetworkInfo';
+import DailyStats from '../../DailyStats';
 
 export function LeftButtons() {
     const [modalShow, setModalShow] = useState(false);
@@ -75,7 +75,7 @@ function NetworkButton({ open }) {
             <Title onClick={openStatsModal} textColor={textColor}>
                 {text}
             </Title>
-            <ClientStatsModal show={showStats} close={closeStatsModal} />
+            <DailyStats show={showStats} close={closeStatsModal} />
         </div>
     );
 }

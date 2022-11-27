@@ -51,7 +51,7 @@ export function useStats() {
     const prevStatsId = useRef();
     const { dispatchSetStats, dispatchSetGames } = useHomeInfo();
     const { player } = useData();
-    const statsId = useMemo(() => {
+    const userId = useMemo(() => {
         if (player?.fid) {
             return `fid=${player.fid}`;
         }
@@ -68,18 +68,18 @@ export function useStats() {
     }, [player]);
 
     useEffect(() => {
-        if (!_.isEmpty(statsId) && prevStatsId.current !== statsId) {
-            fetch(`${config.nakkaApiEndpoint}/n01/online/n01_stats.php?cmd=stats_list&${statsId}`)
+        if (!_.isEmpty(userId) && prevStatsId.current !== userId) {
+            fetch(`${config.nakkaApiEndpoint}/n01/online/n01_stats.php?cmd=stats_list&${userId}`)
                 .then((data) => data.json())
                 .then(dispatchSetStats);
 
             fetch(
-                `${config.nakkaApiEndpoint}/n01/online/n01_history.php?cmd=history_list&skip=0&count=100&${statsId}`
+                `${config.nakkaApiEndpoint}/n01/online/n01_history.php?cmd=history_list&skip=0&count=100&${userId}`
             )
                 .then((data) => data.json())
                 .then(dispatchSetGames);
 
-            prevStatsId.current = statsId;
+            prevStatsId.current = userId;
         }
-    }, [statsId, prevStatsId, dispatchSetStats, dispatchSetGames]);
+    }, [userId, prevStatsId, dispatchSetStats, dispatchSetGames]);
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScenesModal } from '../../ScenesModal';
+import { ScenesModal } from '../ScenesModal';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 

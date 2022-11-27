@@ -3,6 +3,7 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import styled from 'styled-components';
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Opponent } from './Opponent';
 
 export function ScenesModal({ show, close }) {
     return (
@@ -16,6 +17,7 @@ export function ScenesModal({ show, close }) {
                     SCENES
                 </Button>
             </ButtonWrapper>
+            <Opponent />
             <ScenesList />
         </Offcanvas>
     );

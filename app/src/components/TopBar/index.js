@@ -3,9 +3,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { LeftButtons } from './Left';
 import { RightButtons } from './Right';
-import { useData } from '../../../hooks/useData';
+import { useData } from '../../hooks/useData';
 
-export function StatusBar() {
+export function TopBar() {
     const { activity } = useData();
 
     if (activity === 'game') {
@@ -27,7 +27,7 @@ export function StatusBar() {
     );
 }
 
-export default StatusBar;
+export default TopBar;
 
 const StickyTop = styled(Sticky)`
     background-color: #222;

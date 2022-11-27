@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useNetworkInfo } from '../../../../hooks/useNetworkInfo';
+import { useNetworkInfo } from '../../../hooks/useNetworkInfo';
 import { CornerButton } from '../CornerButton';
 import { Filter } from './Filter';
 

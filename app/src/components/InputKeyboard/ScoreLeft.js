@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import React, { useState, useMemo } from 'react';
-import { CheckoutsModal } from '../../CheckoutsModal';
-import { useGameInfo } from '../../../hooks/useGameInfo';
-import { getCheckouts } from '../../../utils/game';
+import { CheckoutsModal } from '../CheckoutsModal';
+import { useGameInfo } from '../../hooks/useGameInfo';
+import { getCheckouts } from '../../utils/game';
 
 export function ScoreLeft() {
     const { scoreLeft } = useGameInfo();

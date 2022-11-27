@@ -3,14 +3,14 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ButtonWrapper } from './index.style';
-import { GamesList } from './GamesList';
 import { StatsList } from './StatsList';
+import { GamesHistory } from '../GamesHistory';
 
-export function ClientStatsModal({ show, close }) {
-    const [showGame, setShowGame] = useState(false);
+export function DailyStats({ show, close }) {
+    const [showGameHistory, setShowGameHistory] = useState(false);
 
     function toggleStatsGame() {
-        setShowGame(!showGame);
+        setShowGameHistory(!showGameHistory);
     }
 
     return (
@@ -24,12 +24,12 @@ export function ClientStatsModal({ show, close }) {
             <ButtonWrapper className="d-grid gap-2">
                 <Button onClick={toggleStatsGame} variant="warning">
                     <FontAwesomeIcon icon="fa-solid fa-ranking-star" className="text-black me-4" />
-                    {showGame ? 'GAMES' : 'STATS'}
+                    {showGameHistory ? 'GAMES' : 'STATS'}
                 </Button>
             </ButtonWrapper>
-            <Offcanvas.Body>{showGame ? <GamesList /> : <StatsList />}</Offcanvas.Body>
+            <Offcanvas.Body>{showGameHistory ? <GamesHistory /> : <StatsList />}</Offcanvas.Body>
         </Offcanvas>
     );
 }
 
-export default ClientStatsModal;
+export default DailyStats;
