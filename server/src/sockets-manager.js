@@ -415,7 +415,7 @@ class SocketsManager {
   };
 
   static generateRandomAccessCode() {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const charactersLength = characters.length;
 
     let result = '';
