@@ -80,9 +80,13 @@ export function GameDetailModal({ close, mid, show }) {
                             stats[playerKey]['180'] += 1;
                         }
 
-                        if (legsLength - 1 === index && pData.score < 0) {
+                        if (
+                            legsLength - 1 === index &&
+                            pData.score < 0 &&
+                            playerIndex === leg.winner
+                        ) {
                             stats[playerKey].highFinish = Math.max(
-                                leg?.playerData?.[0]?.[index - 1]?.left ?? 0,
+                                leg?.playerData?.[playerIndex]?.[index - 1]?.left ?? 0,
                                 stats[playerKey].highFinish
                             );
                         }

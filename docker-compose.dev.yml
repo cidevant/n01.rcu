@@ -4,19 +4,19 @@ services:
     container_name: n01rcu-app-dev
     build:
       context: ./app
-      dockerfile: 'Dockerfile'
+      dockerfile: Dockerfile
     stdin_open: true
     environment:
       - PORT=7000
     ports:
       - '7000:7000'
     volumes:
-        - './app:/app:cached'
+      - './app:/app:cached'
   server:
     container_name: n01rcu-server-dev
     build:
       context: ./server
-      dockerfile: 'Dockerfile'
+      dockerfile: Dockerfile
     environment:
       - PORT=7001
     ports:
