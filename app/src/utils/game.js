@@ -133,7 +133,8 @@ const SCORES_OUTS = [
 ];
 
 const SCORES_HIGH = [
-    [40, 60, 70],
+    [40, 62, 64],
+    [68, 70, 76],
     [80, 100, 120],
     [140, 160, 180],
     { type: 'divider' },
