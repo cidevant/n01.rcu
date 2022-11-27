@@ -3,10 +3,23 @@ import styled from 'styled-components';
 import Spinner from 'react-bootstrap/Spinner';
 import { useLoadingSpinner } from './hooks';
 import { SearchResultItem } from './Item';
+import { useState } from 'react';
+import ItemGamesHistory from './ItemGamesHistory';
 
 function SearchResult() {
     const { players } = useHomeInfo();
     const showSpinner = useLoadingSpinner();
+    const [playerGamesHistory, setPlayerGamesHistory] = useState(false);
+
+    function closePlayerGamesHistory() {
+        setPlayerGamesHistory(false);
+    }
+
+    function openPlayerGamesHistory(playerName) {
+        return () => {
+            setPlayerGamesHistory(playerName);
+        };
+    }
 
     return (
         <div>
@@ -16,8 +29,10 @@ function SearchResult() {
                 </SpinnerWrapper>
             )}
             {players?.map?.((player) => (
-                <SearchResultItem key={player.id} player={player} />
+                <SearchResultItem key={player.id} player={player} open={openPlayerGamesHistory} />
             ))}
+
+            <ItemGamesHistory close={closePlayerGamesHistory} playerName={playerGamesHistory} />
         </div>
     );
 }

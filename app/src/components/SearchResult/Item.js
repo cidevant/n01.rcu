@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import useHomeInfo from '../../hooks/useHomeInfo';
 import LongPressButton from '../LongPressButton';
 
-export function SearchResultItem({ player }) {
+export function SearchResultItem({ player, open }) {
     const { dispatchStartGame } = useHomeInfo();
 
     function onLongPress(event) {
@@ -27,7 +27,10 @@ export function SearchResultItem({ player }) {
                     {player.average}
                 </PlayerAverage>
             )}
-            <PlayerName className="flex-grow-1 d-flex align-items-center">
+            <PlayerName
+                onClick={open(player.name)}
+                className="flex-grow-1 d-flex align-items-center"
+            >
                 {player.cam && <FontAwesomeIcon className="me-4" icon="fa-solid fa-video" />}
                 {stripAverageFromName(player.name)}
             </PlayerName>
