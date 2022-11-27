@@ -60,13 +60,20 @@ export function StatsList() {
 
     return (
         <div {...swipeDays}>
-            <DaySelector
-                goLeft={goLeft}
-                goRight={goRight}
-                disabledLeft={disabledLeft}
-                disabledRight={disabledRight}
-                day={day}
-            />
+            <Wrapper>
+                <Flex>
+                    <FlexItem onClick={goLeft} nav disabled={disabledLeft}>
+                        <FontAwesomeIcon icon="fa-solid fa-chevron-left" className="me-4" />
+                    </FlexItem>
+                    <FlexItem>
+                        <Title>Day</Title>
+                        <StatValue>{day}</StatValue>
+                    </FlexItem>
+                    <FlexItem nav onClick={goRight} disabled={disabledRight}>
+                        <FontAwesomeIcon icon="fa-solid fa-chevron-right" className="me-4" />
+                    </FlexItem>
+                </Flex>
+            </Wrapper>
 
             <Title>Average</Title>
             <StatValue>{dayStats?.average?.score?.toFixed?.(2)}</StatValue>
@@ -108,24 +115,5 @@ export function StatsList() {
             <Title>Worst Leg </Title>
             <StatValue>{dayStats?.worstLeg}</StatValue>
         </div>
-    );
-}
-
-export function DaySelector({ goLeft, goRight, disabledLeft, disabledRight, day }) {
-    return (
-        <Wrapper>
-            <Flex>
-                <FlexItem onClick={goLeft} nav disabled={disabledLeft}>
-                    <FontAwesomeIcon icon="fa-solid fa-chevron-left" className="me-4" />
-                </FlexItem>
-                <FlexItem>
-                    <Title>Day</Title>
-                    <StatValue>{day}</StatValue>
-                </FlexItem>
-                <FlexItem nav onClick={goRight} disabled={disabledRight}>
-                    <FontAwesomeIcon icon="fa-solid fa-chevron-right" className="me-4" />
-                </FlexItem>
-            </Flex>
-        </Wrapper>
     );
 }
