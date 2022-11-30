@@ -3,7 +3,7 @@ import { ScenesModal } from '../ScenesModal';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export function Scenes() {
+export function Scenes({ opponent, average }) {
     const [modalShow, setModalShow] = useState(false);
 
     function onShow() {
@@ -16,7 +16,7 @@ export function Scenes() {
     return (
         <ScoreLeftWrapper>
             <ScenesButton open={onShow} />
-            <ScenesModal show={modalShow} close={onClose} />
+            <ScenesModal opponent={opponent} average={average} show={modalShow} close={onClose} />
         </ScoreLeftWrapper>
     );
 }

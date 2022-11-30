@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Opponent } from './Opponent';
 
-export function ScenesModal({ show, close }) {
+export function ScenesModal({ show, close, opponent, average }) {
     return (
         <Offcanvas placement="end" show={show} onHide={close}>
             <ButtonWrapper className="d-grid gap-2">
@@ -17,7 +17,7 @@ export function ScenesModal({ show, close }) {
                     SCENES
                 </Button>
             </ButtonWrapper>
-            <Opponent />
+            <Opponent opponent={opponent} average={average} />
             <ScenesList />
         </Offcanvas>
     );
