@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import useHomeInfo from '../../hooks/useHomeInfo';
+import { stripAverageFromName } from '../../utils/stats';
 import LongPressButton from '../LongPressButton';
 
 export function SearchResultItem({ player, open }) {
@@ -51,10 +52,6 @@ export function SearchResultItem({ player, open }) {
 }
 
 export default SearchResultItem;
-
-function stripAverageFromName(name) {
-    return name.replace(/\([0-9]*\.[0-9]*\)/, '');
-}
 
 const PlayerWrapper = styled.div`
     border-bottom: 2px solid #ccc;

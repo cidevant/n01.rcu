@@ -18,7 +18,9 @@ export function getDays(data) {
 
     return Object.keys(days);
 }
-
+export function stripAverageFromName(name) {
+    return name.replace(/\([0-9]*\.[0-9]*\)/, '');
+}
 export function getDayStats(data, time) {
     const stats = data?.filter((game) => {
         const start = new Date(time);

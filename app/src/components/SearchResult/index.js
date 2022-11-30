@@ -32,7 +32,9 @@ function SearchResult() {
                 <SearchResultItem key={player.id} player={player} open={openPlayerGamesHistory} />
             ))}
 
-            <ItemGamesHistory close={closePlayerGamesHistory} playerName={playerGamesHistory} />
+            {playerGamesHistory !== false && (
+                <ItemGamesHistory close={closePlayerGamesHistory} playerName={playerGamesHistory} />
+            )}
         </div>
     );
 }

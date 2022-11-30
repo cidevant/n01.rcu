@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const { useState, useEffect } = require('react');
 const { config } = require('../../config');
 const { default: useData } = require('../../hooks/useData');
