@@ -16,7 +16,7 @@ export function useOpponentStats() {
                 `${
                     config.nakkaApiEndpoint
                 }/n01/online/n01_history.php?cmd=history_list&skip=0&count=60&keyword=~${encodeURIComponent(
-                    `"${opponent?.name}"`
+                    `${opponent?.name?.trim?.()}`
                 )}`
             )
                 .then((data) => data.json())

@@ -16,8 +16,8 @@ function ItemGamesHistory({ playerName, close }) {
             fetch(
                 `${
                     config.nakkaApiEndpoint
-                }/n01/online/n01_history.php?cmd=history_list&skip=0&count=10&keyword=${encodeURIComponent(
-                    `~${stripAverageFromName(playerName)}`
+                }/n01/online/n01_history.php?cmd=history_list&skip=0&count=10&keyword=~${encodeURIComponent(
+                    `${stripAverageFromName(playerName)?.trim?.()}`
                 )}`
             )
                 .then((data) => data.json())
