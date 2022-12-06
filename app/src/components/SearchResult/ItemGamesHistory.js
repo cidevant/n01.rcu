@@ -1,44 +1,12 @@
-import _ from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Modal } from 'react-bootstrap';
-import { config } from '../../config';
 import { stripAverageFromName } from '../../utils/stats';
 import styled from 'styled-components';
+import { usePlayerGameHistory } from '../../hooks/useGameHistory';
 
 function ItemGamesHistory({ playerName, close }) {
-    const [opponentStats, setOpponentStats] = useState();
-    const [loading, setLoading] = useState(null);
-
-    useEffect(() => {
-        if (!_.isEmpty(playerName)) {
-            setLoading(true);
-
-            fetch(
-                `${
-                    config.nakkaApiEndpoint
-                }/n01/online/n01_history.php?cmd=history_list&skip=0&count=10&keyword=~${encodeURIComponent(
-                    `${stripAverageFromName(playerName)?.trim?.()}`
-                )}`
-            )
-                .then((data) => data.json())
-                .then((data) => {
-                    setOpponentStats(
-                        data.filter((game) => {
-                            const name = stripAverageFromName(playerName);
-
-                            return name.includes(game.p1name) || name.includes(game.p2name);
-                        })
-                    );
-
-                    setLoading(false);
-                });
-        }
-
-        return () => {
-            setOpponentStats(null);
-            setLoading(null);
-        };
-    }, [playerName]);
+    const name = stripAverageFromName(playerName)?.trim?.();
+    const { stats, loading } = usePlayerGameHistory(name);
 
     return (
         <Modal
@@ -50,35 +18,34 @@ function ItemGamesHistory({ playerName, close }) {
             <H1>{playerName}</H1>
 
             {loading === true && <LoadingState>Loading...</LoadingState>}
-            {loading === false && opponentStats?.length === 0 && (
-                <LoadingState>No data</LoadingState>
-            )}
-            {opponentStats?.map?.((game) => {
-                const p1Stats = ((game.p1allScore / game.p1allDarts) * 3).toFixed(2);
-                const p2Stats = ((game.p2allScore / game.p2allDarts) * 3).toFixed(2);
+            {loading === false && stats?.length === 0 && <LoadingState>No data</LoadingState>}
+            {stats?.length > 0 &&
+                stats?.map?.((game) => {
+                    const p1Stats = ((game.p1allScore / game.p1allDarts) * 3).toFixed(2);
+                    const p2Stats = ((game.p2allScore / game.p2allDarts) * 3).toFixed(2);
 
-                return (
-                    <Wrapper>
-                        <Player>
-                            <PlayerName
-                                owner={stripAverageFromName(playerName).includes(game.p1name)}
-                            >
-                                {game.p1name}
-                            </PlayerName>
-                            <PlayerStats>{p1Stats}</PlayerStats>
-                        </Player>
+                    return (
+                        <Wrapper>
+                            <Player>
+                                <PlayerName
+                                    owner={stripAverageFromName(playerName).includes(game.p1name)}
+                                >
+                                    {game.p1name}
+                                </PlayerName>
+                                <PlayerStats>{p1Stats}</PlayerStats>
+                            </Player>
 
-                        <Player>
-                            <PlayerName
-                                owner={stripAverageFromName(playerName).includes(game.p2name)}
-                            >
-                                {game.p2name}
-                            </PlayerName>
-                            <PlayerStats>{p2Stats}</PlayerStats>
-                        </Player>
-                    </Wrapper>
-                );
-            })}
+                            <Player>
+                                <PlayerName
+                                    owner={stripAverageFromName(playerName).includes(game.p2name)}
+                                >
+                                    {game.p2name}
+                                </PlayerName>
+                                <PlayerStats>{p2Stats}</PlayerStats>
+                            </Player>
+                        </Wrapper>
+                    );
+                })}
         </Modal>
     );
 }

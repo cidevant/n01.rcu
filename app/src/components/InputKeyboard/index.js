@@ -7,11 +7,13 @@ import { Sticky } from '../Sticky';
 import ScoreLeft from './ScoreLeft';
 import Scenes from './Scenes';
 import { useGameInfo } from '../../hooks/useGameInfo';
-import { useOpponentStats } from './hooks';
+import { useOpponentAverage } from './hooks';
+import useData from '../../hooks/useData';
 
 export function InputKeyboard() {
     const dispatch = useDispatch();
-    const { opponent, average } = useOpponentStats();
+    const { game } = useData();
+    const { average } = useOpponentAverage(game?.opponent?.name?.trim?.());
     const { scoreLeft } = useGameInfo();
 
     function onSubmit(e) {
@@ -33,7 +35,7 @@ export function InputKeyboard() {
 
     return (
         <Sticky bottom>
-            <Scenes opponent={opponent} average={average} />
+            <Scenes opponent={game?.opponent} average={average} />
             <StyledInput
                 type="number"
                 onKeyDown={onSubmit}
