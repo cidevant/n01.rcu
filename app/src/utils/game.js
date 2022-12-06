@@ -71,11 +71,25 @@ const SCORES_COMMON = [
 const SCORES_OUTS = [
     [
         {
+            value: 1,
+            style: 'outs',
+        },
+        {
             value: 2,
             style: 'outs',
         },
         {
             value: 4,
+            style: 'outs',
+        },
+    ],
+    [
+        {
+            value: 5,
+            style: 'outs',
+        },
+        {
+            value: 8,
             style: 'outs',
         },
         {
@@ -85,7 +99,7 @@ const SCORES_OUTS = [
     ],
     [
         {
-            value: 8,
+            value: 12,
             style: 'outs',
         },
         {
@@ -133,8 +147,9 @@ const SCORES_OUTS = [
 ];
 
 const SCORES_HIGH = [
-    [40, 62, 64],
-    [66, 68, 70],
+    [40, 60, 62],
+    [64, 66, 68],
+    [70, 76, 78],
     [80, 100, 120],
     [140, 160, 180],
     { type: 'divider' },
