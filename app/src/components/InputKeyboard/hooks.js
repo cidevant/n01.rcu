@@ -1,8 +1,7 @@
 import _ from 'lodash';
 import { usePlayerGameHistory } from '../../hooks/useGameHistory';
-
-const { useState, useEffect } = require('react');
-const { getAverage } = require('../../utils/stats');
+import { useState, useEffect } from 'react';
+import { getAverage } from '../../utils/stats';
 
 export function useOpponentAverage(name) {
     const [opponentStats, setOpponentStats] = useState();
