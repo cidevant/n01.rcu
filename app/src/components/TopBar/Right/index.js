@@ -1,20 +1,42 @@
-import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useNetworkInfo } from '../../../hooks/useNetworkInfo';
+import SettingsModal from '../../SettingsModal';
 import { CornerButton } from '../CornerButton';
-import { Filter } from './Filter';
 
 export function RightButtons() {
-    const { isConnected, isPaired } = useNetworkInfo();
+    const [show, setShow] = useState(false);
 
-    if (isConnected && isPaired) {
-        return <Filter />;
+    function onShow() {
+        setShow(true);
+    }
+    function onClose() {
+        setShow(false);
     }
 
-    return null;
+    return (
+        <>
+            <SettingsButton open={onShow} />
+            <SettingsModal show={show} close={onClose} />
+        </>
+    );
 }
 
 export default RightButtons;
+
+function SettingsButton({ open }) {
+    const color = '#6c757d';
+
+    return (
+        <div className="d-flex align-items-center">
+            <div className="ms-4">
+                <Button color={color} onClick={open}>
+                    <FontAwesomeIcon icon="fa-solid fa-user-gear" />
+                </Button>
+            </div>
+        </div>
+    );
+}
 
 export const Button = styled(CornerButton)`
     & > i {

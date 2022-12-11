@@ -1,28 +1,30 @@
 import Button from 'react-bootstrap/Button';
-import Form from './Form';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import useHomeInfo from '../../hooks/useHomeInfo';
+import { useNetworkInfo } from '../../hooks/useNetworkInfo';
+import SearchFilterForm from '../SearchFilterForm';
+import ConnectionForm from '../ConnectionForm';
 
-export function SearchFilterModal({ show, close }) {
-    const { dispatchSetFilter } = useHomeInfo();
+export function SettingsModal({ show, close }) {
+    const { isConnected, isPaired } = useNetworkInfo();
 
     return (
         <Offcanvas placement="end" show={show} onHide={close}>
             <ButtonWrapper className="d-grid gap-2">
                 <Button size="lg" onClick={close} variant="secondary">
-                    <FontAwesomeIcon icon="fa-solid fa-filter" className="text-white me-4" />
-                    FILTER
+                    <FontAwesomeIcon icon="fa-solid fa-user-gear" className="text-white me-4" />
+                    SETTINGS
                 </Button>
             </ButtonWrapper>
-            <Form applyFormValues={dispatchSetFilter} />
+            <ConnectionForm />
+            {isConnected && isPaired && <SearchFilterForm />}
         </Offcanvas>
     );
 }
 
-export default SearchFilterModal;
+export default SettingsModal;
 
 const ButtonWrapper = styled.div`
     height: 150px;
