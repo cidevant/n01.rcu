@@ -136,8 +136,8 @@ function ConnectDisconnectButton() {
 const StatusWrapper = styled.div`
     width: 100%;
     padding: 35px 15px;
-    background-color: #eee;
-    color: #999;
+    background-color: #333;
+    color: white;
     border-bottom: 1px solid #999;
     border-top: 1px solid #999;
     font-weight: bold;

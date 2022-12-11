@@ -197,8 +197,8 @@ const Flex = styled.div`
 const StatusWrapper = styled.div`
     width: 100%;
     padding: 35px 15px;
-    background-color: #eee;
-    color: #999;
+    background-color: #333;
+    color: white;
     border-top: 1px solid #999;
     border-bottom: 1px solid #999;
     font-weight: bold;
