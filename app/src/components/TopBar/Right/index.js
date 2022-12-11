@@ -31,7 +31,7 @@ function SettingsButton({ open }) {
         <div className="d-flex align-items-center">
             <div className="ms-4">
                 <Button color={color} onClick={open}>
-                    <FontAwesomeIcon icon="fa-solid fa-user-gear" />
+                    <FontAwesomeIcon icon="fa-solid fa-gear" />
                 </Button>
             </div>
         </div>

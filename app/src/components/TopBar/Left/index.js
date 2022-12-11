@@ -1,38 +1,21 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { NetworkModal } from './NetworkModal';
 import React, { useState, useMemo } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import styled from 'styled-components';
 import { CornerButton } from '../CornerButton';
 import { useNetworkInfo } from '../../../hooks/useNetworkInfo';
-import DailyStats from '../../DailyStats';
+import DailyStatsModal from '../../DailyStatsModal';
+import { GamesHistoryModal } from '../../GamesHistoryModal';
 
 export function LeftButtons() {
-    const [modalShow, setModalShow] = useState(false);
-
-    function onShow() {
-        setModalShow(true);
-    }
-    function onClose() {
-        setModalShow(false);
-    }
-
-    return (
-        <>
-            <NetworkButton open={onShow} />
-            <NetworkModal show={modalShow} close={onClose} />
-        </>
-    );
-}
-
-export default LeftButtons;
-
-function NetworkButton({ open }) {
     const { isConnected, isPaired, client } = useNetworkInfo();
+    const [showStats, setShowStats] = useState(false);
+    const [showGamesHistory, setShowGamesHistory] = useState(false);
+
     const icon = useMemo(() => {
         if (isConnected) {
             if (isPaired) {
-                return <FontAwesomeIcon fontSize={70} icon="fa-solid fa-handshake" />;
+                return <FontAwesomeIcon fontSize={70} icon="fa-solid fa-list" />;
             }
 
             return <Spinner animation="border" size="lg" />;
@@ -53,7 +36,6 @@ function NetworkButton({ open }) {
     }, [isConnected, isPaired, client]);
     const color = isConnected ? (isPaired ? 'green' : '#ffa029') : '#444';
     const textColor = isConnected ? (isPaired ? 'rgb(33, 237, 40)' : '#ffa029') : 'white';
-    const [showStats, setShowStats] = useState(false);
 
     function openStatsModal() {
         if (isPaired) {
@@ -65,20 +47,35 @@ function NetworkButton({ open }) {
         setShowStats(false);
     }
 
+    function openGamesHistoryModal() {
+        if (isPaired) {
+            setShowGamesHistory(true);
+        }
+    }
+
+    function closeGamesHistory() {
+        setShowGamesHistory(false);
+    }
+
+    if (!isConnected) {
+        return null;
+    }
+
     return (
         <div className="d-flex align-items-center">
-            <div className="me-4">
-                <Button color={color} onClick={open}>
-                    {icon}
-                </Button>
+            <div className="me-4" onClick={openGamesHistoryModal}>
+                <Button color={color}>{icon}</Button>
             </div>
             <Title onClick={openStatsModal} textColor={textColor}>
                 {text}
             </Title>
-            <DailyStats show={showStats} close={closeStatsModal} />
+            <DailyStatsModal show={showStats} close={closeStatsModal} />
+            <GamesHistoryModal show={showGamesHistory} close={closeGamesHistory} />
         </div>
     );
 }
+
+export default LeftButtons;
 
 const Title = styled.div`
     font-size: 40px;

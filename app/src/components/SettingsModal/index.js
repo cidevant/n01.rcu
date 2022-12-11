@@ -14,7 +14,7 @@ export function SettingsModal({ show, close }) {
         <Offcanvas placement="end" show={show} onHide={close}>
             <ButtonWrapper className="d-grid gap-2">
                 <Button size="lg" onClick={close} variant="secondary">
-                    <FontAwesomeIcon icon="fa-solid fa-user-gear" className="text-white me-4" />
+                    <FontAwesomeIcon icon="fa-solid fa-gear" className="text-white me-4" />
                     SETTINGS
                 </Button>
             </ButtonWrapper>
