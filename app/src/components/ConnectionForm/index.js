@@ -3,7 +3,6 @@ import { Button, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Spinner from 'react-bootstrap/Spinner';
 import ws from '../../utils/ws';
 import { connect, disconnect } from '../../store/ws.reducer';
 

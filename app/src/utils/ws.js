@@ -39,7 +39,7 @@ class WebsocketClient {
         if (this.open) {
             console.log('[ws.client] disconnecting');
 
-            this.__socket.close();
+            this.__socket.close(4050);
         }
     };
 
@@ -147,7 +147,7 @@ class WebsocketClient {
     #reconnectTimeoutID;
 
     #tryReconnect = (event, accessCode, url) => {
-        const closeError = WebsocketClient.closeError?.[event?.code];
+        const closeError = WebsocketClient.closeErrors?.[event?.code];
 
         if (closeError == null || closeError?.reconnect !== false) {
             if (this.__isValidAccessCode(accessCode) && this.__isValidUrl(url)) {
