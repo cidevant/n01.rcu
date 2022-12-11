@@ -1,6 +1,6 @@
 import './index.scss';
 
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import App from './App';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -34,9 +34,9 @@ function getUUID() {
 // Render app
 function renderApp() {
     ReactDOM.createRoot(document.getElementById('root')).render(
-        <BrowserRouter>
+        <HashRouter>
             <App />
-        </BrowserRouter>
+        </HashRouter>
     );
 
     registerServiceWorker();
