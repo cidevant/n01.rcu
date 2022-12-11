@@ -83,9 +83,9 @@ function SearchFilterForm() {
 
     return (
         <>
-            <hr />
+            <StatusWrapper>SEARCH FORM</StatusWrapper>
             <Form>
-                <div className="d-grid">
+                <div className="d-grid mb-4">
                     <Flex>
                         <FormInputWrapper className="mt-4">
                             <TitleForm>AVERAGE FROM</TitleForm>
@@ -192,4 +192,17 @@ const ButtonWrapper = styled.div`
 const Flex = styled.div`
     display: flex;
     flex-direction: row;
+`;
+
+const StatusWrapper = styled.div`
+    width: 100%;
+    padding: 35px 15px;
+    background-color: #eee;
+    color: #999;
+    border-top: 1px solid #999;
+    border-bottom: 1px solid #999;
+    font-weight: bold;
+    text-align: center;
+    font-size: 32px;
+    z-index: 1;
 `;

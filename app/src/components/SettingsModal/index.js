@@ -18,8 +18,8 @@ export function SettingsModal({ show, close }) {
                     SETTINGS
                 </Button>
             </ButtonWrapper>
-            <ConnectionForm />
             {isConnected && isPaired && <SearchFilterForm />}
+            <ConnectionForm />
         </Offcanvas>
     );
 }

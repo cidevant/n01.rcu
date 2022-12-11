@@ -9,12 +9,10 @@ import { connect, disconnect } from '../../store/ws.reducer';
 
 function ConnectionForm() {
     const wsStatus = useSelector((state) => state.ws.status);
-    const client = useSelector((state) => state.client.client);
-    const clientStatus = useSelector((state) => state.client.status);
+
     const [accessCode, setAccessCode] = useState(useSelector((state) => state.ws.accessCode));
     const [serverUrl, setServerUrl] = useState(useSelector((state) => state.ws.serverUrl));
     const isConnected = wsStatus === WebSocket.OPEN;
-    const isPaired = clientStatus === 'PAIRED';
     const dispatch = useDispatch();
     const updateFormValues = useCallback(
         (key, value) => {
@@ -49,14 +47,7 @@ function ConnectionForm() {
     return (
         <Form>
             <div className="d-grid">
-                <div className="d-flex flex-row">
-                    <ServerConnection status={isConnected} />
-                    <ClientConnection
-                        serverStatus={isConnected}
-                        status={isPaired}
-                        client={client}
-                    />
-                </div>
+                <ConnectionStatus />
                 <FormInputWrapper className="mt-4">
                     <TitleForm>ACCESS CODE</TitleForm>
                     <FormInput
@@ -85,93 +76,32 @@ function ConnectionForm() {
 
 export default ConnectionForm;
 
-function ServerConnection(props) {
-    const isConnected = props.status === true;
-    const icon = useMemo(() => {
-        if (!isConnected) {
-            return <FontAwesomeIcon icon="fa-solid fa-circle" className="me-2 text-danger" />;
+function ConnectionStatus() {
+    const wsStatus = useSelector((state) => state.ws.status);
+    const isConnected = wsStatus === WebSocket.OPEN;
+    const clientStatus = useSelector((state) => state.client.status);
+    const isPaired = clientStatus === 'PAIRED';
+
+    function renderStatus() {
+        if (isConnected && isPaired) {
+            return 'CONNECTED & PAIRED';
         }
 
-        return <FontAwesomeIcon icon="fa-solid fa-circle" className="me-2 text-success" />;
-    }, [isConnected]);
+        if (isConnected && !isPaired) {
+            return 'CONNECTED';
+        }
 
-    return (
-        <StatusWrapper>
-            {icon}
-            {isConnected ? 'CONNECTED TO SERVER' : 'SERVER DISCONNECTED'}
-        </StatusWrapper>
-    );
+        return 'CONNECTION FORM';
+    }
+
+    return <StatusWrapper>{renderStatus()}</StatusWrapper>;
 }
-
-function ClientConnection({ status, client, serverStatus }) {
-    const text = useMemo(() => {
-        if (!serverStatus) {
-            return '';
-        }
-
-        if (status && client?.name) {
-            return client?.name?.toUpperCase?.();
-        }
-
-        return 'WAITING FOR CLIENT';
-    }, [serverStatus, status, client?.name]);
-    const icon = useMemo(() => {
-        if (!serverStatus) {
-            return '';
-        }
-
-        if (status) {
-            return <FontAwesomeIcon className="me-2 text-success" icon="fa-solid fa-handshake" />;
-        }
-
-        return <Spinner className="me-2" animation="border" size="sm" />;
-    }, [status, serverStatus]);
-
-    return (
-        <StatusWrapper borderLeft>
-            {icon}
-            {text}
-        </StatusWrapper>
-    );
-}
-
-const StatusWrapper = styled.div`
-    ${({ borderLeft }) => borderLeft && 'border-left: 1px solid #999;'}
-    width: 50%;
-    padding: 15px;
-    background-color: #eee;
-    color: black;
-    border-bottom: 1px solid #999;
-    font-weight: bold;
-    text-align: center;
-    font-size: 18px;
-    z-index: 1;
-`;
-
-const FormInputWrapper = styled.div`
-    padding: 0 20px;
-`;
-
-const TitleForm = styled.div`
-    color: #888;
-    font-size: 40px;
-`;
-
-const FormInput = styled(Form.Control)`
-    font-size: 40px;
-    border-width: 4px;
-    height: 120px;
-    border-radius: 0;
-    outline: none;
-`;
 
 function ConnectDisconnectButton() {
     const dispatch = useDispatch();
-
     const accessCode = useSelector((state) => state.ws.accessCode);
     const serverUrl = useSelector((state) => state.ws.serverUrl);
     const wsStatus = useSelector((state) => state.ws.status);
-
     const disabled = !ws.__isValidAccessCode(accessCode) || !ws.__isValidUrl(serverUrl);
 
     function dispatchConnect() {
@@ -202,6 +132,36 @@ function ConnectDisconnectButton() {
 
     return <ButtonWrapper className="d-grid gap-2 mt-4">{renderButton()}</ButtonWrapper>;
 }
+
+const StatusWrapper = styled.div`
+    width: 100%;
+    padding: 35px 15px;
+    background-color: #eee;
+    color: #999;
+    border-bottom: 1px solid #999;
+    border-top: 1px solid #999;
+    font-weight: bold;
+    text-align: center;
+    font-size: 32px;
+    z-index: 1;
+`;
+
+const FormInputWrapper = styled.div`
+    padding: 0 20px;
+`;
+
+const TitleForm = styled.div`
+    color: #888;
+    font-size: 40px;
+`;
+
+const FormInput = styled(Form.Control)`
+    font-size: 40px;
+    border-width: 4px;
+    height: 120px;
+    border-radius: 0;
+    outline: none;
+`;
 
 const ButtonWrapper = styled.div`
     z-index: 10;
