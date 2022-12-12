@@ -15,7 +15,7 @@ export function useData() {
         page: data?.page,
         activity: data?.activity ?? 'idle',
         game: data?.game,
-        // page: 'game',
+        // activity: 'game',
         // activity: 'game',
         // game: {},
         dispatchGetData,
