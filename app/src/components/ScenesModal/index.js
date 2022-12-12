@@ -38,9 +38,6 @@ function ScenesList() {
                 >
                     EXIT GAME
                 </CheckoutDart>
-                <CheckoutDart className="d-flex align-items-center justify-content-center">
-                    SCENE 2
-                </CheckoutDart>
             </CheckoutsRow>
         </ContentWrapper>
     );
@@ -74,6 +71,7 @@ const CheckoutsRow = styled.div`
 
 const CheckoutDart = styled.div`
     font-size: 40px;
+    width: 100%;
     background-color: #0dcaf0;
     border: 1px solid #004757;
     box-shadow: 0 3px 6px 2px rgba(0, 0, 0, 0.2);

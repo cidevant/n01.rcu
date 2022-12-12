@@ -8,10 +8,10 @@ import ConnectForm from './ConnectForm';
 import TopBar from '../../components/TopBar';
 
 function Home() {
-    const { activity } = useData();
+    const { activity, page } = useData();
     const { isConnected, isPaired } = useNetworkInfo();
 
-    useStartGameWatcher(activity);
+    useStartGameWatcher(page);
     useSearchPolling(activity);
     useStats();
 

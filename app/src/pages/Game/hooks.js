@@ -29,13 +29,13 @@ export function useGameUpdater() {
  */
 export function useEndGameWatcher() {
     const navigate = useNavigate();
-    const { activity } = useData();
+    const { page } = useData();
 
     useEffect(() => {
-        if (activity !== 'game') {
+        if (page !== 'game') {
             navigate('/');
         }
-    }, [activity, navigate]);
+    }, [page, navigate]);
 }
 
 const SCORES_SEQUENCE = Object.values(SCORES_LIST);

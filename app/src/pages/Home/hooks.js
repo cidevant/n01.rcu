@@ -12,14 +12,14 @@ import useInterval from '../../hooks/useInterval';
  * @export
  * @param {*} activity
  */
-export function useStartGameWatcher(activity) {
+export function useStartGameWatcher(page) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (activity === 'game') {
+        if (page === 'game') {
             navigate('/game');
         }
-    }, [activity, navigate]);
+    }, [page, navigate]);
 }
 
 /**

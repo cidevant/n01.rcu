@@ -12,8 +12,10 @@ export function useData() {
     return {
         data,
         player: data?.player,
+        page: data?.page,
         activity: data?.activity ?? 'idle',
         game: data?.game,
+        // page: 'game',
         // activity: 'game',
         // game: {},
         dispatchGetData,
