@@ -37,6 +37,30 @@ export function useEndGameWatcher() {
         }
     }, [page, navigate]);
 }
+/**
+ * Watches when game is finished
+ *
+ * @export
+ */
+export function useExitGameTimeout() {
+    const { activity } = useData();
+    const [showTimeoutDialog, setShowTimeoutDialog] = useState(false);
+
+    function close() {
+        setShowTimeoutDialog(false);
+    }
+
+    useEffect(() => {
+        if (activity !== 'game') {
+            setShowTimeoutDialog(true);
+        }
+    }, [activity]);
+
+    return {
+        show: showTimeoutDialog,
+        close,
+    };
+}
 
 const SCORES_SEQUENCE = Object.values(SCORES_LIST);
 const SCORES_SEQUENCE_LAST_INDEX = SCORES_SEQUENCE.length - 1;
