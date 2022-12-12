@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Opponent } from './Opponent';
+import useGameInfo from '../../hooks/useGameInfo';
 
 export function ScenesModal({ show, close, opponent, average }) {
     return (
@@ -26,11 +27,16 @@ export function ScenesModal({ show, close, opponent, average }) {
 export default ScenesModal;
 
 function ScenesList() {
+    const { dispatchExitGame } = useGameInfo();
+
     return (
         <ContentWrapper>
             <CheckoutsRow className="d-flex gap-5">
-                <CheckoutDart className="d-flex align-items-center justify-content-center">
-                    SCENE 1
+                <CheckoutDart
+                    onClick={dispatchExitGame}
+                    className="d-flex align-items-center justify-content-center"
+                >
+                    EXIT GAME
                 </CheckoutDart>
                 <CheckoutDart className="d-flex align-items-center justify-content-center">
                     SCENE 2

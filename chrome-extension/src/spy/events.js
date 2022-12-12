@@ -80,6 +80,9 @@ async function wsMessageEventsHandler({ payload: { type, payload } }) {
         case 'START_GAME':
             $GAME_PROVIDER.start(payload);
             break;
+        case 'EXIT_GAME':
+            $GAME_PROVIDER.exit();
+            break;
         case 'SET_INPUT_SCORE':
             $GAME_PROVIDER.score(payload);
             break;

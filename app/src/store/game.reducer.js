@@ -9,6 +9,7 @@ export const ACTIONS = {
     // out
     SET_FINISH_DARTS: `${WS_OUT_PREFIX}:CLIENT:SET_FINISH_DARTS`,
     SET_INPUT_SCORE: `${WS_OUT_PREFIX}:CLIENT:SET_INPUT_SCORE`,
+    EXIT_GAME: `${WS_OUT_PREFIX}:CLIENT:EXIT_GAME`,
 };
 
 export function sendInputScore(payload) {
@@ -21,6 +22,13 @@ export function sendInputScore(payload) {
 export function setFinishDarts(payload) {
     return {
         type: ACTIONS.SET_FINISH_DARTS,
+        payload,
+    };
+}
+
+export function exitGame(payload) {
+    return {
+        type: ACTIONS.EXIT_GAME,
         payload,
     };
 }

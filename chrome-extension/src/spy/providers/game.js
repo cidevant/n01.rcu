@@ -21,6 +21,19 @@ function $GAME_PROVIDER_FACTORY() {
         }
     }
 
+    
+    /**
+     * Exits finished game
+     *
+     */
+    function exitGame() {
+        menuFunc('menu_new'); // press Exit button
+
+        setTimeout(() => {
+            $('#msg_ok').click();
+        }, 500);
+    }
+
     /**
      * Submits finish darts
      *
@@ -175,12 +188,6 @@ function $GAME_PROVIDER_FACTORY() {
                         type: 'CONTROLLERS:MATCH_END',
                     },
                 });
-
-                $$DEBUG && $$VERBOSE && console.log('[n01.RCU.spy.game] exit after 3 seconds');
-
-                setTimeout(() => {
-                    menuFunc('menu_new'); // press Exit button
-                }, 3000);
             },
         };
     }
@@ -189,6 +196,7 @@ function $GAME_PROVIDER_FACTORY() {
         start: startGame,
         finish: setFinishDart,
         score: setInputScore,
+        exit: exitGame,
         native: watchNativeGameFunctions,
     };
 }
