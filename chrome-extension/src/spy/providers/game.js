@@ -23,7 +23,7 @@ function $GAME_PROVIDER_FACTORY() {
 
     
     /**
-     * Exits finished game
+     * Exits game
      *
      */
     function exitGame() {
