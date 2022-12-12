@@ -22,7 +22,8 @@ function ExitTimeoutModal({ show, close }) {
             timeoutId = setTimeout(() => {
                 dispatchExitGame();
                 stopTimer();
-            }, 5000);
+                close();
+            }, 2000);
         } else {
             stopTimer();
         }
@@ -30,13 +31,13 @@ function ExitTimeoutModal({ show, close }) {
         return () => {
             stopTimer();
         };
-    }, [show, dispatchExitGame]);
+    }, [show, dispatchExitGame, close]);
 
     return (
         <Modal dialogClassName="XL_MODAL" show={show} fullscreen={false} onHide={close}>
-            <Wrapper>
+            <Wrapper onClick={close}>
                 <Title>
-                    Exit in <br /> 5 seconds
+                    Exit in <br /> 2 seconds
                 </Title>
                 <ButtonWrapper>
                     <Button variant="danger" size="lg">
@@ -65,7 +66,7 @@ const ButtonWrapper = styled.div`
     & > button {
         border-radius: 0;
         font-size: 40px;
-        height: 140px;
+        height: 240px;
         width: 100%;
     }
 `;
