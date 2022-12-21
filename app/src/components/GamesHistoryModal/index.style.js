@@ -35,9 +35,10 @@ export const GamePlayer = styled.div`
 
 export const GamePlayerName = styled.div`
     font-size: 32px;
-    color: #bbb;
+    color: black;
+    font-weight: bold;
 
-    ${({ highlight }) => highlight && 'font-weight: bold; color: #888;'}
+    ${({ highlight }) => highlight && 'font-weight: normal; color:#888;'}
 `;
 
 export const GamePlayerStats = styled.div`

@@ -28,6 +28,41 @@ export function GamesHistoryModal({ show, close }) {
         setShowGameInfoModal(false);
     }
 
+    function getPlayerIndex(isP1Client, isClient = true) {
+        if (isClient) {
+            return isP1Client ? 'p1' : 'p2';
+        }
+
+        return isP1Client ? 'p2' : 'p1';
+    }
+
+    function getGameStats(game) {
+        const isP1Client = game.p1name === client?.name;
+        const allStats = {
+            p1Stats: ((game.p1allScore / game.p1allDarts) * 3).toFixed(2),
+            p2Stats: ((game.p2allScore / game.p2allDarts) * 3).toFixed(2),
+            p1Winner: game.p1winLegs > game.p2winLegs,
+            p2Winner: game.p2winLegs > game.p1winLegs,
+        };
+        const clientIndex = getPlayerIndex(isP1Client, true);
+        const opponentStats = getPlayerIndex(isP1Client, false);
+
+        return {
+            clientStats: {
+                name: game[`${clientIndex}name`],
+                legs: game[`${clientIndex}winLegs`],
+                average: allStats[`${clientIndex}Stats`],
+                winner: allStats[`${clientIndex}Winner`],
+            },
+            opponentStats: {
+                name: game[`${opponentStats}name`],
+                legs: game[`${opponentStats}winLegs`],
+                average: allStats[`${opponentStats}Stats`],
+                winner: allStats[`${opponentStats}Winner`],
+            },
+        };
+    }
+
     return (
         <Offcanvas scroll={true} placement="start" show={show} onHide={close}>
             <ButtonWrapper className="d-grid gap-2">
@@ -44,27 +79,24 @@ export function GamesHistoryModal({ show, close }) {
                 />
                 {(!games || games?.length === 0) && <Alert>No games</Alert>}
                 {games?.map?.((game) => {
-                    const p1Stats = ((game.p1allScore / game.p1allDarts) * 3).toFixed(2);
-                    const p2Stats = ((game.p2allScore / game.p2allDarts) * 3).toFixed(2);
-                    const p1Client = game.p1name === client?.name;
-                    const p2Client = game.p2name === client?.name;
+                    const { clientStats, opponentStats } = getGameStats(game);
 
                     return (
                         <GameInfo key={game.mid} onClick={openGameInfo(game.mid)}>
                             <GamePlayer>
-                                <GamePlayerLegs winner={game.p1winLegs > game.p2winLegs}>
-                                    {game.p1winLegs}
+                                <GamePlayerLegs winner={clientStats.winner}>
+                                    {clientStats.legs}
                                 </GamePlayerLegs>
-                                <GamePlayerName highlight={p1Client}>{game.p1name}</GamePlayerName>
-                                <GamePlayerStats highlight={p1Client}>{p1Stats}</GamePlayerStats>
+                                <GamePlayerName highlight>{clientStats.name}</GamePlayerName>
+                                <GamePlayerStats highlight>{clientStats.average}</GamePlayerStats>
                             </GamePlayer>
 
                             <GamePlayer>
-                                <GamePlayerLegs winner={game.p2winLegs > game.p1winLegs} second>
-                                    {game.p2winLegs}
+                                <GamePlayerLegs winner={opponentStats.winner} second>
+                                    {opponentStats.legs}
                                 </GamePlayerLegs>
-                                <GamePlayerName highlight={p2Client}>{game.p2name}</GamePlayerName>
-                                <GamePlayerStats highlight={p2Client}>{p2Stats}</GamePlayerStats>
+                                <GamePlayerName>{opponentStats.name}</GamePlayerName>
+                                <GamePlayerStats>{opponentStats.average}</GamePlayerStats>
                             </GamePlayer>
                         </GameInfo>
                     );
