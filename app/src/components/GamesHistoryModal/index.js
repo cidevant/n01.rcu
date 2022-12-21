@@ -36,6 +36,15 @@ export function GamesHistoryModal({ show, close }) {
         return isP1Client ? 'p2' : 'p1';
     }
 
+    function getPlayerStats(game, allStats, index) {
+        return {
+            name: game[`${index}name`],
+            legs: game[`${index}winLegs`],
+            average: allStats[`${index}Stats`],
+            winner: allStats[`${index}Winner`],
+        };
+    }
+
     function getGameStats(game) {
         const isP1Client = game.p1name === client?.name;
         const allStats = {
@@ -45,21 +54,11 @@ export function GamesHistoryModal({ show, close }) {
             p2Winner: game.p2winLegs > game.p1winLegs,
         };
         const clientIndex = getPlayerIndex(isP1Client, true);
-        const opponentStats = getPlayerIndex(isP1Client, false);
+        const opponentIndex = getPlayerIndex(isP1Client, false);
 
         return {
-            clientStats: {
-                name: game[`${clientIndex}name`],
-                legs: game[`${clientIndex}winLegs`],
-                average: allStats[`${clientIndex}Stats`],
-                winner: allStats[`${clientIndex}Winner`],
-            },
-            opponentStats: {
-                name: game[`${opponentStats}name`],
-                legs: game[`${opponentStats}winLegs`],
-                average: allStats[`${opponentStats}Stats`],
-                winner: allStats[`${opponentStats}Winner`],
-            },
+            clientStats: getPlayerStats(game, allStats, clientIndex),
+            opponentStats: getPlayerStats(game, allStats, opponentIndex),
         };
     }
 
