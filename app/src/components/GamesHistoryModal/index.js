@@ -46,21 +46,25 @@ export function GamesHistoryModal({ show, close }) {
                 {games?.map?.((game) => {
                     const p1Stats = ((game.p1allScore / game.p1allDarts) * 3).toFixed(2);
                     const p2Stats = ((game.p2allScore / game.p2allDarts) * 3).toFixed(2);
-                    const p1Winner = game.p1name === client.name;
-                    const p2Winner = game.p2name === client.name;
+                    const p1Client = game.p1name === client?.name;
+                    const p2Client = game.p2name === client?.name;
 
                     return (
                         <GameInfo key={game.mid} onClick={openGameInfo(game.mid)}>
                             <GamePlayer>
-                                <GamePlayerLegs>{game.p1winLegs}</GamePlayerLegs>
-                                <GamePlayerName highlight={p1Winner}>{game.p1name}</GamePlayerName>
-                                <GamePlayerStats highlight={p1Winner}>{p1Stats}</GamePlayerStats>
+                                <GamePlayerLegs winner={game.p1winLegs > game.p2winLegs}>
+                                    {game.p1winLegs}
+                                </GamePlayerLegs>
+                                <GamePlayerName highlight={p1Client}>{game.p1name}</GamePlayerName>
+                                <GamePlayerStats highlight={p1Client}>{p1Stats}</GamePlayerStats>
                             </GamePlayer>
 
                             <GamePlayer>
-                                <GamePlayerLegs second>{game.p2winLegs}</GamePlayerLegs>
-                                <GamePlayerName highlight={p2Winner}>{game.p2name}</GamePlayerName>
-                                <GamePlayerStats highlight={p2Winner}>{p2Stats}</GamePlayerStats>
+                                <GamePlayerLegs winner={game.p2winLegs > game.p1winLegs} second>
+                                    {game.p2winLegs}
+                                </GamePlayerLegs>
+                                <GamePlayerName highlight={p2Client}>{game.p2name}</GamePlayerName>
+                                <GamePlayerStats highlight={p2Client}>{p2Stats}</GamePlayerStats>
                             </GamePlayer>
                         </GameInfo>
                     );

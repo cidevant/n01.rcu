@@ -112,7 +112,7 @@ function Cell({ num, rowLength }) {
                 activeStopPropagation
                 onLongPress={onLongPress}
                 delayPressIn={100}
-                delayLongPress={300}
+                delayLongPress={250}
                 onPressIn={onPressIn}
                 onPressOut={onPressOut}
             >

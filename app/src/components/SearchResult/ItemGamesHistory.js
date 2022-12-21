@@ -25,7 +25,7 @@ function ItemGamesHistory({ playerName, close }) {
                     const p2Stats = ((game.p2allScore / game.p2allDarts) * 3).toFixed(2);
 
                     return (
-                        <Wrapper>
+                        <Wrapper key={game.mid}>
                             <Player>
                                 <PlayerName
                                     owner={stripAverageFromName(playerName).includes(game.p1name)}

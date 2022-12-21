@@ -37,7 +37,7 @@ export const GamePlayerName = styled.div`
     font-size: 32px;
     color: #bbb;
 
-    ${({ highlight }) => highlight && 'text-decoration: underline; font-weight: bold; color: #000;'}
+    ${({ highlight }) => highlight && 'font-weight: bold; color: #888;'}
 `;
 
 export const GamePlayerStats = styled.div`
@@ -45,7 +45,7 @@ export const GamePlayerStats = styled.div`
     font-weight: bold;
     color: #bbb;
     text-align: center;
-    ${({ highlight }) => highlight && 'color: #000;'}
+    ${({ highlight }) => highlight && 'color: #000; font-size: 48px;'}
 `;
 
 export const GamePlayerLegs = styled.div`
@@ -55,6 +55,7 @@ export const GamePlayerLegs = styled.div`
     color: #bbb;
     z-index: -1;
 
+    ${({ winner }) => winner && 'color: #888;'}
     ${({ second }) => `${second ? 'right' : 'left'}: 0px;`};
 `;
 
