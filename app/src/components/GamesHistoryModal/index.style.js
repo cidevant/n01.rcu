@@ -35,15 +35,17 @@ export const GamePlayer = styled.div`
 
 export const GamePlayerName = styled.div`
     font-size: 32px;
-    color: #000;
+    color: #bbb;
 
-    ${({ winner }) => winner && 'text-decoration: underline; font-weight: bold;'}
+    ${({ highlight }) => highlight && 'text-decoration: underline; font-weight: bold; color: #000;'}
 `;
 
 export const GamePlayerStats = styled.div`
     font-size: 32px;
     font-weight: bold;
+    color: #bbb;
     text-align: center;
+    ${({ highlight }) => highlight && 'color: #000;'}
 `;
 
 export const GamePlayerLegs = styled.div`

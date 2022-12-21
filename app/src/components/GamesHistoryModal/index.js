@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Alert, Button, Offcanvas } from 'react-bootstrap';
 import styled from 'styled-components';
 import useHomeInfo from '../../hooks/useHomeInfo';
+import { useNetworkInfo } from '../../hooks/useNetworkInfo';
 import { GameHistoryDetail } from './Detail';
 import {
     GameInfo,
@@ -14,6 +15,7 @@ import {
 
 export function GamesHistoryModal({ show, close }) {
     const { games } = useHomeInfo();
+    const { client } = useNetworkInfo();
     const [showGameInfoModal, setShowGameInfoModal] = useState(false);
 
     function openGameInfo(mid) {
@@ -44,21 +46,21 @@ export function GamesHistoryModal({ show, close }) {
                 {games?.map?.((game) => {
                     const p1Stats = ((game.p1allScore / game.p1allDarts) * 3).toFixed(2);
                     const p2Stats = ((game.p2allScore / game.p2allDarts) * 3).toFixed(2);
-                    const p1Winner = game.p1winLegs > game.p2winLegs;
-                    const p2Winner = game.p2winLegs > game.p1winLegs;
+                    const p1Winner = game.p1name === client.name;
+                    const p2Winner = game.p2name === client.name;
 
                     return (
                         <GameInfo key={game.mid} onClick={openGameInfo(game.mid)}>
                             <GamePlayer>
                                 <GamePlayerLegs>{game.p1winLegs}</GamePlayerLegs>
-                                <GamePlayerName winner={p1Winner}>{game.p1name}</GamePlayerName>
-                                <GamePlayerStats>{p1Stats}</GamePlayerStats>
+                                <GamePlayerName highlight={p1Winner}>{game.p1name}</GamePlayerName>
+                                <GamePlayerStats highlight={p1Winner}>{p1Stats}</GamePlayerStats>
                             </GamePlayer>
 
                             <GamePlayer>
                                 <GamePlayerLegs second>{game.p2winLegs}</GamePlayerLegs>
-                                <GamePlayerName winner={p2Winner}>{game.p2name}</GamePlayerName>
-                                <GamePlayerStats>{p2Stats}</GamePlayerStats>
+                                <GamePlayerName highlight={p2Winner}>{game.p2name}</GamePlayerName>
+                                <GamePlayerStats highlight={p2Winner}>{p2Stats}</GamePlayerStats>
                             </GamePlayer>
                         </GameInfo>
                     );
