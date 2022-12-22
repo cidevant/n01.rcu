@@ -28,6 +28,13 @@ export function GamesHistoryModal({ show, close }) {
         setShowGameInfoModal(false);
     }
 
+    /**
+     * Returns game player index of Client or Opponent
+     *
+     * @param {boolean} isP1Client is first player client
+     * @param {boolean} [isClient=true] do we request index of Client or Opponent
+     * @returns {string} 'p1' or 'p2'
+     */
     function getPlayerIndex(isP1Client, isClient = true) {
         if (isClient) {
             return isP1Client ? 'p1' : 'p2';
