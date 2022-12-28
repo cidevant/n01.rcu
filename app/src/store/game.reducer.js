@@ -10,6 +10,7 @@ export const ACTIONS = {
     SET_FINISH_DARTS: `${WS_OUT_PREFIX}:CLIENT:SET_FINISH_DARTS`,
     SET_INPUT_SCORE: `${WS_OUT_PREFIX}:CLIENT:SET_INPUT_SCORE`,
     EXIT_GAME: `${WS_OUT_PREFIX}:CLIENT:EXIT_GAME`,
+    TOGGLE_STATS: `${WS_OUT_PREFIX}:CLIENT:TOGGLE_STATS`,
 };
 
 export function sendInputScore(payload) {
@@ -29,6 +30,13 @@ export function setFinishDarts(payload) {
 export function exitGame(payload) {
     return {
         type: ACTIONS.EXIT_GAME,
+        payload,
+    };
+}
+
+export function toggleStats(payload) {
+    return {
+        type: ACTIONS.TOGGLE_STATS,
         payload,
     };
 }

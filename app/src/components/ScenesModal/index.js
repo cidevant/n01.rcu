@@ -21,7 +21,6 @@ export function ScenesModal({ show, close, opponent, average }) {
             </ButtonWrapper>
             <Opponent opponent={opponent} average={average} />
             <hr />
-            <GameStats />
             <ScenesList />
         </Offcanvas>
     );
@@ -30,10 +29,18 @@ export function ScenesModal({ show, close, opponent, average }) {
 export default ScenesModal;
 
 function ScenesList() {
-    const { dispatchExitGame } = useGameInfo();
+    const { dispatchExitGame, dispatchToggleStats } = useGameInfo();
 
     return (
         <ContentWrapper>
+            <CheckoutsRow className="d-flex gap-5">
+                <CheckoutDart
+                    onClick={dispatchToggleStats()}
+                    className="d-flex align-items-center justify-content-center"
+                >
+                    TOGGLE STATS
+                </CheckoutDart>
+            </CheckoutsRow>
             <CheckoutsRow className="d-flex gap-5">
                 <CheckoutDart
                     onClick={dispatchExitGame}

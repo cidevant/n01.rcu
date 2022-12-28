@@ -72,7 +72,7 @@ export function GameHistoryDetail({ close, mid, show }) {
                     const legsLength = leg.playerData[playerIndex].length;
 
                     leg.playerData[playerIndex].forEach((pData, index) => {
-                        if (pData.score >= 100 && pData.score <= 140) {
+                        if (pData.score >= 100 && pData.score < 140) {
                             stats[playerKey]['100'] += 1;
                         } else if (pData.score >= 140 && pData.score < 180) {
                             stats[playerKey]['140'] += 1;
