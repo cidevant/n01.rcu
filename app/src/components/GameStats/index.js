@@ -1,53 +1,87 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import { Flex, FlexItem, StatValue, Title, Wrapper } from './index.style';
+import { StatValue, Title } from './index.style';
 
-function GameStats() {
-    const dayStats = {};
-    const setsWinRate = 0;
-    const legsWinRate = 0;
+function GameStats({ stats = {} }) {
+    function renderSets() {
+        if (!stats?.sets) {
+            return null;
+        }
+
+        const setsWinRate = ((stats?.sets?.win / stats?.sets?.total).toFixed(2) * 100).toFixed(0);
+
+        return (
+            <>
+                <Title>Sets</Title>
+                <StatValue>
+                    {stats?.sets?.win} / {stats?.sets?.total}{' '}
+                    {setsWinRate > 0 && `(${setsWinRate}%)`}
+                </StatValue>
+            </>
+        );
+    }
+
+    function renderLegs() {
+        if (!stats?.legs) {
+            return null;
+        }
+
+        const legsWinRate = ((stats?.legs?.win / stats?.legs?.total).toFixed(2) * 100).toFixed(0);
+
+        return (
+            <>
+                <Title>Legs</Title>
+                <StatValue>
+                    {stats?.legs?.win} / {stats?.legs?.total}{' '}
+                    {legsWinRate > 0 && `(${legsWinRate}%)`}
+                </StatValue>
+            </>
+        );
+    }
+
+    function renderSetsLegs() {
+        if (!stats?.sets || !stats?.legs) {
+            return null;
+        }
+
+        return (
+            <>
+                <hr />
+                {renderSets()}
+                {renderLegs()}
+            </>
+        );
+    }
 
     return (
         <div>
             <Title>Average</Title>
-            <StatValue>{dayStats?.average?.score?.toFixed?.(2)}</StatValue>
+            <StatValue>{stats?.average?.score?.toFixed?.(2)}</StatValue>
 
             <Title>First 9</Title>
-            <StatValue>{dayStats?.average?.first9?.toFixed?.(2)}</StatValue>
+            <StatValue>{stats?.average?.first9?.toFixed?.(2)}</StatValue>
 
             <hr />
             <Title>100+</Title>
-            <StatValue>{dayStats?.['100']}</StatValue>
+            <StatValue>{stats?.['100']}</StatValue>
 
             <Title>140+</Title>
-            <StatValue>{dayStats?.['140']}</StatValue>
+            <StatValue>{stats?.['140']}</StatValue>
 
             <Title>180's</Title>
-            <StatValue>{dayStats?.['180']}</StatValue>
+            <StatValue>{stats?.['180']}</StatValue>
 
-            <hr />
-            <Title>Sets</Title>
-            <StatValue>
-                {dayStats?.sets.win} / {dayStats?.sets.total}{' '}
-                {setsWinRate > 0 && `(${setsWinRate}%)`}
-            </StatValue>
-
-            <Title>Legs</Title>
-            <StatValue>
-                {dayStats?.legs.win} / {dayStats?.legs.total}{' '}
-                {legsWinRate > 0 && `(${legsWinRate}%)`}
-            </StatValue>
+            {renderSetsLegs()}
 
             <hr />
 
             <Title>High Finish </Title>
-            <StatValue>{dayStats?.highFinish}</StatValue>
+            <StatValue>{stats?.highFinish}</StatValue>
 
             <Title>Best Leg </Title>
-            <StatValue>{dayStats?.bestLeg}</StatValue>
+            <StatValue>{stats?.bestLeg}</StatValue>
 
             <Title>Worst Leg </Title>
-            <StatValue>{dayStats?.worstLeg}</StatValue>
+            <StatValue>{stats?.worstLeg}</StatValue>
         </div>
     );
 }

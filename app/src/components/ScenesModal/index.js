@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Opponent } from './Opponent';
 import useGameInfo from '../../hooks/useGameInfo';
+import GameStats from '../GameStats';
 
 export function ScenesModal({ show, close, opponent, average }) {
     return (
@@ -19,6 +20,8 @@ export function ScenesModal({ show, close, opponent, average }) {
                 </Button>
             </ButtonWrapper>
             <Opponent opponent={opponent} average={average} />
+            <hr />
+            <GameStats />
             <ScenesList />
         </Offcanvas>
     );
