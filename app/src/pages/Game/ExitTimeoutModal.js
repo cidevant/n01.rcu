@@ -22,6 +22,11 @@ function ExitTimeoutModal({ show, close }) {
         dispatchExitGame();
     }
 
+    function closeModal() {
+        stopTimer();
+        close();
+    }
+
     useEffect(() => {
         if (show === true) {
             stopTimer();
@@ -41,7 +46,7 @@ function ExitTimeoutModal({ show, close }) {
     }, [show, dispatchExitGame, close]);
 
     return (
-        <Modal dialogClassName="XL_MODAL" show={show} fullscreen={false} onHide={close}>
+        <Modal dialogClassName="XL_MODAL" show={show} fullscreen={false} onHide={closeModal}>
             <Wrapper>
                 <Title>
                     Exit after <br />
