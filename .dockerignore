@@ -1,5 +1,10 @@
-**/node_modules
+node_modules
+server/node_modules
+app/node_modules
+
 app/build
+chrome-extension
+
 _old
 .idea
 .vscode

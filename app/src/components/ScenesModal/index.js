@@ -35,7 +35,7 @@ function ScenesList() {
         <ContentWrapper>
             <CheckoutsRow className="d-flex gap-5">
                 <CheckoutDart
-                    onClick={dispatchToggleStats()}
+                    onClick={dispatchToggleStats}
                     className="d-flex align-items-center justify-content-center"
                 >
                     TOGGLE STATS
