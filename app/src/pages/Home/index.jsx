@@ -6,7 +6,6 @@ import { useNetworkInfo } from '../../hooks/useNetworkInfo';
 import WaitingForPairing from './WaitingForPairing';
 import ConnectForm from './ConnectForm';
 import TopBar from '../../components/TopBar';
-import ExitTimeoutModal from '../Game/ExitTimeoutModal';
 
 function Home() {
     const { activity, page } = useData();
@@ -35,7 +34,6 @@ function Home() {
     return (
         <>
             <TopBar />
-            {/* <ExitTimeoutModal show={true} close={() => {}} /> */}
             {renderContent()}
         </>
     );
