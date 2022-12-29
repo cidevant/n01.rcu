@@ -1,5 +1,5 @@
 {
-   "name": "n01.obs",
+   "name": "n01.rcu.server",
    "scripts": {
       "eslint": "eslint --fix ./*",
       "daemon:add": "./scripts/systemctl/add.sh",
