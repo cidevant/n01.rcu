@@ -2,8 +2,11 @@ import React, { useEffect } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import styled from 'styled-components';
 import useGameInfo from '../../hooks/useGameInfo';
+import Countdown from 'react-countdown';
 
 let timeoutId;
+
+const exitAfter = 2000;
 
 function ExitTimeoutModal({ show, close }) {
     const { dispatchExitGame } = useGameInfo();
@@ -15,6 +18,10 @@ function ExitTimeoutModal({ show, close }) {
         }
     }
 
+    function exit() {
+        dispatchExitGame();
+    }
+
     useEffect(() => {
         if (show === true) {
             stopTimer();
@@ -23,7 +30,7 @@ function ExitTimeoutModal({ show, close }) {
                 dispatchExitGame();
                 stopTimer();
                 close();
-            }, 2000);
+            }, exitAfter);
         } else {
             stopTimer();
         }
@@ -35,11 +42,25 @@ function ExitTimeoutModal({ show, close }) {
 
     return (
         <Modal dialogClassName="XL_MODAL" show={show} fullscreen={false} onHide={close}>
-            <Wrapper onClick={close}>
+            <Wrapper>
                 <Title>
-                    Exit in <br /> 2 seconds
+                    Exit after <br />
+                    <Countdown
+                        date={Date.now() + exitAfter}
+                        intervalDelay={10}
+                        precision={3}
+                        renderer={(props) => <>{props.total / 1000}</>}
+                    />
+                    <br />
+                    seconds
                 </Title>
-                <ButtonWrapper>
+
+                <ButtonWrapper onClick={exit}>
+                    <Button variant="success" size="lg">
+                        EXIT
+                    </Button>
+                </ButtonWrapper>
+                <ButtonWrapper onClick={close}>
                     <Button variant="danger" size="lg">
                         CANCEL
                     </Button>
@@ -59,7 +80,6 @@ const Wrapper = styled.div`
 
 const ButtonWrapper = styled.div`
     z-index: 10;
-    margin-top: 100px;
     padding: 20px;
     width: 100%;
 
@@ -72,6 +92,6 @@ const ButtonWrapper = styled.div`
 `;
 const Title = styled.div`
     text-align: center;
-
     font-size: 80px;
+    margin-bottom: 100px;
 `;
