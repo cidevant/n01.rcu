@@ -26,6 +26,7 @@ function SearchFilterForm() {
             dispatchSetFilter({
                 from: parseInt(value, 10),
                 to: parseInt(to, 10),
+                updateInterval: parseInt(updateInterval, 10),
                 cam,
             });
         }
@@ -41,6 +42,7 @@ function SearchFilterForm() {
             dispatchSetFilter({
                 from: parseInt(from, 10),
                 to: parseInt(value, 10),
+                updateInterval: parseInt(updateInterval, 10),
                 cam,
             });
         }
@@ -53,6 +55,7 @@ function SearchFilterForm() {
         dispatchSetFilter({
             from: parseInt(from, 10),
             to: parseInt(to, 10),
+            updateInterval: parseInt(updateInterval, 10),
             cam: !cam,
         });
     }

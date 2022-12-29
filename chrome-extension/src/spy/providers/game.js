@@ -21,6 +21,15 @@ function $GAME_PROVIDER_FACTORY() {
         }
     }
 
+
+    function toggleStats() {
+        if ($('#stats_msg').is(":visible")) {
+            // statsClose();
+            $('#modal-overlay').click();
+        } else {
+            menuFunc('menu_stats');
+        }
+    }
     
     /**
      * Exits game
@@ -197,6 +206,7 @@ function $GAME_PROVIDER_FACTORY() {
         finish: setFinishDart,
         score: setInputScore,
         exit: exitGame,
+        toggleStats,
         native: watchNativeGameFunctions,
     };
 }

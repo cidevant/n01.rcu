@@ -131,6 +131,7 @@ function $DATA_PROVIDER_FACTORY() {
                 case '/n01/online/n01_v2/setting.php':
                     return 'setup';
                 case '/n01/online/n01.php':
+                case '/n01/online/n01_v2/c_stats.html':
                     return 'game';
                 default:
                     throw new Error('unknown page path', path);
