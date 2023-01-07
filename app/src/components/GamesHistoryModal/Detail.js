@@ -14,6 +14,7 @@ const gameInfoEmptyStats = {
     first9: 0,
     setsWin: 0,
     legsWin: 0,
+    60: 0,
     100: 0,
     140: 0,
     180: 0,
@@ -72,7 +73,9 @@ export function GameHistoryDetail({ close, mid, show }) {
                     const legsLength = leg.playerData[playerIndex].length;
 
                     leg.playerData[playerIndex].forEach((pData, index) => {
-                        if (pData.score >= 100 && pData.score < 140) {
+                        if (pData.score > 60 && pData.score < 100) {
+                            stats[playerKey]['60'] += 1;
+                        } else if (pData.score >= 100 && pData.score < 140) {
                             stats[playerKey]['100'] += 1;
                         } else if (pData.score >= 140 && pData.score < 180) {
                             stats[playerKey]['140'] += 1;
@@ -126,6 +129,8 @@ export function GameHistoryDetail({ close, mid, show }) {
                     <StatValue>{playersStats?.p1?.legsWin}</StatValue>
 
                     <hr />
+                    <Title>60+</Title>
+                    <StatValue>{playersStats?.p1?.['60']}</StatValue>
 
                     <Title>100+</Title>
                     <StatValue>{playersStats?.p1?.['100']}</StatValue>
@@ -164,6 +169,9 @@ export function GameHistoryDetail({ close, mid, show }) {
                     <StatValue>{playersStats?.p2?.legsWin}</StatValue>
 
                     <hr />
+
+                    <Title>60+</Title>
+                    <StatValue>{playersStats?.p2?.['60']}</StatValue>
 
                     <Title>100+</Title>
                     <StatValue>{playersStats?.p2?.['100']}</StatValue>
