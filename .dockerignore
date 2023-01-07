@@ -1,12 +1,13 @@
 chrome-extension
 
 server/node_modules
+server/.eslintrc.js
 
 app/node_modules
 app/build
+app/.eslintrc.js
 
-node_modules
-
+./eslintrc.js
 _old
 .idea
 .vscode
