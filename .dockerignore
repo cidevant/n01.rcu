@@ -2,6 +2,9 @@ chrome-extension
 
 server/node_modules
 server/.eslintrc.js
+server/obs
+server/bin
+server/scripts
 
 app/node_modules
 app/build

@@ -65,10 +65,11 @@ const SmallText = styled.span`
 
 const PlayerName = styled.div`
     font-size: 44px;
+    color: #444;
 `;
 
 const PlayerAverage = styled.div`
-    font-size: 32px;
+    font-size: 52px;
     margin-right: 20px;
     font-weight: bold;
 `;
@@ -83,8 +84,8 @@ const PlayButton = styled.button`
     font-size: 30px;
     border-radius: 15px;
     font-weight: bold;
-    width: 250px;
-    height: 130px;
+    width: 350px;
+    height: 160px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
     user-select: none;
     -webkit-user-select: none;
