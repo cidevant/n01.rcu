@@ -300,6 +300,26 @@ class $SHARED_HELPERS {
             .replace('ws://', 'http://')
             .replace('/ws', path);
     }
+
+    /**
+     * Changes icon of chrome extension
+     *
+     * @static
+     * @param {Object} payload
+     * @param {string} payload.icon name of the icon
+     */
+    static changeChromeExtensionIcon(payload) {
+        if (payload?.icon && chrome?.action?.setIcon) {
+            chrome.action.setIcon({
+                path: {
+                    16: `assets/icons/${payload.icon}.png`,
+                    36: `assets/icons/${payload.icon}.png`,
+                    48: `assets/icons/${payload.icon}.png`,
+                    120: `assets/icons/${payload.icon}.png`,
+                },
+            });
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------------------------

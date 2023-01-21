@@ -48,16 +48,7 @@ chrome.runtime.onMessage.addListener(async (event, _sender, sendResponse) => {
                 break;
             }
             case $SHARED.actions.SET_ICON: {
-                if (payload.icon) {
-                    chrome.action.setIcon({
-                        path: {
-                            16: `assets/icons/${payload.icon}.png`,
-                            36: `assets/icons/${payload.icon}.png`,
-                            48: `assets/icons/${payload.icon}.png`,
-                            120: `assets/icons/${payload.icon}.png`,
-                        },
-                    });
-                }
+                $SHARED_HELPERS.changeChromeExtensionIcon(payload);
 
                 break;
             }
@@ -84,10 +75,6 @@ if ($$DEBUG && $$VERBOSE && $$VERY_VERBOSE) {
 }
 
 // @TODO WATCH TAB CLOSING AND CHANGE BACK ICON
-// chrome.tabs.onRemoved.addListener(async function (tabid, removed) {
-//     const tabs = await chrome.tabs.query({
-//         currentWindow: true,
-//         url: 'https://nakka.com/n01/online/*',
-//     });
-//     console.log('tab closed', tabid, removed, tabs);
-// });
+chrome.tabs.onRemoved.addListener(async function (tabid, removed) {
+    $SHARED_HELPERS.changeChromeExtensionIcon({ icon: 'default' });
+});
