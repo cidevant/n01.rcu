@@ -5,7 +5,6 @@ import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Opponent } from './Opponent';
 import useGameInfo from '../../hooks/useGameInfo';
-import GameStats from '../GameStats';
 
 export function ScenesModal({ show, close, opponent, average }) {
     return (
@@ -29,7 +28,7 @@ export function ScenesModal({ show, close, opponent, average }) {
 export default ScenesModal;
 
 function ScenesList() {
-    const { dispatchExitGame, dispatchToggleStats } = useGameInfo();
+    const { dispatchExitGame, dispatchToggleStats, dispatchRefreshPage } = useGameInfo();
 
     return (
         <ContentWrapper>
@@ -39,6 +38,14 @@ function ScenesList() {
                     className="d-flex align-items-center justify-content-center"
                 >
                     TOGGLE STATS
+                </CheckoutDart>
+            </CheckoutsRow>
+            <CheckoutsRow className="d-flex gap-5">
+                <CheckoutDart
+                    onClick={dispatchRefreshPage}
+                    className="d-flex align-items-center justify-content-center"
+                >
+                    REFRESH
                 </CheckoutDart>
             </CheckoutsRow>
             <CheckoutsRow className="d-flex gap-5">

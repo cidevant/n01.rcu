@@ -1,5 +1,11 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { sendInputScore, setFinishDarts, exitGame, toggleStats } from '../store/game.reducer';
+import {
+    sendInputScore,
+    setFinishDarts,
+    exitGame,
+    toggleStats,
+    refreshPage,
+} from '../store/game.reducer';
 import { validInputValue } from '../utils/game';
 
 export function useGameInfo() {
@@ -24,12 +30,17 @@ export function useGameInfo() {
         dispatch(toggleStats());
     }
 
+    function dispatchRefreshPage() {
+        dispatch(refreshPage());
+    }
+
     return {
         scoreLeft,
         // scoreLeft: 332,
         finishDarts,
         dispatchInputScore,
         dispatchToggleStats,
+        dispatchRefreshPage,
         dispatchSetFinishDarts,
         dispatchExitGame,
     };

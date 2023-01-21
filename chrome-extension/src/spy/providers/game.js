@@ -209,17 +209,26 @@ function $GAME_PROVIDER_FACTORY() {
         };
     }
 
+    /**
+     * Reloads page
+     *
+     */
+    function refreshPage() {
+        window.location.reload();
+    }
+
     return {
         start: startGame,
         finish: setFinishDart,
         score: setInputScore,
         exit: exitGame,
         toggleStats,
+        refresh: refreshPage,
         native: watchNativeGameFunctions,
     };
 }
 
-// Disable browser alerting
+// Disable browser alerting and send it to CONTROLLERS
 window.alert = function (message) {
     $SHARED_FOREGROUND.dispatchToContent({
         type: $SHARED.actions.WEBSOCKET_SEND,

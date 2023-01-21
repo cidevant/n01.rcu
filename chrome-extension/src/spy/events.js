@@ -86,6 +86,9 @@ async function wsMessageEventsHandler({ payload: { type, payload } }) {
         case 'TOGGLE_STATS':
             $GAME_PROVIDER.toggleStats();
             break;
+        case 'REFRESH_PAGE':
+            $GAME_PROVIDER.refresh();
+            break;
         case 'SET_INPUT_SCORE':
             $GAME_PROVIDER.score(payload);
             break;

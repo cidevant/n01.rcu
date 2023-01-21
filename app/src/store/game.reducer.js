@@ -11,6 +11,7 @@ export const ACTIONS = {
     SET_INPUT_SCORE: `${WS_OUT_PREFIX}:CLIENT:SET_INPUT_SCORE`,
     EXIT_GAME: `${WS_OUT_PREFIX}:CLIENT:EXIT_GAME`,
     TOGGLE_STATS: `${WS_OUT_PREFIX}:CLIENT:TOGGLE_STATS`,
+    REFRESH_PAGE: `${WS_OUT_PREFIX}:CLIENT:REFRESH_PAGE`,
 };
 
 export function sendInputScore(payload) {
@@ -37,6 +38,13 @@ export function exitGame(payload) {
 export function toggleStats(payload) {
     return {
         type: ACTIONS.TOGGLE_STATS,
+        payload,
+    };
+}
+
+export function refreshPage(payload) {
+    return {
+        type: ACTIONS.REFRESH_PAGE,
         payload,
     };
 }
