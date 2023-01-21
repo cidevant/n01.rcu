@@ -36,6 +36,10 @@ export function getDayStats(data, time) {
     if (_.isArray(stats) && !_.isEmpty(stats)) {
         const dayStats = stats.reduce(
             (acc, game) => {
+                if (game.bestLeg <= 0) {
+                    return acc;
+                }
+
                 acc.highFinish = Math.max(acc.highFinish, game.ho);
                 acc.bestLeg =
                     acc.bestLeg === 0

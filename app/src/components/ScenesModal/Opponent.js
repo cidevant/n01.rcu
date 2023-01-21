@@ -1,9 +1,4 @@
-import _ from 'lodash';
-import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { config } from '../../config';
-import useData from '../../hooks/useData';
-import { getAverage } from '../../utils/stats';
 
 export function Opponent({ opponent, average }) {
     return (

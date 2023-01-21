@@ -77,15 +77,12 @@ async function webSocketMessageHandler(message) {
 
             await $SHARED_STORAGE.updateConnection({ paired });
             await $SHARED_BACKGROUND.dispatchToPopup({ type: $SHARED.actions.UPDATE });
-
-            if (paired) {
-                await $SHARED_BACKGROUND.dispatchToBackground({
-                    type: $SHARED.actions.SET_ICON,
-                    payload: {
-                        icon: 'paired',
-                    },
-                });
-            }
+            await $SHARED_BACKGROUND.dispatchToBackground({
+                type: $SHARED.actions.SET_ICON,
+                payload: {
+                    icon: paired ? 'paired' : 'connected',
+                },
+            });
             break;
         }
     }
