@@ -7,9 +7,7 @@ class WebsocketClient {
         const isValidUrl = this.__isValidUrl(url);
 
         if (!this.open && isValidAccessCode && isValidUrl) {
-            const uuid = localStorage.getItem('uuid');
-            const name = this.__getName();
-            const params = `?client=false&id=${uuid}&name=${name}&accessCode=${accessCode}`;
+            const params = `?client=false&accessCode=${accessCode}`;
 
             this.__socket = new WebSocket(`${url}${params}`);
             this.__socket.onopen = this.__onOpen;
@@ -124,14 +122,6 @@ class WebsocketClient {
         console.log('[ws.client] connection error');
 
         this.onerror('connection error');
-    };
-
-    __getName = () => {
-        try {
-            return navigator.userAgent.split('(')[1].split(')')[0];
-        } catch (error) {
-            return navigator.userAgent;
-        }
     };
 
     get open() {

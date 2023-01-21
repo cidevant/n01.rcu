@@ -1,7 +1,7 @@
 import queryString from 'query-string';
 import chalk from 'chalk';
 
-const privateMetaAttributes = ['id', 'accessCode'];
+const privateMetaAttributes = ['accessCode'];
 
 class SocketsManager {
   constructor() {
@@ -17,20 +17,6 @@ class SocketsManager {
    * @returns {Boolean} is valid connection
    */
   validateSocketConnectionInfo(connectionInfo) {
-    // ID
-    if (!connectionInfo.id) {
-      console.error(
-        chalk.red('[sockets][validateSocketConnectionInfo][error] missing id'),
-        connectionInfo
-      );
-
-      return {
-        valid: false,
-        code: 4003,
-        reason: 'missing id',
-      };
-    }
-
     // ACCESS CODE
     if (!connectionInfo.accessCode) {
       console.error(
@@ -47,58 +33,23 @@ class SocketsManager {
 
     // CLIENT ONLY
     if (connectionInfo.client === 'true') {
-      // NAME
-      if (!connectionInfo.name) {
-        console.error(
-          chalk.red('[sockets][validateSocketConnectionInfo][error] missing name'),
-          connectionInfo
-        );
-
-        return {
-          valid: false,
-          code: 4004,
-          reason: 'missing name',
-        };
-      }
-
       const existingClients = this.filterSocketsByMeta(
         (meta) => meta.client === true && meta.accessCode === connectionInfo.accessCode
       );
 
       if (existingClients.length > 0) {
-        let replace = false;
-
         existingClients.forEach((socket) => {
-          const meta = this.getMeta(socket);
+          console.error(
+            chalk.bgYellow('[sockets][validateSocketConnectionInfo] replace existing client'),
+            JSON.stringify(connectionInfo)
+          );
 
-          if (meta.id === connectionInfo.id) {
-            console.error(
-              chalk.bgYellow('[sockets][validateSocketConnectionInfo] replace existing client'),
-              JSON.stringify(connectionInfo)
-            );
-
-            replace = true;
-
-            socket.close(4002, 'replaced by new client');
-            this.onClose(socket);
-          }
+          socket.close(4002, 'replaced by new client');
+          this.onClose(socket);
         });
 
-        if (replace) {
-          return {
-            valid: true,
-          };
-        }
-
-        console.error(
-          chalk.red('[sockets][validateSocketConnectionInfo][error] client already exists'),
-          JSON.stringify(connectionInfo)
-        );
-
         return {
-          valid: false,
-          code: 4001,
-          reason: 'accessCode already in use',
+          valid: true,
         };
       }
     }
@@ -127,8 +78,6 @@ class SocketsManager {
     }
 
     this.sockets.set(socket, {
-      id: connectionInfo.id,
-      name: connectionInfo.name,
       client: connectionInfo.client === 'true',
       accessCode: connectionInfo.accessCode,
     });
@@ -343,9 +292,7 @@ class SocketsManager {
     const meta = this.getMeta(socket);
 
     if (meta) {
-      const id = meta.id != null && `[${meta.id}]`;
-
-      return `[${meta.client ? 'client' : 'controller'}][${meta.name}]${id}`;
+      return `[${meta.client ? 'client' : 'controller'}]`;
     }
   }
 

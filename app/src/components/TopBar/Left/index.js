@@ -28,8 +28,8 @@ export function LeftButtons() {
             return;
         }
 
-        if (isPaired && client?.name) {
-            return client?.name?.toUpperCase?.();
+        if (isPaired) {
+            return client?.name ? client?.name?.toUpperCase?.() : 'NOT AUTHORIZED';
         }
 
         return 'WAITING FOR CLIENT';

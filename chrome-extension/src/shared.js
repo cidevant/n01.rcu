@@ -172,7 +172,7 @@ class $SHARED_VALIDATORS {
         }
     }
 
-    static validateConnectionInfoFormat({ url, accessCode, player }) {
+    static validateConnectionInfoFormat({ url, accessCode }) {
         const result = [];
 
         if (!url || !(url?.length > 0)) {
@@ -200,36 +200,6 @@ class $SHARED_VALIDATORS {
                 scope: 'accessCode',
                 text: 'invalid format',
                 value: accessCode,
-            });
-        }
-
-        if (player) {
-            if (!player.pid || !(player?.pid?.length > 0)) {
-                result.push({
-                    scope: 'player',
-                    text: 'missing id',
-                    value: player.pid,
-                });
-            } else if (!$SHARED_VALIDATORS.isValidPlayerId(player.pid)) {
-                result.push({
-                    scope: 'player',
-                    text: 'invalid id format',
-                    value: player.pid,
-                });
-            }
-
-            if (!player.playerName || !(player.playerName?.length > 0)) {
-                result.push({
-                    scope: 'player',
-                    text: 'missing name',
-                    value: player.playerName,
-                });
-            }
-        } else {
-            result.push({
-                scope: 'player',
-                text: 'missing',
-                value: player,
             });
         }
 
@@ -687,12 +657,11 @@ class $SHARED_WEBSOCKET {
 
     // PUBLIC SETTERS
 
-    set data({ url, accessCode, player }) {
+    set data({ url, accessCode }) {
         this.#url = url;
         this.#accessCode = accessCode;
-        this.#player = player;
 
-        this.#validate(url, accessCode, player);
+        this.#validate(url, accessCode);
     }
 
     // PUBLIC GETTERS
@@ -701,7 +670,6 @@ class $SHARED_WEBSOCKET {
         return {
             url: this.#url,
             accessCode: this.#accessCode,
-            player: this.#player,
         };
     }
 
@@ -718,12 +686,7 @@ class $SHARED_WEBSOCKET {
     }
 
     get connectionUrl() {
-        const params = [
-            'client=true',
-            `id=${this.#player?.pid}`,
-            `name=${this.#player?.playerName}`,
-            `accessCode=${this.#accessCode}`,
-        ];
+        const params = ['client=true', `accessCode=${this.#accessCode}`];
 
         return [this.#url, params.join('&')].join('?');
     }
@@ -737,7 +700,7 @@ class $SHARED_WEBSOCKET {
     }
 
     get valid() {
-        return this.#validate(this.#url, this.#accessCode, this.#player);
+        return this.#validate(this.#url, this.#accessCode);
     }
 
     get validForConnect() {
@@ -767,7 +730,6 @@ class $SHARED_WEBSOCKET {
     #socket;
     #url;
     #accessCode;
-    #player;
     #errors = [];
     #closeError;
     #closeCode;
@@ -825,14 +787,13 @@ class $SHARED_WEBSOCKET {
 
     // VALIDATORS
 
-    #validate = (url, accessCode, player) => {
+    #validate = (url, accessCode) => {
         this.#clearErrors();
 
         $SHARED_VALIDATORS
             .validateConnectionInfoFormat({
                 url,
                 accessCode,
-                player,
             })
             .forEach(this.#addError);
 
@@ -979,18 +940,7 @@ class $SHARED_WEBSOCKET {
             text: 'already in use',
             reconnect: false,
         },
-        4003: {
-            code: 4003,
-            scope: 'player.id',
-            text: 'missing',
-            reconnect: false,
-        },
-        4004: {
-            code: 4004,
-            scope: 'player.name',
-            text: 'missing',
-            reconnect: false,
-        },
+
         // client socket replace
         4002: {
             code: 4002,

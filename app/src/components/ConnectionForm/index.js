@@ -4,13 +4,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ws from '../../utils/ws';
-import { connect, disconnect } from '../../store/ws.reducer';
+import { connect, disconnect, setAccessCode, setServerUrl } from '../../store/ws.reducer';
 
 function ConnectionForm() {
     const wsStatus = useSelector((state) => state.ws.status);
 
-    const [accessCode, setAccessCode] = useState(useSelector((state) => state.ws.accessCode));
-    const [serverUrl, setServerUrl] = useState(useSelector((state) => state.ws.serverUrl));
+    const [accessCode, setAccessCodeState] = useState(useSelector((state) => state.ws.accessCode));
+    const [serverUrl, setServerUrlState] = useState(useSelector((state) => state.ws.serverUrl));
     const isConnected = wsStatus === WebSocket.OPEN;
     const dispatch = useDispatch();
     const updateFormValues = useCallback(
@@ -32,14 +32,14 @@ function ConnectionForm() {
         if (value.length < 5) {
             const upperValue = `${value}`.toUpperCase();
 
-            setAccessCode(upperValue);
+            setAccessCodeState(upperValue);
             updateFormValues('accessCode', upperValue);
         }
     }
 
     function updateServerUrl(event) {
         event.preventDefault();
-        setServerUrl(event.target.value);
+        setServerUrlState(event.target.value);
         updateFormValues('serverUrl', event.target.value);
     }
 
@@ -62,7 +62,7 @@ function ConnectionForm() {
                     <FormInput
                         disabled={isConnected}
                         type="text"
-                        placeholder="ws://localhost:3000/ws"
+                        placeholder="wss://n01.devant.cz/ws"
                         value={serverUrl}
                         onChange={updateServerUrl}
                     />
