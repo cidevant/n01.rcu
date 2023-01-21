@@ -38,10 +38,7 @@ export function useSearchPolling(activity) {
     useInterval(() => {
         if (activity === 'search') {
             dispatchFilter();
-
-            if (keepScrollingBottom) {
-                dispatchScrollBottom();
-            }
+            dispatchScrollBottom(keepScrollingBottom);
         }
     }, updateInterval);
 }

@@ -34,8 +34,8 @@ export function useHomeInfo() {
         dispatch(setKeepScrollingBottom(value));
     }
 
-    function dispatchScrollBottom() {
-        dispatch(sendScrollBottom());
+    function dispatchScrollBottom(value) {
+        dispatch(sendScrollBottom(value));
     }
 
     function dispatchStartGame(id) {

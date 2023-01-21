@@ -71,7 +71,7 @@ async function wsMessageEventsHandler({ payload: { type, payload } }) {
             break;
         // SEARCH
         case 'SEARCH_PAGE_SCROLL_BOTTOM':
-            $SEARCH_PROVIDER.scroll();
+            $SEARCH_PROVIDER.scroll(payload);
             break;
         case 'SEARCH_PAGE_FILTER_BY_AVERAGE':
             $SEARCH_PROVIDER.search(payload);

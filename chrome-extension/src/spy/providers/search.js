@@ -1,5 +1,7 @@
 const $SEARCH_PROVIDER = $SEARCH_PROVIDER_FACTORY();
 
+let $$SCROLL_BOTTOM = false;
+
 function $SEARCH_PROVIDER_FACTORY() {
     /**
      * Returns list of user which satisfies search condition
@@ -115,7 +117,7 @@ function $SEARCH_PROVIDER_FACTORY() {
                     type: $SHARED.actions.WEBSOCKET_SEND,
                     payload: {
                         type: 'CONTROLLERS:SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT',
-                        payload: [...(getSearchResults(data)?.passedFilter ?? {})].reverse(),
+                        payload: [...(getSearchResults(data)?.passedFilter ?? [])].reverse(),
                     },
                 });
             } else {
@@ -127,12 +129,22 @@ function $SEARCH_PROVIDER_FACTORY() {
     }
 
     /**
-     * Scrolls down on search page
+     * Sets auto scroll parameter
      *
+     * @param {boolean} [payload=true] is autoscroll enabled
      */
-    function searchScrollBottom() {
+    function setScrollBottom(payload = true) {
+        $$SCROLL_BOTTOM = payload;
+    }
+
+    /**
+     * Scrolls down on search page when there are any updates
+     */
+    function scrollToBottom(params) {
         try {
             $('#schedule_button').hide();
+            $('#page_bottom').hide();
+            $('#chat_button').hide();
             $('#menu_button').hide();
             $('#article').css('padding-bottom', 0);
             $('#article').css('margin-bottom', 0);
@@ -150,16 +162,18 @@ function $SEARCH_PROVIDER_FACTORY() {
         return {
             // players list changed
             createDiffList: function (data, changedCount) {
-                // $$DEBUG && $$VERBOSE && console.log('[n01.RCU.spy.search] createDiffList');
-                // if (changedCount > 0) {
-                // }
+                $$DEBUG && $$VERBOSE && console.log('[n01.RCU.spy.search] createDiffList');
+
+                if (changedCount > 0 && $$SCROLL_BOTTOM === true) {
+                    scrollToBottom();
+                }
             },
         };
     }
 
     return {
         search: searchByFilter,
-        scroll: searchScrollBottom,
+        scroll: setScrollBottom,
         native: watchNativeSearchFunctions,
     };
 }

@@ -904,9 +904,9 @@ class $SHARED_WEBSOCKET {
     //          * closes connection to server
 
     #pingPongHandler = (event) => {
-        if (event.data === 'ping') {
+        if (event?.data === 'ping') {
             this.#pingPongStart();
-            this.#socket.send('pong');
+            this.#socket?.send?.('pong');
 
             return true;
         }

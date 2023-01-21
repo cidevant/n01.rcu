@@ -21,16 +21,19 @@ function $GAME_PROVIDER_FACTORY() {
         }
     }
 
-
+    /**
+     * Toggle stats window
+     *
+     */
     function toggleStats() {
-        if ($('#stats_msg').is(":visible")) {
+        if ($('#stats_msg').is(':visible')) {
             // statsClose();
             $('#modal-overlay').click();
         } else {
             menuFunc('menu_stats');
         }
     }
-    
+
     /**
      * Exits game
      *
@@ -39,7 +42,7 @@ function $GAME_PROVIDER_FACTORY() {
         menuFunc('menu_new'); // press Exit button
 
         setTimeout(() => {
-            $('#msg_ok').click();
+            $('#msg_exit_ok').click();
         }, 500);
     }
 
@@ -126,6 +129,11 @@ function $GAME_PROVIDER_FACTORY() {
         }
     }
 
+    /**
+     * Watches executed functions of n01.nakka
+     *
+     * @returns {Object} list of functions to watch
+     */
     function watchNativeGameFunctions() {
         return {
             //start of new leg
@@ -210,3 +218,14 @@ function $GAME_PROVIDER_FACTORY() {
         native: watchNativeGameFunctions,
     };
 }
+
+// Disable browser alerting
+window.alert = function (message) {
+    $SHARED_FOREGROUND.dispatchToContent({
+        type: $SHARED.actions.WEBSOCKET_SEND,
+        payload: {
+            type: 'CONTROLLERS:ALERT',
+            payload: message,
+        },
+    });
+};

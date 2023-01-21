@@ -15,9 +15,10 @@ const ACTIONS = {
     START_GAME: `${WS_OUT_PREFIX}:CLIENT:START_GAME`,
 };
 
-export function sendScrollBottom() {
+export function sendScrollBottom(payload) {
     return {
         type: ACTIONS.SEARCH_PAGE_SCROLL_BOTTOM,
+        payload,
     };
 }
 
