@@ -9,6 +9,8 @@ const initialState = {
     accessCode: localStorage.getItem('accessCode') || '',
     wsServerUrl: localStorage.getItem('wsServerUrl') || config.defaultWsServerUrl,
     serverUrl: localStorage.getItem('serverUrl') || config.defaultServerUrl,
+    obsUrl: localStorage.getItem('obsUrl') || config.defaultObsUrl,
+    obsPassword: localStorage.getItem('obsPassword') || config.defaultObsPassword,
 };
 
 const slice = createSlice({
@@ -46,9 +48,29 @@ const slice = createSlice({
             state.wsServerUrl = action.payload;
             localStorage.setItem('wsServerUrl', action.payload);
         },
+
+        setObsUrl(state, action) {
+            state.obsUrl = action.payload;
+            localStorage.setItem('obsUrl', action.payload);
+        },
+        setObsPassword(state, action) {
+            state.obsPassword = action.payload;
+            localStorage.setItem('obsPassword', action.payload);
+        },
     },
 });
 
-export const { connect, disconnect, onopen, onclose, onerror, setAccessCode, setWsServerUrl } =
-    slice.actions;
+export const {
+    connect,
+    disconnect,
+    onopen,
+    onclose,
+    onerror,
+    setAccessCode,
+    setWsServerUrl,
+    setObsUrl,
+    setObsPassword,
+    obsUrl,
+    obsPassword,
+} = slice.actions;
 export default slice.reducer;

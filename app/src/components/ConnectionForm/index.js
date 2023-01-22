@@ -4,25 +4,26 @@ import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ws from '../../utils/ws';
-import { connect, disconnect, setAccessCode, setWsServerUrl } from '../../store/ws.reducer';
+import {
+    connect,
+    disconnect,
+    setAccessCode,
+    setWsServerUrl,
+    setObsPassword,
+    setObsUrl,
+} from '../../store/ws.reducer';
 
 function ConnectionForm() {
     const wsStatus = useSelector((state) => state.ws.status);
 
     const [accessCode, setAccessCodeState] = useState(useSelector((state) => state.ws.accessCode));
     const [wsServerUrl, setServerUrlState] = useState(useSelector((state) => state.ws.wsServerUrl));
+    const [obsUrl, setObsUrlState] = useState(useSelector((state) => state.ws.obsUrl));
+    const [obsPassword, setObsPasswordState] = useState(
+        useSelector((state) => state.ws.obsPassword)
+    );
     const isConnected = wsStatus === WebSocket.OPEN;
     const dispatch = useDispatch();
-    const updateFormValues = useCallback(
-        (key, value) => {
-            if (key === 'accessCode') {
-                dispatch(setAccessCode(value));
-            } else if (key === 'wsServerUrl') {
-                dispatch(setWsServerUrl(value));
-            }
-        },
-        [dispatch]
-    );
 
     function updateAccessCode(event) {
         event.preventDefault();
@@ -33,14 +34,25 @@ function ConnectionForm() {
             const upperValue = `${value}`.toUpperCase();
 
             setAccessCodeState(upperValue);
-            updateFormValues('accessCode', upperValue);
+            dispatch(setAccessCode(upperValue));
         }
     }
 
     function updateServerUrl(event) {
         event.preventDefault();
         setServerUrlState(event.target.value);
-        updateFormValues('wsServerUrl', event.target.value);
+        dispatch(setWsServerUrl(event.target.value));
+    }
+    function updateObsUrl(event) {
+        event.preventDefault();
+        setObsUrlState(event.target.value);
+        dispatch(setObsUrl(event.target.value));
+    }
+
+    function updateObsPassword(event) {
+        event.preventDefault();
+        setObsPasswordState(event.target.value);
+        dispatch(setObsPassword(event.target.value));
     }
 
     return (
@@ -66,6 +78,19 @@ function ConnectionForm() {
                         value={wsServerUrl}
                         onChange={updateServerUrl}
                     />
+                </FormInputWrapper>
+                <FormInputWrapper className="mt-4">
+                    <TitleForm>OBS URL</TitleForm>
+                    <FormInput
+                        type="text"
+                        placeholder="https://n01.devant.cz:4444"
+                        value={obsUrl}
+                        onChange={updateObsUrl}
+                    />
+                </FormInputWrapper>
+                <FormInputWrapper className="mt-4">
+                    <TitleForm>OBS PASSWORD</TitleForm>
+                    <FormInput type="text" value={obsPassword} onChange={updateObsPassword} />
                 </FormInputWrapper>
             </div>
             <ConnectDisconnectButton />
@@ -157,7 +182,7 @@ const TitleForm = styled.div`
 const FormInput = styled(Form.Control)`
     font-size: 40px;
     border-width: 4px;
-    height: 120px;
+    height: 80px;
     border-radius: 0;
     outline: none;
 `;
