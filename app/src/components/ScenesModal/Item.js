@@ -23,7 +23,9 @@ export default Item;
 const SceneButton = styled.div`
     flex-grow: 1;
     width: 30%;
-    min-height: 100px;
+    min-height: 160px;
+    text-transform: uppercase;
+    font-weight: bold;
     font-size: 40px;
     margin: 10px;
     background-color: #0dcaf0;
