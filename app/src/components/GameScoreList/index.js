@@ -85,14 +85,9 @@ function Cell({ num, rowLength }) {
     }
 
     function onLongPress(event) {
-        if (currentPlayer === playerIndex) {
-            event.target.classList.add('confirmed');
-            setValue(<FontAwesomeIcon icon="fa-solid fa-check" />);
-            dispatchInputScore(event.target.id);
-        } else {
-            event.target.classList.add('error');
-            setValue(<FontAwesomeIcon icon="fa-solid fa-xmark" />);
-        }
+        event.target.classList.add('confirmed');
+        setValue(<FontAwesomeIcon icon="fa-solid fa-check" />);
+        dispatchInputScore(event.target.id);
     }
 
     function onPressOut(event) {

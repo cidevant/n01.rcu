@@ -14,13 +14,13 @@ export function InputKeyboard() {
     const dispatch = useDispatch();
     const { game } = useData();
     const { average } = useOpponentAverage(game?.opponent?.name?.trim?.());
-    const { scoreLeft, currentPlayer, playerIndex } = useGameInfo();
+    const { scoreLeft } = useGameInfo();
 
     function onSubmit(e) {
         const { value } = e.target;
 
         if (e.key === 'Enter') {
-            if (validInputValue(value, scoreLeft) && currentPlayer === playerIndex) {
+            if (validInputValue(value, scoreLeft)) {
                 dispatch(sendInputScore(value));
                 e.target.value = '';
                 e.target.blur();
