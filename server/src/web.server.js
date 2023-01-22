@@ -2,6 +2,21 @@ import express from 'express';
 import chalk from 'chalk';
 import cors from 'cors';
 import { sockets } from './sockets-manager.js';
+import OBSWebSocket from 'obs-websocket-js';
+
+let obsConnected = false;
+
+const obs = new OBSWebSocket();
+
+try {
+  await obs.connect('ws://devant.cz:4444', undefined, { rpcVersion: 1 });
+
+  obsConnected = true;
+
+  console.log('[ws.obs] connected');
+} catch (error) {
+  console.log('[ws.obs] connection error', error);
+}
 
 /**
  * Web server
@@ -37,6 +52,36 @@ export function initWebServer(port) {
     });
   });
 
+  app.get('/set-scene', async function (req, res) {
+    if (!obsConnected) {
+      res.json({
+        ok: false,
+        error: 'not_connected_to_obs_websocket',
+        message: 'Not connected to OBSWebSocket',
+      });
+
+      return;
+    }
+
+    try {
+      await obs.call('SetCurrentProgramScene', { sceneName: req.query.scene });
+
+      setTimeout(() => {
+        obs.call('SetCurrentProgramScene', { sceneName: 'main_scene' });
+      }, 2000);
+
+      res.json({
+        ok: true,
+      });
+    } catch (error) {
+      res.json({
+        ok: false,
+        error: error.code,
+        message: error.message,
+      });
+    }
+  });
+
   app.get('/generate-access-code', function (_req, res) {
     const accessCode = sockets.generateAccessCode();
 
@@ -54,7 +99,7 @@ export function initWebServer(port) {
     }
   });
 
-  return app.listen(port, () => {
+  return app.listen(port, async () => {
     console.log('[web.server] listening on port', chalk.greenBright(port));
   });
 }
