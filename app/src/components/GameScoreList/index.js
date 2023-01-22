@@ -50,7 +50,7 @@ function Row({ row }) {
 }
 
 function Cell({ num, rowLength }) {
-    const { scoreLeft, dispatchInputScore } = useGameInfo();
+    const { scoreLeft, dispatchInputScore, currentPlayer, playerIndex } = useGameInfo();
     const [value, setValue] = useState(getValueOutput(num));
     const colSpan = useMemo(() => {
         if (num?.colspan > 0) {
@@ -85,15 +85,21 @@ function Cell({ num, rowLength }) {
     }
 
     function onLongPress(event) {
-        event.target.classList.add('confirmed');
-        setValue(<FontAwesomeIcon icon="fa-solid fa-check" />);
-        dispatchInputScore(event.target.id);
+        if (currentPlayer === playerIndex) {
+            event.target.classList.add('confirmed');
+            setValue(<FontAwesomeIcon icon="fa-solid fa-check" />);
+            dispatchInputScore(event.target.id);
+        } else {
+            event.target.classList.add('error');
+            setValue(<FontAwesomeIcon icon="fa-solid fa-xmark" />);
+        }
     }
 
     function onPressOut(event) {
+        event.target.classList.remove('error');
         event.target.classList.remove('confirmed');
         event.target.classList.remove('touching');
-
+        event.target.classList.add('normal');
         setValue(getValueOutput(num));
     }
 

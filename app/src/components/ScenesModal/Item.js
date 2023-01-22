@@ -1,10 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { config } from '../../config';
+import { useNetworkInfo } from '../../hooks/useNetworkInfo';
+import { obsToggleScene } from '../../utils/obs';
 
 function Item({ scene }) {
-    function setScene() {
-        fetch(`${config.defaultServerUrl}/set-scene?scene=${scene.code}`);
+    const { obsUrl, obsPassword } = useNetworkInfo();
+
+    async function setScene() {
+        await obsToggleScene(scene.code, obsUrl, obsPassword);
     }
 
     return (

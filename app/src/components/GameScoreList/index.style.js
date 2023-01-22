@@ -59,4 +59,10 @@ export const Button = styled.div`
         border-color: #fff;
         color: white;
     }
+
+    &.error {
+        background-color: red;
+        color: white;
+        transition: background-color 1s;
+    }
 `;

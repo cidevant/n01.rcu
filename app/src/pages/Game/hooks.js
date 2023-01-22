@@ -5,6 +5,7 @@ import { useSwipeable, LEFT, RIGHT } from 'react-swipeable';
 import { useGameInfo } from '../../hooks/useGameInfo';
 import { isOneDartCheckout, SCORES, SCORES_LIST } from '../../utils/game';
 import { useInterval } from '../../hooks/useInterval';
+import { obsDisconnect } from '../../utils/obs';
 
 /**
  * Polls game info and switches SCORES_LIST if score is less than 100
@@ -32,6 +33,7 @@ export function useEndGameWatcher() {
 
     useEffect(() => {
         if (page !== 'game') {
+            obsDisconnect();
             navigate('/');
         }
     }, [page, navigate]);
