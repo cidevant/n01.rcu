@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useData } from '../../hooks/useData';
 import { useNavigate } from 'react-router-dom';
 import { useSwipeable, LEFT, RIGHT } from 'react-swipeable';
 import { useGameInfo } from '../../hooks/useGameInfo';
 import { isOneDartCheckout, SCORES, SCORES_LIST } from '../../utils/game';
 import { useInterval } from '../../hooks/useInterval';
-import { useMemo } from 'react';
 
 /**
  * Polls game info and switches SCORES_LIST if score is less than 100
