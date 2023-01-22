@@ -54,12 +54,12 @@ function ScenesList() {
 
             <hr />
 
-            <div className="d-flex gap-5">
+            <div className="d-flex gap-4">
                 <ControlButton
                     onClick={dispatchToggleStats}
                     className="d-flex align-items-center justify-content-center"
                 >
-                    TOGGLE STATS
+                    STATS
                 </ControlButton>
 
                 <ControlButton
@@ -72,7 +72,7 @@ function ScenesList() {
                     onClick={dispatchExitGame}
                     className="d-flex align-items-center justify-content-center"
                 >
-                    EXIT GAME
+                    EXIT
                 </ControlButton>
             </div>
         </Wrapper>
@@ -110,14 +110,15 @@ const Flex = styled.div`
 `;
 
 const ControlButton = styled.div`
+    margin-top: 30px;
     font-size: 40px;
-    background-color: #0dcaf0;
+    background-color: #ccc;
     border: 1px solid #004757;
     box-shadow: 0 3px 6px 2px rgba(0, 0, 0, 0.2);
     padding: 5px;
     color: black;
     border-radius: 10px;
-    min-height: 60px;
+    min-height: 160px;
     width: 33%;
     text-align: center;
 `;

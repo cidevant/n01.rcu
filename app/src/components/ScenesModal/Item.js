@@ -22,7 +22,7 @@ export default Item;
 
 const SceneButton = styled.div`
     flex-grow: 1;
-    width: 33%;
+    width: 30%;
     min-height: 100px;
     font-size: 40px;
     margin: 10px;
