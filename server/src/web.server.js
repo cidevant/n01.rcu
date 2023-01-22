@@ -2,21 +2,7 @@ import express from 'express';
 import chalk from 'chalk';
 import cors from 'cors';
 import { sockets } from './sockets-manager.js';
-import OBSWebSocket from 'obs-websocket-js';
-
-let obsConnected = false;
-
-const obs = new OBSWebSocket();
-
-try {
-  await obs.connect('ws://devant.cz:4444', undefined, { rpcVersion: 1 });
-
-  obsConnected = true;
-
-  console.log('[ws.obs] connected');
-} catch (error) {
-  console.log('[ws.obs] connection error', error);
-}
+import { obs, obsConnect, obsConnected, obsDisconnect } from './ws.obs.js';
 
 /**
  * Web server
@@ -46,21 +32,65 @@ export function initWebServer(port) {
     });
   });
 
-  app.get('/sockets-list', function (req, res) {
+  app.get('/sockets-list', function (_req, res) {
     res.json({
       sockets: sockets.listMetaSafe,
     });
   });
 
-  app.get('/set-scene', async function (req, res) {
-    if (!obsConnected) {
+  app.get('/obs-status', function (_req, res) {
+    res.json({
+      obsConnected,
+    });
+  });
+
+  app.get('/obs-disconnect', async function (_req, res) {
+    const result = await obsDisconnect();
+
+    if (result === true) {
+      res.json({
+        ok: true,
+        obsConnected,
+      });
+    } else {
       res.json({
         ok: false,
-        error: 'not_connected_to_obs_websocket',
-        message: 'Not connected to OBSWebSocket',
+        obsConnected,
+        error: result,
       });
+    }
+  });
 
-      return;
+  app.get('/obs-connect', async function (_req, res) {
+    const result = await obsConnect();
+
+    if (result === true) {
+      res.json({
+        ok: true,
+        obsConnected,
+      });
+    } else {
+      res.json({
+        ok: false,
+        obsConnected,
+        error: result,
+      });
+    }
+  });
+
+  app.get('/set-scene', async function (req, res) {
+    if (!obsConnected) {
+      const result = await obsConnect();
+
+      if (result !== true) {
+        res.json({
+          ok: false,
+          obsConnected,
+          error: result,
+        });
+
+        return;
+      }
     }
 
     try {
@@ -76,8 +106,8 @@ export function initWebServer(port) {
     } catch (error) {
       res.json({
         ok: false,
-        error: error.code,
-        message: error.message,
+        obsConnected,
+        error: error?.message ?? error,
       });
     }
   });

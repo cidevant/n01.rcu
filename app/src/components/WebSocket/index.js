@@ -8,7 +8,7 @@ import { connect, disconnect, onopen, onclose, onerror } from '../../store/ws.re
 export function WebSocket({ children }) {
     const dispatch = useDispatch();
     const accessCode = useSelector((state) => state.ws.accessCode);
-    const serverUrl = useSelector((state) => state.ws.serverUrl);
+    const wsServerUrl = useSelector((state) => state.ws.wsServerUrl);
 
     // Setup websocket client
     useEffect(() => {
@@ -47,8 +47,8 @@ export function WebSocket({ children }) {
 
     // Try connecting only once at the beginning
     useEffect(() => {
-        if (!ws.open && ws.__isValidAccessCode(accessCode) && ws.__isValidUrl(serverUrl)) {
-            dispatch(connect(accessCode, serverUrl));
+        if (!ws.open && ws.__isValidAccessCode(accessCode) && ws.__isValidUrl(wsServerUrl)) {
+            dispatch(connect(accessCode, wsServerUrl));
         }
 
         return () => {

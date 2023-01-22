@@ -4,7 +4,7 @@ import { config } from '../../config';
 
 function Item({ scene }) {
     function setScene() {
-        fetch(`${config.obsSceneSwitcherUrl}?scene=${scene.code}`);
+        fetch(`${config.defaultServerUrl}/set-scene?scene=${scene.code}`);
     }
 
     return (

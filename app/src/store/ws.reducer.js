@@ -7,6 +7,7 @@ const initialState = {
     close: null,
     error: null,
     accessCode: localStorage.getItem('accessCode') || '',
+    wsServerUrl: localStorage.getItem('wsServerUrl') || config.defaultWsServerUrl,
     serverUrl: localStorage.getItem('serverUrl') || config.defaultServerUrl,
 };
 
@@ -18,7 +19,7 @@ const slice = createSlice({
             state.status = WebSocket.CONNECTING;
             state.close = null;
             state.error = null;
-            ws.connect(state.accessCode, state.serverUrl);
+            ws.connect(state.accessCode, state.wsServerUrl);
         },
         disconnect(state) {
             state.status = WebSocket.CLOSING;
@@ -41,13 +42,13 @@ const slice = createSlice({
             state.accessCode = action.payload;
             localStorage.setItem('accessCode', action.payload);
         },
-        setServerUrl(state, action) {
-            state.serverUrl = action.payload;
-            localStorage.setItem('serverUrl', action.payload);
+        setWsServerUrl(state, action) {
+            state.wsServerUrl = action.payload;
+            localStorage.setItem('wsServerUrl', action.payload);
         },
     },
 });
 
-export const { connect, disconnect, onopen, onclose, onerror, setAccessCode, setServerUrl } =
+export const { connect, disconnect, onopen, onclose, onerror, setAccessCode, setWsServerUrl } =
     slice.actions;
 export default slice.reducer;

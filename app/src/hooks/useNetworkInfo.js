@@ -16,6 +16,6 @@ export function useNetworkInfo() {
               }
             : null,
         accessCode: ws.accessCode,
-        serverUrl: ws.serverUrl,
+        wsServerUrl: ws.wsServerUrl,
     };
 }

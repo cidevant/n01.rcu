@@ -4,21 +4,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ws from '../../utils/ws';
-import { connect, disconnect, setAccessCode, setServerUrl } from '../../store/ws.reducer';
+import { connect, disconnect, setAccessCode, setWsServerUrl } from '../../store/ws.reducer';
 
 function ConnectionForm() {
     const wsStatus = useSelector((state) => state.ws.status);
 
     const [accessCode, setAccessCodeState] = useState(useSelector((state) => state.ws.accessCode));
-    const [serverUrl, setServerUrlState] = useState(useSelector((state) => state.ws.serverUrl));
+    const [wsServerUrl, setServerUrlState] = useState(useSelector((state) => state.ws.wsServerUrl));
     const isConnected = wsStatus === WebSocket.OPEN;
     const dispatch = useDispatch();
     const updateFormValues = useCallback(
         (key, value) => {
             if (key === 'accessCode') {
                 dispatch(setAccessCode(value));
-            } else if (key === 'serverUrl') {
-                dispatch(setServerUrl(value));
+            } else if (key === 'wsServerUrl') {
+                dispatch(setWsServerUrl(value));
             }
         },
         [dispatch]
@@ -40,7 +40,7 @@ function ConnectionForm() {
     function updateServerUrl(event) {
         event.preventDefault();
         setServerUrlState(event.target.value);
-        updateFormValues('serverUrl', event.target.value);
+        updateFormValues('wsServerUrl', event.target.value);
     }
 
     return (
@@ -63,7 +63,7 @@ function ConnectionForm() {
                         disabled={isConnected}
                         type="text"
                         placeholder="wss://n01.devant.cz/ws"
-                        value={serverUrl}
+                        value={wsServerUrl}
                         onChange={updateServerUrl}
                     />
                 </FormInputWrapper>
@@ -99,9 +99,9 @@ function ConnectionStatus() {
 function ConnectDisconnectButton() {
     const dispatch = useDispatch();
     const accessCode = useSelector((state) => state.ws.accessCode);
-    const serverUrl = useSelector((state) => state.ws.serverUrl);
+    const wsServerUrl = useSelector((state) => state.ws.wsServerUrl);
     const wsStatus = useSelector((state) => state.ws.status);
-    const disabled = !ws.__isValidAccessCode(accessCode) || !ws.__isValidUrl(serverUrl);
+    const disabled = !ws.__isValidAccessCode(accessCode) || !ws.__isValidUrl(wsServerUrl);
 
     function dispatchConnect() {
         dispatch(connect());
