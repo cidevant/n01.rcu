@@ -65,6 +65,7 @@ const SCORES_COMMON = [
         {
             value: 26,
             style: 'yellow',
+            scene: '26_scene',
         },
         {
             value: 58,
@@ -97,6 +98,7 @@ const SCORES_COMMON = [
         {
             value: 100,
             style: 'good',
+            scene: '100_scene',
         },
 
         {
@@ -198,7 +200,14 @@ const SCORES_HIGH = [
     [40, 60, 62],
     [64, 66, 68],
     [70, 76, 78],
-    [80, 100, 120],
+    [
+        80,
+        {
+            value: 100,
+            scene: '100_scene',
+        },
+        120,
+    ],
     [140, 160, 180],
     [125, 121, 123],
     [135, 134, 137],
