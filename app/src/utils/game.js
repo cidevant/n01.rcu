@@ -1,3 +1,65 @@
+export const SCENES = [
+    {
+        name: '26',
+        code: '26_scene',
+    },
+    {
+        name: '100',
+        code: '100_scene',
+    },
+    {
+        name: '007',
+        code: '007_scene',
+    },
+    {
+        name: '13',
+        code: '13_scene',
+    },
+    {
+        name: '27',
+        code: '27_scene',
+    },
+    {
+        name: '33',
+        code: '33_scene',
+    },
+    {
+        name: '180',
+        code: '180_scene',
+    },
+];
+
+export const SCENES_GREETINGS = [
+    {
+        name: 'hello',
+        code: 'hello_scene',
+        style: 'green',
+    },
+    {
+        name: 'bye',
+        code: 'bye_scene',
+        style: 'red',
+    },
+];
+
+export const SCENES_MEMES = [
+    {
+        name: 'nice',
+        code: 'nice_scene',
+        style: 'yellow',
+    },
+    {
+        name: 'wow',
+        code: 'wow_scene',
+        style: 'yellow',
+    },
+    {
+        name: 'gg',
+        code: 'gg_scene',
+        style: 'yellow',
+    },
+];
+
 const SCORES_COMMON = [
     [
         {

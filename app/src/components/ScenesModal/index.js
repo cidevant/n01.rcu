@@ -5,6 +5,8 @@ import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Opponent } from './Opponent';
 import useGameInfo from '../../hooks/useGameInfo';
+import { SCENES, SCENES_GREETINGS, SCENES_MEMES } from '../../utils/game';
+import Item from './Item';
 
 export function ScenesModal({ show, close, opponent, average }) {
     return (
@@ -31,32 +33,49 @@ function ScenesList() {
     const { dispatchExitGame, dispatchToggleStats, dispatchRefreshPage } = useGameInfo();
 
     return (
-        <ContentWrapper>
-            <CheckoutsRow className="d-flex gap-5">
-                <CheckoutDart
+        <Wrapper>
+            <Flex>
+                {SCENES.map((scene) => (
+                    <Item scene={scene} key={scene.code} />
+                ))}{' '}
+            </Flex>
+
+            <Flex>
+                {SCENES_MEMES.map((scene) => (
+                    <Item scene={scene} key={scene.code} />
+                ))}{' '}
+            </Flex>
+
+            <Flex>
+                {SCENES_GREETINGS.map((scene) => (
+                    <Item scene={scene} key={scene.code} />
+                ))}
+            </Flex>
+
+            <hr />
+
+            <div className="d-flex gap-5">
+                <ControlButton
                     onClick={dispatchToggleStats}
                     className="d-flex align-items-center justify-content-center"
                 >
                     TOGGLE STATS
-                </CheckoutDart>
-            </CheckoutsRow>
-            <CheckoutsRow className="d-flex gap-5">
-                <CheckoutDart
+                </ControlButton>
+
+                <ControlButton
                     onClick={dispatchRefreshPage}
                     className="d-flex align-items-center justify-content-center"
                 >
                     REFRESH
-                </CheckoutDart>
-            </CheckoutsRow>
-            <CheckoutsRow className="d-flex gap-5">
-                <CheckoutDart
+                </ControlButton>
+                <ControlButton
                     onClick={dispatchExitGame}
                     className="d-flex align-items-center justify-content-center"
                 >
                     EXIT GAME
-                </CheckoutDart>
-            </CheckoutsRow>
-        </ContentWrapper>
+                </ControlButton>
+            </div>
+        </Wrapper>
     );
 }
 
@@ -78,23 +97,27 @@ const ButtonWrapper = styled.div`
     }
 `;
 
-const ContentWrapper = styled.div`
+const Wrapper = styled.div`
     padding: 20px;
 `;
 
-const CheckoutsRow = styled.div`
-    padding: 20px;
-`;
-
-const CheckoutDart = styled.div`
-    font-size: 40px;
+const Flex = styled.div`
+    display: flex;
+    flex-direction: row;
     width: 100%;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+`;
+
+const ControlButton = styled.div`
+    font-size: 40px;
     background-color: #0dcaf0;
     border: 1px solid #004757;
     box-shadow: 0 3px 6px 2px rgba(0, 0, 0, 0.2);
-    padding: 5px 15px;
+    padding: 5px;
     color: black;
     border-radius: 10px;
-    min-width: 295px;
-    min-height: 200px;
+    min-height: 60px;
+    width: 33%;
+    text-align: center;
 `;
