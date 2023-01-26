@@ -13,6 +13,6 @@ RUN apk add --no-cache build-base nodejs icu-data-full
 WORKDIR /server
 COPY ./server .
 RUN npm ci --silent
-COPY --from=APP_BUILD /app/build /server/static
+COPY --from=APP_BUILD /app/build /server/app
 EXPOSE $PORT
 CMD ["npm", "start"]

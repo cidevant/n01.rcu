@@ -10,11 +10,16 @@ import { sockets } from './sockets-manager.js';
 export function initWebServer(port) {
   const app = express();
 
-  app.use(express.static('static'));
   app.use(cors());
+  app.use(express.static('static'));
+  app.use(express.static('app'));
 
   app.get('/', function (_, res) {
     res.sendfile('static/index.html');
+  });
+
+  app.get('/app', function (_, res) {
+    res.sendfile('app/index.html');
   });
 
   app.get('/is-alive', function (_req, res) {
