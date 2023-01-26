@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ws } from '../utils/ws';
 import { config } from '../config';
+import { obsConnect as _obsConnect, obsDisconnect as _obsDisconnect } from '../utils/obs';
 
 const initialState = {
     status: WebSocket.CLOSED,
@@ -8,7 +9,9 @@ const initialState = {
     error: null,
     accessCode: localStorage.getItem('accessCode') || '',
     wsServerUrl: localStorage.getItem('wsServerUrl') || config.defaultWsServerUrl,
-    serverUrl: localStorage.getItem('serverUrl') || config.defaultServerUrl,
+    obsStatus: WebSocket.CLOSED,
+    obsClose: null,
+    obsError: null,
     obsUrl: localStorage.getItem('obsUrl') || config.defaultObsUrl,
     obsPassword: localStorage.getItem('obsPassword') || config.defaultObsPassword,
 };
@@ -40,6 +43,29 @@ const slice = createSlice({
             state.status = WebSocket.CLOSED;
             state.error = action.payload;
         },
+        obsConnect(state) {
+            state.obsStatus = WebSocket.CONNECTING;
+            state.obsClose = null;
+            state.obsError = null;
+            _obsConnect(state.obsUrl, state.obsPassword);
+        },
+        obsDisconnect(state) {
+            state.obsStatus = WebSocket.CLOSING;
+            _obsDisconnect();
+        },
+        obsOnopen(state) {
+            state.obsStatus = WebSocket.OPEN;
+            state.obsClose = null;
+            state.obsError = null;
+        },
+        obsOnclose(state, action) {
+            state.obsStatus = WebSocket.CLOSED;
+            state.obsClose = action.payload;
+        },
+        obsOnerror(state, action) {
+            state.obsStatus = WebSocket.CLOSED;
+            state.obsError = action.payload;
+        },
         setAccessCode(state, action) {
             state.accessCode = action.payload;
             localStorage.setItem('accessCode', action.payload);
@@ -48,7 +74,6 @@ const slice = createSlice({
             state.wsServerUrl = action.payload;
             localStorage.setItem('wsServerUrl', action.payload);
         },
-
         setObsUrl(state, action) {
             state.obsUrl = action.payload;
             localStorage.setItem('obsUrl', action.payload);
@@ -70,7 +95,13 @@ export const {
     setWsServerUrl,
     setObsUrl,
     setObsPassword,
+    obsConnect,
+    obsDisconnect,
+    obsOnopen,
+    obsOnclose,
+    obsOnerror,
     obsUrl,
     obsPassword,
 } = slice.actions;
+
 export default slice.reducer;

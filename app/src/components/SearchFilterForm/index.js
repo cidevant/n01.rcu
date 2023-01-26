@@ -109,15 +109,6 @@ function SearchFilterForm() {
                             />
                         </FormInputWrapper>
                     </Flex>
-                    <FormInputWrapper className="mt-4">
-                        <TitleForm>UPDATE INTERVAL</TitleForm>
-                        <FormInput
-                            disabled={activity !== 'search'}
-                            type="number"
-                            value={updateInterval}
-                            onChange={updateUpdateInterval}
-                        />
-                    </FormInputWrapper>
                     <Flex>
                         <ButtonWrapper className="d-grid gap-2 mt-4">
                             <TitleForm>ONLY WITH CAM</TitleForm>
