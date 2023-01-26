@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import useData from '../../hooks/useData';
 
 function SearchFilterForm() {
-    const { dispatchSetFilter } = useHomeInfo();
+    const { dispatchSetFilter, dispatchFilter } = useHomeInfo();
     const { activity } = useData();
     const { filter, keepScrollingBottom, dispatchKeepScrollingBottom } = useHomeInfo();
     const [scroll, setScroll] = useState(keepScrollingBottom);
@@ -27,6 +27,7 @@ function SearchFilterForm() {
                 to: parseInt(to, 10),
                 cam,
             });
+            dispatchFilter();
         }
     }
 
@@ -42,6 +43,7 @@ function SearchFilterForm() {
                 to: parseInt(value, 10),
                 cam,
             });
+            dispatchFilter();
         }
     }
 
@@ -54,6 +56,7 @@ function SearchFilterForm() {
             to: parseInt(to, 10),
             cam: !cam,
         });
+        dispatchFilter();
     }
 
     function updateScroll(event) {

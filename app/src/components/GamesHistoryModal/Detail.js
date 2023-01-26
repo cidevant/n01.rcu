@@ -79,7 +79,7 @@ export function GameHistoryDetail({ close, mid, show }) {
                             stats[playerKey]['100'] += 1;
                         } else if (pData.score >= 140 && pData.score < 180) {
                             stats[playerKey]['140'] += 1;
-                        } else if (pData.score === 180) {
+                        } else if (pData.score >= 180) {
                             stats[playerKey]['180'] += 1;
                         }
 

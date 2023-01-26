@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import moment from 'moment';
 import { useState } from 'react';
 import { Alert, Button, Offcanvas } from 'react-bootstrap';
 import styled from 'styled-components';
@@ -103,6 +104,9 @@ export function GamesHistoryModal({ show, close }) {
                                 </GamePlayerLegs>
                                 <GamePlayerName>{opponentStats.name}</GamePlayerName>
                                 <GamePlayerStats>{opponentStats.average}</GamePlayerStats>
+                                <DateTime>
+                                    {moment(game.startTime * 1000).format('DD/MM/YYYY HH:MM')}
+                                </DateTime>
                             </GamePlayer>
                         </GameInfo>
                     );
@@ -121,4 +125,12 @@ const ButtonWrapper = styled.div`
         font-size: 80px;
         height: 150px;
     }
+`;
+
+const DateTime = styled.div`
+    position: absolute;
+    bottom: -40px;
+    color: #999;
+    left: -120px;
+    font-size: 32px;
 `;
