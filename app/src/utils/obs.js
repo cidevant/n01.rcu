@@ -3,6 +3,10 @@ import OBSWebSocket from 'obs-websocket-js';
 export const obs = new OBSWebSocket();
 
 export async function obsToggleScene(sceneName, url, password) {
+    if (!url) {
+        return 'no obs url';
+    }
+
     if (!isObsConnected()) {
         await obsConnect(url, password);
     }
@@ -18,10 +22,6 @@ export async function obsToggleScene(sceneName, url, password) {
             console.log('[ws.obs] obsToggleScene error', error?.message ?? error);
         }
     }
-}
-
-function isObsConnected() {
-    return obs?.socket?.readyState === WebSocket.OPEN;
 }
 
 export async function obsConnect(url, password) {
@@ -52,4 +52,8 @@ export async function obsDisconnect() {
 
         return error?.message ?? error;
     }
+}
+
+function isObsConnected() {
+    return obs?.socket?.readyState === WebSocket.OPEN;
 }
