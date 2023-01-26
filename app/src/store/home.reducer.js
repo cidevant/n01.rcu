@@ -119,16 +119,16 @@ export default function homeReducer(state, action) {
                 games: action.payload,
             };
             break;
-        case ACTIONS.SEARCH_PAGE_FILTER_BY_AVERAGE:
-            state = {
-                ...state,
-                loading: true,
-            };
-            break;
+        // case ACTIONS.SEARCH_PAGE_FILTER_BY_AVERAGE:
+        //     state = {
+        //         ...state,
+        //         loading: true,
+        //     };
+        //     break;
         case ACTIONS.SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT:
             state = {
                 ...state,
-                loading: false,
+                // loading: false,
                 players: action.payload['payload'],
             };
             break;

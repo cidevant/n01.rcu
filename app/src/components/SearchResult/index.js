@@ -8,7 +8,7 @@ import ItemGamesHistory from './ItemGamesHistory';
 
 function SearchResult() {
     const { players } = useHomeInfo();
-    const showSpinner = useLoadingSpinner();
+    // const showSpinner = useLoadingSpinner();
     const [playerGamesHistory, setPlayerGamesHistory] = useState(false);
 
     function closePlayerGamesHistory() {
@@ -23,11 +23,11 @@ function SearchResult() {
 
     return (
         <div>
-            {showSpinner && (
+            {/* {showSpinner && (
                 <SpinnerWrapper>
                     <Spinner className="me-2" animation="border" size="sm" />
                 </SpinnerWrapper>
-            )}
+            )} */}
             {players?.map?.((player) => (
                 <SearchResultItem key={player.id} player={player} open={openPlayerGamesHistory} />
             ))}

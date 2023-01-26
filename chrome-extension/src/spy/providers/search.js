@@ -1,6 +1,8 @@
 const $SEARCH_PROVIDER = $SEARCH_PROVIDER_FACTORY();
 
 let $$SCROLL_BOTTOM = false;
+let $$SEARCH_FILTER = null;
+let $$PREVIOUS_SEARCH_RESULT = null;
 
 function $SEARCH_PROVIDER_FACTORY() {
     /**
@@ -105,27 +107,40 @@ function $SEARCH_PROVIDER_FACTORY() {
         return returnValue;
     }
 
-    /**
-     * Filters opponents by avg score
-     */
-    function searchByFilter(data, ws) {
+    function sendSearchResult(data) {
         try {
             const { activity } = $DATA_PROVIDER.activity();
 
             if (activity === 'search') {
-                $SHARED_FOREGROUND.dispatchToContent({
-                    type: $SHARED.actions.WEBSOCKET_SEND,
-                    payload: {
-                        type: 'CONTROLLERS:SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT',
-                        payload: [...(getSearchResults(data)?.passedFilter ?? [])].reverse(),
-                    },
-                });
+                const searchResult = [...(getSearchResults(data)?.passedFilter ?? [])].reverse();
+
+                if (searchResult !== $$PREVIOUS_SEARCH_RESULT) {
+                    $$PREVIOUS_SEARCH_RESULT = JSON.stringify(searchResult);
+
+                    $SHARED_FOREGROUND.dispatchToContent({
+                        type: $SHARED.actions.WEBSOCKET_SEND,
+                        payload: {
+                            type: 'CONTROLLERS:SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT',
+                            payload: searchResult,
+                        },
+                    });
+                }
             } else {
                 throw new Error(`activity must be "search", but got "${activity}"`);
             }
         } catch (error) {
             console.log('[n01.RCU.spy.search][error] searchByFilter', error?.message ?? error);
         }
+    }
+
+    /**
+     * Filters opponents by avg score
+     */
+    function searchByFilter(data, ws) {
+        $$SEARCH_FILTER = data;
+
+        // @TODO remove
+        // sendSearchResult(data);
     }
 
     /**
@@ -164,8 +179,14 @@ function $SEARCH_PROVIDER_FACTORY() {
             createDiffList: function (data, changedCount) {
                 $$DEBUG && $$VERBOSE && console.log('[n01.RCU.spy.search] createDiffList');
 
-                if (changedCount > 0 && $$SCROLL_BOTTOM === true) {
-                    scrollToBottom();
+                if (changedCount > 0) {
+                    if ($$SCROLL_BOTTOM === true) {
+                        scrollToBottom();
+                    }
+
+                    if ($$SEARCH_FILTER) {
+                        sendSearchResult($$SEARCH_FILTER);
+                    }
                 }
             },
         };

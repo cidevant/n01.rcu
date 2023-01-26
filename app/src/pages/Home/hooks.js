@@ -29,18 +29,14 @@ export function useStartGameWatcher(page) {
  * @param {*} activity
  */
 export function useSearchPolling(activity) {
-    const { dispatchFilter, dispatchScrollBottom, keepScrollingBottom, filter } = useHomeInfo();
-    const updateInterval =
-        filter?.updateInterval > 0 && filter?.updateInterval < 1000
-            ? filter?.updateInterval * 1000
-            : 5000;
+    const { dispatchFilter, dispatchScrollBottom, keepScrollingBottom } = useHomeInfo();
 
-    useInterval(() => {
+    useEffect(() => {
         if (activity === 'search') {
             dispatchFilter();
             dispatchScrollBottom(keepScrollingBottom);
         }
-    }, updateInterval);
+    }, [activity]);
 }
 
 /**
