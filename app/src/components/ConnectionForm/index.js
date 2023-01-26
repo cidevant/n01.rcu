@@ -81,7 +81,17 @@ function ConnectionForm() {
     return (
         <Form>
             <div className="d-grid">
-                <ConnectionStatus />
+                <StatusWrapper>SERVER</StatusWrapper>
+                <FormInputWrapper className="mt-4">
+                    <TitleForm>URL</TitleForm>
+                    <FormInput
+                        disabled={isConnected}
+                        type="text"
+                        placeholder="wss://n01.devant.cz/ws"
+                        value={wsServerUrl}
+                        onChange={updateServerUrl}
+                    />
+                </FormInputWrapper>
                 <FormInputWrapper className="mt-4">
                     <TitleForm>ACCESS CODE</TitleForm>
                     <FormInput
@@ -92,34 +102,32 @@ function ConnectionForm() {
                         onChange={updateAccessCode}
                     />
                 </FormInputWrapper>
-                <FormInputWrapper className="mt-4">
-                    <TitleForm>SERVER URL</TitleForm>
-                    <FormInput
-                        disabled={isConnected}
-                        type="text"
-                        placeholder="wss://n01.devant.cz/ws"
-                        value={wsServerUrl}
-                        onChange={updateServerUrl}
-                    />
-                </FormInputWrapper>
+
                 <ConnectDisconnectButton
                     connect={dispatchConnect}
                     disconnect={dispatchDisconnect}
                     disabled={wsDisabled}
                     isConnected={isConnected}
                 />
+                <StatusWrapper>OBS</StatusWrapper>
                 <FormInputWrapper className="mt-4">
-                    <TitleForm>OBS URL</TitleForm>
+                    <TitleForm>URL</TitleForm>
                     <FormInput
                         type="text"
-                        placeholder="https://n01.devant.cz:4444"
+                        disabled={isObsConnected}
+                        placeholder="wss://n01.devant.cz/obs"
                         value={obsUrl}
                         onChange={updateObsUrl}
                     />
                 </FormInputWrapper>
                 <FormInputWrapper className="mt-4">
-                    <TitleForm>OBS PASSWORD</TitleForm>
-                    <FormInput type="text" value={obsPassword} onChange={updateObsPassword} />
+                    <TitleForm>PASSWORD</TitleForm>
+                    <FormInput
+                        type="text"
+                        disabled={isObsConnected}
+                        value={obsPassword}
+                        onChange={updateObsPassword}
+                    />
                 </FormInputWrapper>
                 <ConnectDisconnectButton
                     connect={dispatchObsConnect}
@@ -133,27 +141,6 @@ function ConnectionForm() {
 }
 
 export default ConnectionForm;
-
-function ConnectionStatus() {
-    const wsStatus = useSelector((state) => state.ws.status);
-    const isConnected = wsStatus === WebSocket.OPEN;
-    const clientStatus = useSelector((state) => state.client.status);
-    const isPaired = clientStatus === 'PAIRED';
-
-    function renderStatus() {
-        if (isConnected && isPaired) {
-            return 'CONNECTED & PAIRED';
-        }
-
-        if (isConnected && !isPaired) {
-            return 'CONNECTED';
-        }
-
-        return 'CONNECTION FORM';
-    }
-
-    return <StatusWrapper>{renderStatus()}</StatusWrapper>;
-}
 
 function ConnectDisconnectButton({ connect, disconnect, isConnected, disabled }) {
     function renderButton() {
@@ -179,7 +166,7 @@ function ConnectDisconnectButton({ connect, disconnect, isConnected, disabled })
 
 const StatusWrapper = styled.div`
     width: 100%;
-    padding: 35px 15px;
+    padding: 20px 15px;
     background-color: #333;
     color: white;
     border-bottom: 1px solid #999;
@@ -210,11 +197,12 @@ const FormInput = styled(Form.Control)`
 const ButtonWrapper = styled.div`
     z-index: 10;
     padding: 20px;
+    margin-bottom: 30px;
     width: 100%;
 
     & > button {
         border-radius: 0;
         font-size: 40px;
-        height: 140px;
+        height: 100px;
     }
 `;

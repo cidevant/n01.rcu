@@ -13,7 +13,6 @@ function SearchFilterForm() {
     const [scroll, setScroll] = useState(keepScrollingBottom);
     const [from, setFrom] = useState(filter.from);
     const [to, setTo] = useState(filter.to);
-    const [updateInterval, setUpdateInterval] = useState(filter.updateInterval);
     const [cam, setCam] = useState(filter.cam);
 
     function updateFrom(event) {
@@ -26,7 +25,6 @@ function SearchFilterForm() {
             dispatchSetFilter({
                 from: parseInt(value, 10),
                 to: parseInt(to, 10),
-                updateInterval: parseInt(updateInterval, 10),
                 cam,
             });
         }
@@ -42,7 +40,6 @@ function SearchFilterForm() {
             dispatchSetFilter({
                 from: parseInt(from, 10),
                 to: parseInt(value, 10),
-                updateInterval: parseInt(updateInterval, 10),
                 cam,
             });
         }
@@ -55,7 +52,6 @@ function SearchFilterForm() {
         dispatchSetFilter({
             from: parseInt(from, 10),
             to: parseInt(to, 10),
-            updateInterval: parseInt(updateInterval, 10),
             cam: !cam,
         });
     }
@@ -67,26 +63,9 @@ function SearchFilterForm() {
         dispatchKeepScrollingBottom(!scroll);
     }
 
-    function updateUpdateInterval(event) {
-        event.preventDefault();
-
-        const { value } = event.target;
-
-        if (value >= 0) {
-            setUpdateInterval(value);
-
-            dispatchSetFilter({
-                from: parseInt(from, 10),
-                to: parseInt(to, 10),
-                updateInterval: parseInt(value, 10),
-                cam,
-            });
-        }
-    }
-
     return (
         <>
-            <StatusWrapper>SEARCH FORM</StatusWrapper>
+            <StatusWrapper>SEARCH</StatusWrapper>
             <Form>
                 <div className="d-grid mb-4">
                     <Flex>
@@ -179,7 +158,7 @@ const ButtonWrapper = styled.div`
     & > button {
         border-radius: 0;
         font-size: 40px;
-        height: 140px;
+        height: 100px;
     }
 `;
 
@@ -190,7 +169,7 @@ const Flex = styled.div`
 
 const StatusWrapper = styled.div`
     width: 100%;
-    padding: 35px 15px;
+    padding: 20px 15px;
     background-color: #333;
     color: white;
     border-top: 1px solid #999;
