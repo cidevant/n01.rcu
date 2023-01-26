@@ -10,7 +10,7 @@ chrome.runtime.onInstalled.addListener(async (reason) => {
         $$DEBUG && console.log('[n01.RCU.background] initial storage setup');
 
         await $SHARED_STORAGE.updateConnection({
-            url: $$DEBUG ? 'wss://n01.devant.cz/ws' : 'ws://n01.devant.cz/ws',
+            url: 'wss://n01.devant.cz/ws',
             urlValid: false,
             accessCode: null,
             accessCodeValid: false,
@@ -70,6 +70,6 @@ chrome.runtime.onMessage.addListener(async (event, _sender, sendResponse) => {
 // }
 
 // CLOSE
-chrome.tabs.onRemoved.addListener(async function (tabid, removed) {
+chrome.tabs.onRemoved.addListener(async function (_tabId, _removed) {
     $SHARED_HELPERS.changeChromeExtensionIcon({ icon: 'default' });
 });

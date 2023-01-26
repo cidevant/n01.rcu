@@ -3,6 +3,8 @@ const $SEARCH_PROVIDER = $SEARCH_PROVIDER_FACTORY();
 let $$SCROLL_BOTTOM = false;
 let $$SEARCH_FILTER = null;
 let $$PREVIOUS_SEARCH_RESULT = null;
+let $$SENDING_SEARCH_RESULT = false;
+let $$SENDING_SEARCH_RESULT_TIMEOUT = null;
 
 function $SEARCH_PROVIDER_FACTORY() {
     /**
@@ -107,32 +109,6 @@ function $SEARCH_PROVIDER_FACTORY() {
         return returnValue;
     }
 
-    function sendSearchResult(data) {
-        try {
-            const { activity } = $DATA_PROVIDER.activity();
-
-            if (activity === 'search') {
-                const searchResult = [...(getSearchResults(data)?.passedFilter ?? [])].reverse();
-
-                if ($$PREVIOUS_SEARCH_RESULT == null || searchResult !== $$PREVIOUS_SEARCH_RESULT) {
-                    $$PREVIOUS_SEARCH_RESULT = JSON.stringify(searchResult);
-
-                    $SHARED_FOREGROUND.dispatchToContent({
-                        type: $SHARED.actions.WEBSOCKET_SEND,
-                        payload: {
-                            type: 'CONTROLLERS:SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT',
-                            payload: searchResult,
-                        },
-                    });
-                }
-            } else {
-                throw new Error(`activity must be "search", but got "${activity}"`);
-            }
-        } catch (error) {
-            console.log('[n01.RCU.spy.search][error] searchByFilter', error?.message ?? error);
-        }
-    }
-
     /**
      * Filters opponents by avg score
      */
@@ -170,6 +146,31 @@ function $SEARCH_PROVIDER_FACTORY() {
         }
     }
 
+    function sendSearchResult(data) {
+        try {
+            const { activity } = $DATA_PROVIDER.activity();
+
+            if (activity === 'search') {
+                const searchResult = [...(getSearchResults(data)?.passedFilter ?? [])].reverse();
+
+                if ($$PREVIOUS_SEARCH_RESULT == null || searchResult !== $$PREVIOUS_SEARCH_RESULT) {
+                    $$PREVIOUS_SEARCH_RESULT = JSON.stringify(searchResult);
+
+                    $SHARED_FOREGROUND.dispatchToContent({
+                        type: $SHARED.actions.WEBSOCKET_SEND,
+                        payload: {
+                            type: 'CONTROLLERS:SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT',
+                            payload: searchResult,
+                        },
+                    });
+                }
+            } else {
+                throw new Error(`activity must be "search", but got "${activity}"`);
+            }
+        } catch (error) {
+            console.log('[n01.RCU.spy.search][error] searchByFilter', error?.message ?? error);
+        }
+    }
     function watchNativeSearchFunctions() {
         return {
             // players list changed
@@ -181,11 +182,20 @@ function $SEARCH_PROVIDER_FACTORY() {
                         scrollToBottom();
                     }
 
-                    if ($$SEARCH_FILTER) {
-                        sendSearchResult($$SEARCH_FILTER);
+                    // Don't spam server, send updates only once in 2 seconds
+                    if ($$SEARCH_FILTER != null && $$SENDING_SEARCH_RESULT === false) {
+                        $$SENDING_SEARCH_RESULT = true;
+                        $$SENDING_SEARCH_RESULT_TIMEOUT = setTimeout(() => {
+                            sendSearchResult($$SEARCH_FILTER);
+                            $$SENDING_SEARCH_RESULT = false;
+                        }, 2000);
                     }
                 } else {
-                    if ($$PREVIOUS_SEARCH_RESULT == null && $$SEARCH_FILTER) {
+                    if (
+                        $$SEARCH_FILTER != null &&
+                        $$SENDING_SEARCH_RESULT === false &&
+                        $$PREVIOUS_SEARCH_RESULT == null
+                    ) {
                         sendSearchResult($$SEARCH_FILTER);
                     }
                 }
@@ -197,6 +207,13 @@ function $SEARCH_PROVIDER_FACTORY() {
         $$SCROLL_BOTTOM = false;
         $$SEARCH_FILTER = null;
         $$PREVIOUS_SEARCH_RESULT = null;
+
+        if ($$SENDING_SEARCH_RESULT_TIMEOUT) {
+            clearTimeout($$SENDING_SEARCH_RESULT_TIMEOUT);
+            $$SENDING_SEARCH_RESULT_TIMEOUT = null;
+        }
+
+        $$SENDING_SEARCH_RESULT = false;
     }
 
     return {
