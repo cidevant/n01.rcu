@@ -114,7 +114,7 @@ function $SEARCH_PROVIDER_FACTORY() {
             if (activity === 'search') {
                 const searchResult = [...(getSearchResults(data)?.passedFilter ?? [])].reverse();
 
-                if (searchResult !== $$PREVIOUS_SEARCH_RESULT) {
+                if ($$PREVIOUS_SEARCH_RESULT == null || searchResult !== $$PREVIOUS_SEARCH_RESULT) {
                     $$PREVIOUS_SEARCH_RESULT = JSON.stringify(searchResult);
 
                     $SHARED_FOREGROUND.dispatchToContent({
@@ -138,9 +138,6 @@ function $SEARCH_PROVIDER_FACTORY() {
      */
     function searchByFilter(data, ws) {
         $$SEARCH_FILTER = data;
-
-        // @TODO remove
-        // sendSearchResult(data);
     }
 
     /**
@@ -187,12 +184,23 @@ function $SEARCH_PROVIDER_FACTORY() {
                     if ($$SEARCH_FILTER) {
                         sendSearchResult($$SEARCH_FILTER);
                     }
+                } else {
+                    if ($$PREVIOUS_SEARCH_RESULT == null && $$SEARCH_FILTER) {
+                        sendSearchResult($$SEARCH_FILTER);
+                    }
                 }
             },
         };
     }
 
+    function reset() {
+        $$SCROLL_BOTTOM = false;
+        $$SEARCH_FILTER = null;
+        $$PREVIOUS_SEARCH_RESULT = null;
+    }
+
     return {
+        reset,
         search: searchByFilter,
         scroll: setScrollBottom,
         native: watchNativeSearchFunctions,
