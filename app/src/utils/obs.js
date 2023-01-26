@@ -30,8 +30,6 @@ export async function obsConnect(url, password) {
             rpcVersion: 1,
         });
 
-        console.log('[ws.obs] connected');
-
         return true;
     } catch (error) {
         console.log('[ws.obs] connect error', error);
@@ -43,8 +41,6 @@ export async function obsConnect(url, password) {
 export async function obsDisconnect() {
     try {
         await obs.disconnect();
-
-        console.log('[ws.obs] disconnected');
 
         return true;
     } catch (error) {

@@ -62,17 +62,20 @@ export function WebSocket({ children }) {
         // OBS
         obs.on('ConnectionOpened', () => {
             dispatch(obsOnopen());
+            console.log('[ws.obs] connected');
         });
         obs.on('ConnectionClosed', (event) => {
             dispatch(
                 obsOnclose({
                     code: event.code,
-                    reason: event.reason,
+                    reason: event.message,
                 })
             );
+            console.log('[ws.obs] disconnected', event.code, event.message);
         });
         obs.on('ConnectionError', (error) => {
             dispatch(obsOnerror(error));
+            console.log('[ws.obs] error', error?.message ?? error);
         });
     }, [dispatch]);
 
