@@ -19,5 +19,6 @@ export function useNetworkInfo() {
         wsServerUrl: ws.wsServerUrl,
         obsUrl: ws.obsUrl,
         obsPassword: ws.obsPassword,
+        obsStatus: ws.obsStatus,
     };
 }

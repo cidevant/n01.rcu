@@ -54,6 +54,6 @@ export async function obsDisconnect() {
     }
 }
 
-function isObsConnected() {
+export function isObsConnected() {
     return obs?.socket?.readyState === WebSocket.OPEN;
 }
