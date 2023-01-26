@@ -7,14 +7,18 @@ import ws from '../../utils/ws';
 import {
     connect,
     disconnect,
+    obsConnect,
+    obsDisconnect,
     setAccessCode,
     setWsServerUrl,
     setObsPassword,
     setObsUrl,
 } from '../../store/ws.reducer';
+import _ from 'lodash';
 
 function ConnectionForm() {
     const wsStatus = useSelector((state) => state.ws.status);
+    const obsStatus = useSelector((state) => state.ws.obsStatus);
 
     const [accessCode, setAccessCodeState] = useState(useSelector((state) => state.ws.accessCode));
     const [wsServerUrl, setServerUrlState] = useState(useSelector((state) => state.ws.wsServerUrl));
@@ -23,7 +27,10 @@ function ConnectionForm() {
         useSelector((state) => state.ws.obsPassword)
     );
     const isConnected = wsStatus === WebSocket.OPEN;
+    const isObsConnected = obsStatus === WebSocket.OPEN;
     const dispatch = useDispatch();
+    const wsDisabled = !ws.__isValidAccessCode(accessCode) || !ws.__isValidUrl(wsServerUrl);
+    const obsDisabled = _.isEmpty(obsUrl);
 
     function updateAccessCode(event) {
         event.preventDefault();
@@ -55,6 +62,22 @@ function ConnectionForm() {
         dispatch(setObsPassword(event.target.value));
     }
 
+    function dispatchConnect() {
+        dispatch(connect());
+    }
+
+    function dispatchDisconnect() {
+        dispatch(disconnect());
+    }
+
+    function dispatchObsConnect() {
+        dispatch(obsConnect(obsUrl, obsPassword));
+    }
+
+    function dispatchObsDisconnect() {
+        dispatch(obsDisconnect());
+    }
+
     return (
         <Form>
             <div className="d-grid">
@@ -79,6 +102,12 @@ function ConnectionForm() {
                         onChange={updateServerUrl}
                     />
                 </FormInputWrapper>
+                <ConnectDisconnectButton
+                    connect={dispatchConnect}
+                    disconnect={dispatchDisconnect}
+                    disabled={wsDisabled}
+                    isConnected={isConnected}
+                />
                 <FormInputWrapper className="mt-4">
                     <TitleForm>OBS URL</TitleForm>
                     <FormInput
@@ -92,8 +121,13 @@ function ConnectionForm() {
                     <TitleForm>OBS PASSWORD</TitleForm>
                     <FormInput type="text" value={obsPassword} onChange={updateObsPassword} />
                 </FormInputWrapper>
+                <ConnectDisconnectButton
+                    connect={dispatchObsConnect}
+                    disconnect={dispatchObsDisconnect}
+                    disabled={obsDisabled}
+                    isConnected={isObsConnected}
+                />
             </div>
-            <ConnectDisconnectButton />
         </Form>
     );
 }
@@ -121,25 +155,11 @@ function ConnectionStatus() {
     return <StatusWrapper>{renderStatus()}</StatusWrapper>;
 }
 
-function ConnectDisconnectButton() {
-    const dispatch = useDispatch();
-    const accessCode = useSelector((state) => state.ws.accessCode);
-    const wsServerUrl = useSelector((state) => state.ws.wsServerUrl);
-    const wsStatus = useSelector((state) => state.ws.status);
-    const disabled = !ws.__isValidAccessCode(accessCode) || !ws.__isValidUrl(wsServerUrl);
-
-    function dispatchConnect() {
-        dispatch(connect());
-    }
-
-    function dispatchDisconnect() {
-        dispatch(disconnect());
-    }
-
+function ConnectDisconnectButton({ connect, disconnect, isConnected, disabled }) {
     function renderButton() {
-        if (wsStatus === WebSocket.OPEN) {
+        if (isConnected) {
             return (
-                <Button variant="danger" size="lg" onClick={dispatchDisconnect}>
+                <Button variant="danger" size="lg" onClick={disconnect}>
                     <FontAwesomeIcon icon="fa-solid fa-power-off" className="me-4" />
                     DISCONNECT
                 </Button>
@@ -147,7 +167,7 @@ function ConnectDisconnectButton() {
         }
 
         return (
-            <Button size="lg" disabled={disabled} onClick={dispatchConnect}>
+            <Button size="lg" disabled={disabled} onClick={connect}>
                 <FontAwesomeIcon icon="fa-solid fa-link" className="me-4" />
                 CONNECT
             </Button>
