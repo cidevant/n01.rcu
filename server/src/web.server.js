@@ -7,9 +7,7 @@ import { sockets } from './sockets-manager.js';
  * Web server
  */
 
-export function initWebServer(port, appPort, nodeEnv) {
-  // SERVER
-
+export function initWebServer(port, appPort, isProductionEnv) {
   const server = express();
 
   server.use(cors());
@@ -51,23 +49,21 @@ export function initWebServer(port, appPort, nodeEnv) {
     }
   });
 
-  // APP SERVER
-
-  const app = express();
-
-  app.use(cors());
-  app.use(express.static('app'));
-  app.get('/', function (_, res) {
-    res.sendfile('app/index.html');
-  });
-
-  // RUN
-
   return server.listen(port, async () => {
     console.log('[web.server] listening on port', chalk.greenBright(port));
 
-    app.listen(appPort, async () => {
-      console.log('[web.app] listening on port', chalk.greenBright(appPort));
-    });
+    // APP SERVER
+    if (isProductionEnv) {
+      const app = express();
+
+      app.use(cors());
+      app.use(express.static('app'));
+      app.get('/', function (_, res) {
+        res.sendfile('app/index.html');
+      });
+      app.listen(appPort, async () => {
+        console.log('[web.app] listening on port', chalk.greenBright(appPort));
+      });
+    }
   });
 }
