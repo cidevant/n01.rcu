@@ -2,30 +2,37 @@ export const SCENES = [
     {
         name: '26',
         code: '26_scene',
+        score: '26',
     },
     {
         name: '100',
         code: '100_scene',
+        score: '100',
     },
     {
         name: '007',
         code: '007_scene',
+        score: '7',
     },
     {
         name: '13',
         code: '13_scene',
+        score: '13',
     },
     {
         name: '27',
         code: '27_scene',
+        score: '27',
     },
     {
         name: '33',
         code: '33_scene',
+        score: '33',
     },
     {
         name: '180',
         code: '180_scene',
+        score: '180',
     },
 ];
 

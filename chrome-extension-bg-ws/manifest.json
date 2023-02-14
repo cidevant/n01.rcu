@@ -1,0 +1,57 @@
+{
+    "manifest_version": 3,
+    "name": "[n01.RCU] CLIENT 2",
+    "description": "Accepts and handles requests from RCU",
+    "version": "3.0.0",
+    "background": {
+        "service_worker": "src/background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://nakka.com/n01/online/*"
+            ],
+            "js": [
+                "src/shared.js",
+                "src/content/websocket.js",
+                "src/content/events.js",
+                "src/content.js"
+            ],
+            "all_frames": true
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "src/shared.js",
+                                
+                "src/content/websocket.js",
+                "src/content/events.js",
+
+                "src/spy/providers/data.js",
+                "src/spy/providers/search.js",
+                "src/spy/providers/game.js",
+                "src/spy/providers/user.js",
+                "src/spy/events.js",
+                "src/spy/spy.js"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ],
+    "action": {
+        "default_popup": "src/popup/index.html",
+        "default_icon": {
+            "16": "src/assets/icons/default.png",
+            "36": "src/assets/icons/default.png",
+            "48": "src/assets/icons/default.png",
+            "120": "src/assets/icons/default.png"
+        }
+    },
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "storage"
+    ]
+}

@@ -1,13 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
+import useGameInfo from '../../hooks/useGameInfo';
 import { useNetworkInfo } from '../../hooks/useNetworkInfo';
 import { obsToggleScene } from '../../utils/obs';
 
 function Item({ scene }) {
     const { obsUrl, obsPassword } = useNetworkInfo();
+    const { dispatchInputScore } = useGameInfo();
 
     async function setScene() {
         await obsToggleScene(scene.code, obsUrl, obsPassword);
+
+        if (scene.score) {
+            const score = parseInt(scene.score, 10);
+
+            if (score >= 0) {
+                dispatchInputScore(score);
+            }
+        }
     }
 
     return (
