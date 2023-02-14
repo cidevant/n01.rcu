@@ -6,6 +6,7 @@ import { useNetworkInfo } from '../../hooks/useNetworkInfo';
 import WaitingForPairing from './WaitingForPairing';
 import ConnectForm from './ConnectForm';
 import TopBar from '../../components/TopBar';
+import ScenesModal from '../../components/ScenesModal';
 
 function Home() {
     const { activity, page } = useData();
@@ -35,6 +36,7 @@ function Home() {
         <>
             <TopBar />
             {renderContent()}
+            {/* <ScenesModal show={true} close={() => {}} /> */}
         </>
     );
 }

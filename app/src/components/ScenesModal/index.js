@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import styled from 'styled-components';
 import Button from 'react-bootstrap/Button';
@@ -31,12 +31,30 @@ export default ScenesModal;
 
 function ScenesList() {
     const { dispatchExitGame, dispatchToggleStats, dispatchRefreshPage } = useGameInfo();
+    const [sendSceneScore, setSendSceneScore] = useState(true);
+
+    function toggleSendSceneScore() {
+        setSendSceneScore(!sendSceneScore);
+    }
 
     return (
         <Wrapper>
+            <ToggleSceneScoreButtonWrapper>
+                <Button
+                    size="lg"
+                    onClick={toggleSendSceneScore}
+                    variant={sendSceneScore === true ? 'success' : 'secondary'}
+                >
+                    <FontAwesomeIcon
+                        className="text-white me-4"
+                        icon={sendSceneScore === true ? 'fa-solid fa-check' : 'fa-solid fa-xmark'}
+                    />
+                    SEND SCENE SCORE
+                </Button>
+            </ToggleSceneScoreButtonWrapper>
             <Flex>
                 {SCENES.map((scene) => (
-                    <Item scene={scene} key={scene.code} />
+                    <Item scene={scene} sendScore={sendSceneScore} key={scene.code} />
                 ))}{' '}
             </Flex>
 
@@ -121,4 +139,16 @@ const ControlButton = styled.div`
     min-height: 160px;
     width: 33%;
     text-align: center;
+`;
+const ToggleSceneScoreButtonWrapper = styled.div`
+    z-index: 10;
+    padding: 20px;
+    width: 100%;
+
+    & > button {
+        border-radius: 0;
+        font-size: 40px;
+        height: 100px;
+        width: 100%;
+    }
 `;

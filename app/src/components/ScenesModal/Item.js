@@ -4,14 +4,14 @@ import useGameInfo from '../../hooks/useGameInfo';
 import { useNetworkInfo } from '../../hooks/useNetworkInfo';
 import { obsToggleScene } from '../../utils/obs';
 
-function Item({ scene }) {
+function Item({ scene, sendScore }) {
     const { obsUrl, obsPassword } = useNetworkInfo();
     const { dispatchInputScore } = useGameInfo();
 
     async function setScene() {
         await obsToggleScene(scene.code, obsUrl, obsPassword);
 
-        if (scene.score) {
+        if (sendScore && scene.score) {
             const score = parseInt(scene.score, 10);
 
             if (score >= 0) {
