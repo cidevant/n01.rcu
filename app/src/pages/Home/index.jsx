@@ -36,7 +36,7 @@ function Home() {
         <>
             <TopBar />
             {renderContent()}
-            {/* <ScenesModal show={true} close={() => {}} /> */}
+            <ScenesModal show={true} close={() => {}} />
         </>
     );
 }

@@ -12,13 +12,13 @@ export function SearchResultItem({ player, open }) {
         dispatchStartGame(event.target.id);
     }
 
+    function onPressIn(event) {
+        event.target.classList.add('touching');
+    }
+
     function onPressOut(event) {
         event.target.classList.remove('confirmed');
         event.target.classList.remove('touching');
-    }
-
-    function onPressIn(event) {
-        event.target.classList.add('touching');
     }
 
     return (

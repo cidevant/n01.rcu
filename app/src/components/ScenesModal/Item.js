@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import useGameInfo from '../../hooks/useGameInfo';
 import { useNetworkInfo } from '../../hooks/useNetworkInfo';
 import { obsToggleScene } from '../../utils/obs';
+import LongPressButton from '../LongPressButton';
 
-function Item({ scene, sendScore }) {
+function Item({ scene, sendScore, useLongPress = false }) {
     const { obsUrl, obsPassword } = useNetworkInfo();
     const { dispatchInputScore } = useGameInfo();
 
@@ -20,14 +21,41 @@ function Item({ scene, sendScore }) {
         }
     }
 
+    async function onLongPress(event) {
+        event.target.classList.add('confirmed');
+        await setScene();
+    }
+
+    function onPressIn(event) {
+        event.target.classList.add('touching');
+    }
+
+    function onPressOut(event) {
+        event.target.classList.remove('confirmed');
+        event.target.classList.remove('touching');
+    }
+
+    function renderButton() {
+        const buttonProps = {
+            sceneStyle: scene.style,
+            className: 'd-flex align-items-center justify-content-center',
+        };
+
+        if (!useLongPress) {
+            buttonProps.onClick = setScene;
+        }
+
+        return <SceneButton {...buttonProps}>{scene.name}</SceneButton>;
+    }
+
+    if (!useLongPress) {
+        return renderButton();
+    }
+
     return (
-        <SceneButton
-            sceneStyle={scene.style}
-            onClick={setScene}
-            className="d-flex align-items-center justify-content-center"
-        >
-            {scene.name}
-        </SceneButton>
+        <LongPressButton onLongPress={onLongPress} onPressOut={onPressOut} onPressIn={onPressIn}>
+            {renderButton()}
+        </LongPressButton>
     );
 }
 
@@ -48,8 +76,22 @@ const SceneButton = styled.div`
     color: black;
     border-radius: 10px;
     text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 
     ${({ sceneStyle }) => sceneStyle === 'yellow' && 'background-color: yellow;'};
     ${({ sceneStyle }) => sceneStyle === 'green' && 'background-color: lightgreen;'};
     ${({ sceneStyle }) => sceneStyle === 'red' && 'background-color: red;'};
+
+    &.touching {
+        background-color: #15c900;
+        transition: background-color 1s;
+    }
+
+    &.confirmed {
+        border-color: #fff;
+        color: white;
+    }
 `;

@@ -58,7 +58,7 @@ function ScenesList({ sendSceneScore, toggleSendSceneScore }) {
             </ToggleSceneScoreButtonWrapper>
             <Flex>
                 {SCENES.map((scene) => (
-                    <Item scene={scene} sendScore={sendSceneScore} key={scene.code} />
+                    <Item scene={scene} useLongPress sendScore={sendSceneScore} key={scene.code} />
                 ))}{' '}
             </Flex>
 
