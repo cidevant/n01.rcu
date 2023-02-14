@@ -9,6 +9,12 @@ import { SCENES, SCENES_GREETINGS, SCENES_MEMES } from '../../utils/game';
 import Item from './Item';
 
 export function ScenesModal({ show, close, opponent, average }) {
+    const [sendSceneScore, setSendSceneScore] = useState(true);
+
+    function toggleSendSceneScore() {
+        setSendSceneScore(!sendSceneScore);
+    }
+
     return (
         <Offcanvas placement="end" show={show} onHide={close}>
             <ButtonWrapper className="d-grid gap-2">
@@ -22,20 +28,18 @@ export function ScenesModal({ show, close, opponent, average }) {
             </ButtonWrapper>
             <Opponent opponent={opponent} average={average} />
             <hr />
-            <ScenesList />
+            <ScenesList
+                toggleSendSceneScore={toggleSendSceneScore}
+                sendSceneScore={sendSceneScore}
+            />
         </Offcanvas>
     );
 }
 
 export default ScenesModal;
 
-function ScenesList() {
+function ScenesList({ sendSceneScore, toggleSendSceneScore }) {
     const { dispatchExitGame, dispatchToggleStats, dispatchRefreshPage } = useGameInfo();
-    const [sendSceneScore, setSendSceneScore] = useState(true);
-
-    function toggleSendSceneScore() {
-        setSendSceneScore(!sendSceneScore);
-    }
 
     return (
         <Wrapper>
