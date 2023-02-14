@@ -4,4 +4,4 @@ RUN apk add --no-cache build-base nodejs icu-data-full
 WORKDIR /server
 COPY . .
 RUN npm ci --silent
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]

@@ -1,6 +1,7 @@
 import express from 'express';
 import chalk from 'chalk';
 import cors from 'cors';
+import path from 'path';
 import { sockets } from './sockets-manager.js';
 
 /**
@@ -57,9 +58,9 @@ export function initWebServer(port, appPort, nodeEnv) {
   const appPath = nodeEnv === 'development' ? '../app/build' : 'app';
 
   app.use(cors());
-  app.use(express.static('app'));
+  app.use(express.static(path.resolve(appPath)));
   app.get('/', function (_, res) {
-    res.sendfile('app/index.html');
+    res.sendfile(path.resolve(`${appPath}/index.html`));
   });
 
   // RUN

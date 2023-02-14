@@ -1,5 +1,6 @@
 {
    "name": "n01.rcu.server",
+   "main": "src/index.js",
    "scripts": {
       "eslint": "eslint --fix ./*",
       "daemon:add": "./scripts/systemctl/add.sh",
@@ -7,7 +8,8 @@
       "daemon:init": "npm run daemon:remove && npm run daemon:add",
       "check:bin": "./scripts/check-obs-cli.sh",
       "init": "npm run check:bin && npm run daemon:init",
-      "start": "node src/index.js"
+      "start": "node src/index.js",
+      "dev": "nodemon --watch src src/index.js"
    },
    "dependencies": {
       "chalk": "^5.0.1",
@@ -48,6 +50,7 @@
       "eslint-plugin-prettier": "^4.0.0",
       "husky": "^7.0.4",
       "lint-staged": "^12.4.1",
+      "nodemon": "^2.0.20",
       "prettier": "^2.6.2"
    }
 }
