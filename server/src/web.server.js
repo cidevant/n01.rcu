@@ -7,42 +7,34 @@ import { sockets } from './sockets-manager.js';
  * Web server
  */
 
-export function initWebServer(port) {
-  const app = express();
+export function initWebServer(port, appPort, nodeEnv) {
+  // SERVER
 
-  app.use(cors());
-  app.use(express.static('static'));
-  app.use(express.static('app'));
+  const server = express();
 
-  app.get('/', function (_, res) {
+  server.use(cors());
+  server.use(express.static('static'));
+  server.get('/', function (_, res) {
     res.sendfile('static/index.html');
   });
-
-  app.get('/app', function (_, res) {
-    res.sendfile('app/index.html');
-  });
-
-  app.get('/is-alive', function (_req, res) {
+  server.get('/is-alive', function (_req, res) {
     res.json({
       ok: true,
     });
   });
-
-  app.get('/check-access-code', function (req, res) {
+  server.get('/check-access-code', function (req, res) {
     const valid = sockets.isAccessCodeAvailable(req.params.accessCode);
 
     res.json({
       ok: valid,
     });
   });
-
-  app.get('/sockets-list', function (_req, res) {
+  server.get('/sockets-list', function (_req, res) {
     res.json({
       sockets: sockets.listMetaSafe,
     });
   });
-
-  app.get('/generate-access-code', function (_req, res) {
+  server.get('/generate-access-code', function (_req, res) {
     const accessCode = sockets.generateAccessCode();
 
     if (accessCode) {
@@ -59,7 +51,24 @@ export function initWebServer(port) {
     }
   });
 
-  return app.listen(port, async () => {
+  // APP SERVER
+
+  const app = express();
+  const appPath = nodeEnv === 'development' ? '../app/build' : 'app';
+
+  app.use(cors());
+  app.use(express.static('app'));
+  app.get('/', function (_, res) {
+    res.sendfile('app/index.html');
+  });
+
+  // RUN
+
+  return server.listen(port, async () => {
     console.log('[web.server] listening on port', chalk.greenBright(port));
+
+    app.listen(appPort, async () => {
+      console.log('[web.app] listening on port', chalk.greenBright(appPort));
+    });
   });
 }

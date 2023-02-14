@@ -98,9 +98,11 @@ export const handlePingPong = {
     if (message === 'pong') {
       ws.isAlive = true;
 
+      // stop further processing of message
       return true;
     }
 
+    // process message
     return false;
   },
 
@@ -119,9 +121,9 @@ export const handlePingPong = {
         }
 
         /**
-         * 1. mark socket as `dead`
+         * 1. set socket as `dead`
          * 2. send `ping` request to socket
-         * 3. wait for socket `pong` response to mark it `alive`
+         * 3. wait for socket `pong` response to set it `alive`
          */
         ws.isAlive = false;
         ws.send('ping');

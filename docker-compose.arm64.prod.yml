@@ -5,5 +5,7 @@ services:
     image: registry.docker.devant.cz/arm64/n01rcu
     environment:
       - PORT=3000
+      - APP_PORT=3001
     ports:
       - '3000:3000'
+      - '3001:3001'

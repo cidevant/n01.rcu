@@ -8,6 +8,7 @@ services:
     stdin_open: true
     environment:
       - PORT=7000
+      - NODE_ENV=development
     ports:
       - '7000:7000'
     volumes:
@@ -19,7 +20,10 @@ services:
       dockerfile: Dockerfile
     environment:
       - PORT=7001
+      - APP_PORT=7005
+      - NODE_ENV=development
     ports:
       - '7001:7001'
+      - '7005:7005'
     volumes:
       - './server:/server:cached'
