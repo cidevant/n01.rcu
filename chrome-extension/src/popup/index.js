@@ -52,7 +52,7 @@ window.addEventListener('DOMContentLoaded', async function popupLoadedCallback()
             const connection = await $SHARED_STORAGE.getConnection();
 
             // try to connect with stored accessCode
-            if ($SHARED_VALIDATORS.isValidAccessCodeFormat(connection.accessCode)) {
+            if ($SHARED_VALIDATORS.isValidAccessCodeFormat(connection?.accessCode)) {
                 // will animate url validation
                 tryToConnect(url, connection.accessCode);
             } else {
