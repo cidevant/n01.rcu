@@ -190,7 +190,10 @@ function $SEARCH_PROVIDER_FACTORY() {
             $$PREVIOUS_SEARCH_RESULT = null;
             $$SENDING_SEARCH_RESULT = false;
 
-            throw new Error(`activity must be "search", but got "${activity}"`);
+            console.log(
+                '[n01.RCU.spy.search][error] search',
+                `activity must be "search", but got "${activity}"`
+            );
         }
     }
 
