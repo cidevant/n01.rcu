@@ -12,12 +12,15 @@ function $SEARCH_PROVIDER_FACTORY() {
         $$PREVIOUS_SEARCH_RESULT = null;
         $$SCROLL_BOTTOM = false;
 
+        clearSendingTimeout();
+        $$SENDING_SEARCH_RESULT = false;
+    }
+
+    function clearSendingTimeout(params) {
         if ($$SENDING_SEARCH_RESULT_TIMEOUT != null) {
             clearTimeout($$SENDING_SEARCH_RESULT_TIMEOUT);
             $$SENDING_SEARCH_RESULT_TIMEOUT = null;
         }
-
-        $$SENDING_SEARCH_RESULT = false;
     }
 
     /**
@@ -123,31 +126,24 @@ function $SEARCH_PROVIDER_FACTORY() {
     }
 
     /**
-     * Safely sends search data over WEBSOCKET to CONTROLLERS
+     *  Throttled sending of search results
      *
-     * Safety checks:
-     *      * search data are same as sent previously
-     *      * already sending search data
-     *
-     * @param {boolean} [force=false] If true -> ignore safety checks
+     * @param {boolean} [force=false] Disables throttling
      */
     function sendSearchResults(force = false) {
-        if (force) {
-            // Don't spam server, send updates only once in 2 seconds
-            if ($$SEARCH_FILTER != null && $$SENDING_SEARCH_RESULT === false) {
-                $$SENDING_SEARCH_RESULT = true;
+        if ($$SEARCH_FILTER != null) {
+            if (force) {
+                clearSendingTimeout();
+
+                $$SENDING_SEARCH_RESULT = false;
+
+                wsSendSearchResults($$SEARCH_FILTER);
+            } else {
+                // Don't spam server, send updates only once in 2 seconds
                 $$SENDING_SEARCH_RESULT_TIMEOUT = setTimeout(() => {
                     wsSendSearchResults($$SEARCH_FILTER);
-                    $$SENDING_SEARCH_RESULT = false;
+                    $$SENDING_SEARCH_RESULT_TIMEOUT = null;
                 }, 2000);
-            }
-        } else {
-            if (
-                $$SEARCH_FILTER != null &&
-                $$SENDING_SEARCH_RESULT === false &&
-                $$PREVIOUS_SEARCH_RESULT == null
-            ) {
-                wsSendSearchResults($$SEARCH_FILTER);
             }
         }
     }
@@ -155,17 +151,22 @@ function $SEARCH_PROVIDER_FACTORY() {
     /**
      * Sends search data over WEBSOCKET to CONTROLLERS
      *
-     * @param {*} data
+     * @param {Array<Object>} data Search results
      */
     function wsSendSearchResults(data) {
-        try {
-            const { activity } = $DATA_PROVIDER.activity();
+        if ($$SENDING_SEARCH_RESULT === true) {
+            return;
+        }
+        const { activity } = $DATA_PROVIDER.activity();
 
-            if (activity === 'search') {
+        if (activity === 'search') {
+            try {
                 const searchResult = [...(getSearchResults(data)?.passedFilter ?? [])].reverse();
+                const searchResultString = JSON.stringify(searchResult);
 
-                if ($$PREVIOUS_SEARCH_RESULT == null || searchResult !== $$PREVIOUS_SEARCH_RESULT) {
-                    $$PREVIOUS_SEARCH_RESULT = JSON.stringify(searchResult);
+                if (searchResultString !== $$PREVIOUS_SEARCH_RESULT) {
+                    $$SENDING_SEARCH_RESULT = true;
+                    $$PREVIOUS_SEARCH_RESULT = searchResultString;
 
                     $SHARED_FOREGROUND.dispatchToContent({
                         type: $SHARED.actions.WEBSOCKET_SEND,
@@ -174,14 +175,22 @@ function $SEARCH_PROVIDER_FACTORY() {
                             payload: searchResult,
                         },
                     });
+
+                    $$SENDING_SEARCH_RESULT = false;
                 }
 
                 scrollToBottom();
-            } else {
-                throw new Error(`activity must be "search", but got "${activity}"`);
+            } catch (error) {
+                $$PREVIOUS_SEARCH_RESULT = null;
+                $$SENDING_SEARCH_RESULT = false;
+
+                console.log('[n01.RCU.spy.search][error] search', error?.message ?? error);
             }
-        } catch (error) {
-            console.log('[n01.RCU.spy.search][error] search', error?.message ?? error);
+        } else {
+            $$PREVIOUS_SEARCH_RESULT = null;
+            $$SENDING_SEARCH_RESULT = false;
+
+            throw new Error(`activity must be "search", but got "${activity}"`);
         }
     }
 
@@ -201,7 +210,7 @@ function $SEARCH_PROVIDER_FACTORY() {
     }
 
     /**
-     * Scrolls down on search page when there are any updates
+     * Scrolls down on search page if enabled
      */
     function scrollToBottom() {
         if ($$SCROLL_BOTTOM === true) {
@@ -226,7 +235,7 @@ function $SEARCH_PROVIDER_FACTORY() {
     /**
      * Checks if new search filter is same as existing search filter (if any exists)
      *
-     * @param {*} data
+     * @param {Object} data search filter
      * @returns {boolean} is same?
      */
     function isSearchFilterChanged(newFilter) {
@@ -273,7 +282,11 @@ function $SEARCH_PROVIDER_FACTORY() {
             createDiffList: function (data, changedCount) {
                 $$DEBUG && $$VERBOSE && console.log('[n01.RCU.spy.search] createDiffList');
 
-                sendSearchResults(changedCount > 0);
+                if (changedCount > 0) {
+                    sendSearchResults();
+                } else if ($$PREVIOUS_SEARCH_RESULT == null && $$SENDING_SEARCH_RESULT === false) {
+                    sendSearchResults(true);
+                }
             },
         };
     }
