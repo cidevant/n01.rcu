@@ -191,13 +191,19 @@ function $SEARCH_PROVIDER_FACTORY() {
      * @param {boolean} [payload=true] is autoscroll enabled
      */
     function setScrollBottom(payload = true) {
+        const changed = $$SCROLL_BOTTOM !== payload;
+
         $$SCROLL_BOTTOM = payload;
+
+        if (changed) {
+            scrollToBottom();
+        }
     }
 
     /**
      * Scrolls down on search page when there are any updates
      */
-    function scrollToBottom(params) {
+    function scrollToBottom() {
         if ($$SCROLL_BOTTOM === true) {
             try {
                 $('#schedule_button').hide();
@@ -215,22 +221,6 @@ function $SEARCH_PROVIDER_FACTORY() {
                     );
             }
         }
-    }
-
-    /**
-     * Watches n01 native functions invocations and intercepts them
-     *
-     * @returns {*}
-     */
-    function watchNativeSearchFunctions() {
-        return {
-            // players list changed
-            createDiffList: function (data, changedCount) {
-                $$DEBUG && $$VERBOSE && console.log('[n01.RCU.spy.search] createDiffList');
-
-                sendSearchResults(changedCount > 0);
-            },
-        };
     }
 
     /**
@@ -265,11 +255,27 @@ function $SEARCH_PROVIDER_FACTORY() {
      * Filters opponents by avg score
      */
     function search(data, ws) {
-        const filterChanged = isSearchFilterChanged(data);
+        const changed = isSearchFilterChanged(data);
 
         $$SEARCH_FILTER = data;
 
-        sendSearchResults(filterChanged);
+        sendSearchResults(changed);
+    }
+
+    /**
+     * Watches n01 native functions invocations and intercepts them
+     *
+     * @returns {*}
+     */
+    function watchNativeSearchFunctions() {
+        return {
+            // players list changed
+            createDiffList: function (data, changedCount) {
+                $$DEBUG && $$VERBOSE && console.log('[n01.RCU.spy.search] createDiffList');
+
+                sendSearchResults(changedCount > 0);
+            },
+        };
     }
 
     return {
