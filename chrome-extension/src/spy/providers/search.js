@@ -133,10 +133,6 @@ function $SEARCH_PROVIDER_FACTORY() {
      */
     function sendSearchResults(force = false) {
         if (force) {
-            if ($$SCROLL_BOTTOM === true) {
-                scrollToBottom();
-            }
-
             // Don't spam server, send updates only once in 2 seconds
             if ($$SEARCH_FILTER != null && $$SENDING_SEARCH_RESULT === false) {
                 $$SENDING_SEARCH_RESULT = true;
@@ -179,6 +175,8 @@ function $SEARCH_PROVIDER_FACTORY() {
                         },
                     });
                 }
+
+                scrollToBottom();
             } else {
                 throw new Error(`activity must be "search", but got "${activity}"`);
             }
@@ -200,17 +198,22 @@ function $SEARCH_PROVIDER_FACTORY() {
      * Scrolls down on search page when there are any updates
      */
     function scrollToBottom(params) {
-        try {
-            $('#schedule_button').hide();
-            $('#page_bottom').hide();
-            $('#chat_button').hide();
-            $('#menu_button').hide();
-            $('#article').css('padding-bottom', 0);
-            $('#article').css('margin-bottom', 0);
-            scroll_bottom();
-        } catch (error) {
-            $$DEBUG &&
-                console.log('[n01.RCU.spy.search][error] scrollToBottom', error?.message ?? error);
+        if ($$SCROLL_BOTTOM === true) {
+            try {
+                $('#schedule_button').hide();
+                $('#page_bottom').hide();
+                $('#chat_button').hide();
+                $('#menu_button').hide();
+                $('#article').css('padding-bottom', 0);
+                $('#article').css('margin-bottom', 0);
+                scroll_bottom();
+            } catch (error) {
+                $$DEBUG &&
+                    console.log(
+                        '[n01.RCU.spy.search][error] scrollToBottom',
+                        error?.message ?? error
+                    );
+            }
         }
     }
 
@@ -231,26 +234,42 @@ function $SEARCH_PROVIDER_FACTORY() {
     }
 
     /**
-     * Filters opponents by avg score
+     * Checks if new search filter is same as existing search filter (if any exists)
+     *
+     * @param {*} data
+     * @returns {boolean} is same?
      */
-    function search(data, ws) {
-        let force = false;
-
+    function isSearchFilterChanged(newFilter) {
         if ($$SEARCH_FILTER != null) {
             try {
-                const filterString = JSON.stringify(data);
+                const newFilterString = JSON.stringify(newFilter);
                 const previousFilterString = JSON.stringify($$SEARCH_FILTER);
 
-                force = filterString !== previousFilterString;
+                return newFilterString !== previousFilterString;
             } catch (error) {
                 $$DEBUG &&
                     $$VERBOSE &&
-                    console.log('[n01.RCU.spy.search][error] search', error?.message ?? error);
+                    console.log(
+                        '[n01.RCU.spy.search][error] isSearchFilterChanged',
+                        error?.message ?? error
+                    );
+
+                return false;
             }
         }
 
+        return false;
+    }
+
+    /**
+     * Filters opponents by avg score
+     */
+    function search(data, ws) {
+        const filterChanged = isSearchFilterChanged(data);
+
         $$SEARCH_FILTER = data;
-        sendSearchResults(force);
+
+        sendSearchResults(filterChanged);
     }
 
     return {
