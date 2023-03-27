@@ -284,8 +284,6 @@ function $SEARCH_PROVIDER_FACTORY() {
 
                 if (changedCount > 0) {
                     sendSearchResults();
-                } else if ($$PREVIOUS_SEARCH_RESULT == null && $$SENDING_SEARCH_RESULT === false) {
-                    sendSearchResults(true);
                 }
             },
         };
