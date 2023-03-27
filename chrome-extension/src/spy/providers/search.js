@@ -7,6 +7,19 @@ let $$SENDING_SEARCH_RESULT = false;
 let $$SENDING_SEARCH_RESULT_TIMEOUT = null;
 
 function $SEARCH_PROVIDER_FACTORY() {
+    function reset() {
+        $$SEARCH_FILTER = null;
+        $$PREVIOUS_SEARCH_RESULT = null;
+        $$SCROLL_BOTTOM = false;
+
+        if ($$SENDING_SEARCH_RESULT_TIMEOUT != null) {
+            clearTimeout($$SENDING_SEARCH_RESULT_TIMEOUT);
+            $$SENDING_SEARCH_RESULT_TIMEOUT = null;
+        }
+
+        $$SENDING_SEARCH_RESULT = false;
+    }
+
     /**
      * Returns list of user which satisfies search condition
      *
@@ -110,10 +123,68 @@ function $SEARCH_PROVIDER_FACTORY() {
     }
 
     /**
-     * Filters opponents by avg score
+     * Safely sends search data over WEBSOCKET to CONTROLLERS
+     *
+     * Safety checks:
+     *      * search data are same as sent previously
+     *      * already sending search data
+     *
+     * @param {boolean} [force=false] If true -> ignore safety checks
      */
-    function searchByFilter(data, ws) {
-        $$SEARCH_FILTER = data;
+    function sendSearchResults(force = false) {
+        if (force) {
+            if ($$SCROLL_BOTTOM === true) {
+                scrollToBottom();
+            }
+
+            // Don't spam server, send updates only once in 2 seconds
+            if ($$SEARCH_FILTER != null && $$SENDING_SEARCH_RESULT === false) {
+                $$SENDING_SEARCH_RESULT = true;
+                $$SENDING_SEARCH_RESULT_TIMEOUT = setTimeout(() => {
+                    wsSendSearchResults($$SEARCH_FILTER);
+                    $$SENDING_SEARCH_RESULT = false;
+                }, 2000);
+            }
+        } else {
+            if (
+                $$SEARCH_FILTER != null &&
+                $$SENDING_SEARCH_RESULT === false &&
+                $$PREVIOUS_SEARCH_RESULT == null
+            ) {
+                wsSendSearchResults($$SEARCH_FILTER);
+            }
+        }
+    }
+
+    /**
+     * Sends search data over WEBSOCKET to CONTROLLERS
+     *
+     * @param {*} data
+     */
+    function wsSendSearchResults(data) {
+        try {
+            const { activity } = $DATA_PROVIDER.activity();
+
+            if (activity === 'search') {
+                const searchResult = [...(getSearchResults(data)?.passedFilter ?? [])].reverse();
+
+                if ($$PREVIOUS_SEARCH_RESULT == null || searchResult !== $$PREVIOUS_SEARCH_RESULT) {
+                    $$PREVIOUS_SEARCH_RESULT = JSON.stringify(searchResult);
+
+                    $SHARED_FOREGROUND.dispatchToContent({
+                        type: $SHARED.actions.WEBSOCKET_SEND,
+                        payload: {
+                            type: 'CONTROLLERS:SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT',
+                            payload: searchResult,
+                        },
+                    });
+                }
+            } else {
+                throw new Error(`activity must be "search", but got "${activity}"`);
+            }
+        } catch (error) {
+            console.log('[n01.RCU.spy.search][error] search', error?.message ?? error);
+        }
     }
 
     /**
@@ -139,86 +210,52 @@ function $SEARCH_PROVIDER_FACTORY() {
             scroll_bottom();
         } catch (error) {
             $$DEBUG &&
-                console.log(
-                    '[n01.RCU.spy.search][error] searchScrollBottom',
-                    error?.message ?? error
-                );
+                console.log('[n01.RCU.spy.search][error] scrollToBottom', error?.message ?? error);
         }
     }
 
-    function sendSearchResult(data) {
-        try {
-            const { activity } = $DATA_PROVIDER.activity();
-
-            if (activity === 'search') {
-                const searchResult = [...(getSearchResults(data)?.passedFilter ?? [])].reverse();
-
-                if ($$PREVIOUS_SEARCH_RESULT == null || searchResult !== $$PREVIOUS_SEARCH_RESULT) {
-                    $$PREVIOUS_SEARCH_RESULT = JSON.stringify(searchResult);
-
-                    $SHARED_FOREGROUND.dispatchToContent({
-                        type: $SHARED.actions.WEBSOCKET_SEND,
-                        payload: {
-                            type: 'CONTROLLERS:SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT',
-                            payload: searchResult,
-                        },
-                    });
-                }
-            } else {
-                throw new Error(`activity must be "search", but got "${activity}"`);
-            }
-        } catch (error) {
-            console.log('[n01.RCU.spy.search][error] searchByFilter', error?.message ?? error);
-        }
-    }
+    /**
+     * Watches n01 native functions invocations and intercepts them
+     *
+     * @returns {*}
+     */
     function watchNativeSearchFunctions() {
         return {
             // players list changed
             createDiffList: function (data, changedCount) {
                 $$DEBUG && $$VERBOSE && console.log('[n01.RCU.spy.search] createDiffList');
 
-                if (changedCount > 0) {
-                    if ($$SCROLL_BOTTOM === true) {
-                        scrollToBottom();
-                    }
-
-                    // Don't spam server, send updates only once in 2 seconds
-                    if ($$SEARCH_FILTER != null && $$SENDING_SEARCH_RESULT === false) {
-                        $$SENDING_SEARCH_RESULT = true;
-                        $$SENDING_SEARCH_RESULT_TIMEOUT = setTimeout(() => {
-                            sendSearchResult($$SEARCH_FILTER);
-                            $$SENDING_SEARCH_RESULT = false;
-                        }, 2000);
-                    }
-                } else {
-                    if (
-                        $$SEARCH_FILTER != null &&
-                        $$SENDING_SEARCH_RESULT === false &&
-                        $$PREVIOUS_SEARCH_RESULT == null
-                    ) {
-                        sendSearchResult($$SEARCH_FILTER);
-                    }
-                }
+                sendSearchResults(changedCount > 0);
             },
         };
     }
 
-    function reset() {
-        $$SCROLL_BOTTOM = false;
-        $$SEARCH_FILTER = null;
-        $$PREVIOUS_SEARCH_RESULT = null;
+    /**
+     * Filters opponents by avg score
+     */
+    function search(data, ws) {
+        let force = false;
 
-        if ($$SENDING_SEARCH_RESULT_TIMEOUT) {
-            clearTimeout($$SENDING_SEARCH_RESULT_TIMEOUT);
-            $$SENDING_SEARCH_RESULT_TIMEOUT = null;
+        if ($$SEARCH_FILTER != null) {
+            try {
+                const filterString = JSON.stringify(data);
+                const previousFilterString = JSON.stringify($$SEARCH_FILTER);
+
+                force = filterString !== previousFilterString;
+            } catch (error) {
+                $$DEBUG &&
+                    $$VERBOSE &&
+                    console.log('[n01.RCU.spy.search][error] search', error?.message ?? error);
+            }
         }
 
-        $$SENDING_SEARCH_RESULT = false;
+        $$SEARCH_FILTER = data;
+        sendSearchResults(force);
     }
 
     return {
         reset,
-        search: searchByFilter,
+        search,
         scroll: setScrollBottom,
         native: watchNativeSearchFunctions,
     };

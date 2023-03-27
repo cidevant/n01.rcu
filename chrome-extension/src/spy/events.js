@@ -32,7 +32,8 @@ async function backgroundEventsListener({ detail }) {
             break;
         }
         case $SHARED.actions.WATCH_NATIVE_FUNCTIONS: {
-            originalFunctionsToWatch = [];
+            const originalFunctionsToWatch = [];
+
             Object.keys(nativeFunctionsWatchListCallbacks).forEach((name) => {
                 originalFunctionsToWatch[name] = window[name];
                 window[name] = function wrappedNativeFunction() {
@@ -106,6 +107,8 @@ async function wsMessageEventsHandler({ payload: { type, payload } }) {
  * @param {boolean} paired
  */
 function setPaired(paired) {
+    $SEARCH_PROVIDER.reset();
+
     if (paired) {
         wsSendData();
     }
