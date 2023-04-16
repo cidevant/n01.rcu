@@ -1,6 +1,8 @@
 let $$WEBSOCKET = null;
 
-async function webSocketConnect() {
+const intID = null;
+
+async function n01rcu$background$webSocketConnect() {
     $$DEBUG && $$VERBOSE && console.log('[n01.RCU.background.websocket] webSocketConnect');
 
     // creates websocket instance
@@ -15,6 +17,10 @@ async function webSocketConnect() {
             $SHARED_HELPERS.changeChromeExtensionIcon({
                 icon: 'connected',
             });
+
+            // intID = setInterval(() => {
+            //     console.log('===================> ws open', $$WEBSOCKET.open);
+            // }, 4000);
         };
         $$WEBSOCKET.onclose = async () => {
             await $SHARED_STORAGE.updateConnection({ paired: false });
@@ -24,6 +30,7 @@ async function webSocketConnect() {
             $SHARED_HELPERS.changeChromeExtensionIcon({
                 icon: 'default',
             });
+            // clearInterval(intID);
         };
     }
 
@@ -103,7 +110,7 @@ function n01rcu$background$webSocketSend(message) {
 async function n01rcu$background$webSocketConnectionHandler(type) {
     if ($$WEBSOCKET) {
         await $SHARED_STORAGE.updateConnection($$WEBSOCKET.connectionInfo);
-        await $SHARED_BACKGROUND.dispatchToPopup({ type });
+        // await $SHARED_BACKGROUND.dispatchToPopup({ type });
     } else {
         $$DEBUG &&
             console.log(

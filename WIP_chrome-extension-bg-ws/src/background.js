@@ -1,16 +1,19 @@
 importScripts(
     'shared.js',
-    'background/ws/index.js',
     'background/ws/actions.js',
     'background/ws/events.js',
     'background/events/spy.js',
+    'background/events/popup.js',
     'background/init.js'
 );
+
+// `POPUP` MESSAGES
+chrome.runtime.onMessage.addListener(n01rcu$background$onMessageEventListener);
 
 // INSTALL
 chrome.runtime.onInstalled.addListener(n01rcu$background$onInstallEventListener);
 
-// `SPY` CONNECTION
+// `SPY` MESSAGES
 chrome.runtime.onConnect.addListener(n01rcu$background$onConnectEventListener);
 
 // REMOVE

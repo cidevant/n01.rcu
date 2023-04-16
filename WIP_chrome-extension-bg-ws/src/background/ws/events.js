@@ -21,6 +21,7 @@ async function n01rcu$background$webSocketMessagesHandler(message) {
     }
 
     // Forward message to `SPY`
+    // MISSING PORT
     return $SHARED_BACKGROUND.dispatchToSpy({
         type: $SHARED.actions.WEBSOCKET_MESSAGE,
         payload: message,

@@ -9,7 +9,7 @@ async function n01rcu$background$spyMessagesHandler(event, port) {
 
     switch (type) {
         case $SHARED.actions.SPY_LOADED:
-            await $SHARED_BACKGROUND.dispatchToSpy({ type: $SHARED.actions.GET_DATA });
+            await port.postMessage({ type: $SHARED.actions.GET_DATA });
             break;
         case $SHARED.actions.SPY_UNLOAD:
             {
@@ -22,7 +22,7 @@ async function n01rcu$background$spyMessagesHandler(event, port) {
             break;
         case $SHARED.actions.SET_DATA:
             await $SHARED_STORAGE.saveData(payload);
-            await $SHARED_BACKGROUND.dispatchToSpy({
+            await port.postMessage({
                 type: $SHARED.actions.WATCH_NATIVE_FUNCTIONS,
             });
             break;
@@ -31,7 +31,10 @@ async function n01rcu$background$spyMessagesHandler(event, port) {
                 let newPayload = null;
 
                 try {
-                    newPayload = payload?.length > 0 ? JSON.parse(payload) : null;
+                    newPayload =
+                        typeof payload === 'string' && payload?.length > 0
+                            ? JSON.parse(payload)
+                            : payload;
                 } catch (error) {
                     $$DEBUG &&
                         $$VERBOSE &&

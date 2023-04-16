@@ -19,9 +19,12 @@ function n01rcu$content$init() {
                 });
                 $$BACKGROUND_CONNECTION_PORT.onMessage.addListener((message) => {
                     $$DEBUG &&
-                        console.log('[n01.RCU.content] got message from BACKGROUND', error.message);
+                        console.log(
+                            '[n01.RCU.content][background] got message from BACKGROUND',
+                            error.message
+                        );
 
-                    $SHARED_BACKGROUND.dispatchToSpy(message);
+                    $SHARED_FOREGROUND.dispatchToSpy(message);
                 });
 
                 return Promise.resolve();
@@ -69,7 +72,7 @@ function n01rcu$content$spyMessagesListener({ detail }) {
     $$DEBUG &&
         $$VERBOSE &&
         $$VERY_VERBOSE &&
-        console.log('[n01.RCU.content] message from SPY', detail);
+        console.log('[n01.RCU.content][foreground] message from SPY', detail);
 
     try {
         if (chrome == null || chrome.runtime == null || chrome.runtime.id == null) {
