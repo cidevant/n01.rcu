@@ -41,7 +41,7 @@ async function n01rcu$background$spyMessagesHandler(event, port) {
                     $$DEBUG &&
                         $$VERBOSE &&
                         console.log(
-                            "[n01.RCU.content.events] cant parse 'payload' for WEBSOCKET_SEND",
+                            "[n01.RCU.background.events.spy] can't parse 'payload' for WEBSOCKET_SEND",
                             event
                         );
                 }

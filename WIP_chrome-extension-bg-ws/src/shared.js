@@ -1,6 +1,6 @@
 const $$DEBUG = true;
-const $$VERBOSE = false;
-const $$VERY_VERBOSE = false;
+const $$VERBOSE = true;
+const $$VERY_VERBOSE = true;
 
 // ---------------------------------------------------------------------------------------------
 // SHARED

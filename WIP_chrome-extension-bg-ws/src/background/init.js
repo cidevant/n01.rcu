@@ -13,6 +13,8 @@ async function n01rcu$background$onConnectEventListener(port) {
         port.onDisconnect.addListener((port) => {
             console.log('[n01.RCU.background] onConnect: onDisconnect');
         });
+
+        n01rcu$background$webSocketInit();
     }
 }
 

@@ -17,6 +17,8 @@ async function initUI() {
     try {
         const connection = await $SHARED_STORAGE.getConnection();
 
+        $$DEBUG && console.log('[n01.RCU.popup] initUI connectionInfo', connection);
+
         $VALIDATION.url = connection?.urlValid ?? false;
         $VALIDATION.accessCode = connection?.accessCodeValid ?? false;
 

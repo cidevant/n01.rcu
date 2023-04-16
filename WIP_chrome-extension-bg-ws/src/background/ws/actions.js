@@ -2,10 +2,8 @@ let $$WEBSOCKET = null;
 
 const intID = null;
 
-async function n01rcu$background$webSocketConnect() {
-    $$DEBUG && $$VERBOSE && console.log('[n01.RCU.background.websocket] webSocketConnect');
-
-    // creates websocket instance
+// creates websocket instance
+async function n01rcu$background$webSocketInit(params) {
     if (!$$WEBSOCKET) {
         $$WEBSOCKET = new $SHARED_WEBSOCKET();
         $$WEBSOCKET.onmessage = async (event) => {
@@ -18,10 +16,6 @@ async function n01rcu$background$webSocketConnect() {
             $SHARED_HELPERS.changeChromeExtensionIcon({
                 icon: 'connected',
             });
-
-            // intID = setInterval(() => {
-            //     console.log('===================> ws open', $$WEBSOCKET.open);
-            // }, 4000);
         };
         $$WEBSOCKET.onclose = async () => {
             await $SHARED_STORAGE.updateConnection({ paired: false });
@@ -31,9 +25,14 @@ async function n01rcu$background$webSocketConnect() {
             $SHARED_HELPERS.changeChromeExtensionIcon({
                 icon: 'default',
             });
-            // clearInterval(intID);
         };
     }
+}
+
+async function n01rcu$background$webSocketConnect() {
+    $$DEBUG && $$VERBOSE && console.log('[n01.RCU.background.websocket] webSocketConnect');
+
+    await n01rcu$background$webSocketInit();
 
     // gets connection data from store
     const data = await $SHARED_STORAGE.getConnection();
@@ -84,6 +83,8 @@ function n01rcu$background$webSocketDisconnect({ code, reason }) {
             console.log(
                 '[n01.RCU.background.websocket][error] webSocketDisconnect no connection to ws server'
             );
+
+        n01rcu$background$webSocketConnectionHandler($SHARED.actions.WEBSOCKET_CONNECTION_CLOSED);
     }
 }
 
@@ -100,6 +101,8 @@ function n01rcu$background$webSocketSend(message) {
             console.log(
                 '[n01.RCU.background.websocket][error] webSocketSend: no connection to ws server'
             );
+
+        n01rcu$background$webSocketConnectionHandler($SHARED.actions.WEBSOCKET_CONNECTION_CLOSED);
     }
 }
 
