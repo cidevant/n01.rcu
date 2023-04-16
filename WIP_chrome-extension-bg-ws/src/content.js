@@ -7,9 +7,19 @@ function init() {
     Promise.resolve()
         // 1. Handles events from `BACKGROUND`, `POPUP`, `CONTENT`
         .then(() => {
-            backgroundEventsListener();
+            try {
+                if (chrome == null || chrome.runtime == null || chrome.runtime.id == null) {
+                    throw new Error('no chrome runtime');
+                }
+                chrome.runtime.onMessage.removeListener(backgroundEventsListener);
+                chrome.runtime.onMessage.addListener(backgroundEventsListener);
 
-            return Promise.resolve();
+                return Promise.resolve();
+            } catch (error) {
+                $$DEBUG && console.log('[n01.RCU.content][background][error]', error.message);
+
+                return Promise.reject();
+            }
         })
         // 2. Handles events from `SPY`
         .then(() => {
@@ -20,7 +30,7 @@ function init() {
         })
         // [LAST] Injects `SPY` into page context to access functions and variables
         .then(() => {
-            Promise.resolve()
+            return Promise.resolve()
                 .then(() => scriptInjector('src/shared.js')) // [FIRST]
                 .then(() => scriptInjector('src/spy/providers/data.js'))
                 .then(() => scriptInjector('src/spy/providers/user.js'))
@@ -32,37 +42,24 @@ function init() {
 }
 
 /**
- * Proxify events from `WEBSOCKET`, `BACKGROUND`, `POPUP`, `WEBSOCKET`
+ * Proxify events from `WEBSOCKET`, `BACKGROUND`, `POPUP`
  *
  * @param {*} event received event
  */
-function backgroundEventsListener() {
-    try {
-        if (chrome == null || chrome.runtime == null || chrome.runtime.id == null) {
-            throw new Error('no chrome runtime');
-        }
+function backgroundEventsListener(event, _sender, sendResponse) {
+    $$DEBUG &&
+        $$VERBOSE &&
+        $$VERY_VERBOSE &&
+        console.log('[n01.RCU.content][background] got event', event);
 
-        chrome.runtime.onMessage.addListener((event, _sender, sendResponse) => {
-            $$DEBUG &&
-                $$VERBOSE &&
-                $$VERY_VERBOSE &&
-                console.log('[n01.RCU.content][background] got event', event);
-
-            // [PROXY] forward event to proper target
-            switch (event.__target) {
-                case $SHARED.targets.spy:
-                    $SHARED_FOREGROUND.dispatchToSpy(event);
-                    break;
-                case $SHARED.targets.content:
-                    contentBackgroundEventsHandler(event);
-                    break;
-            }
-
-            sendResponse();
-        });
-    } catch (error) {
-        $$DEBUG && console.log('[n01.RCU.content][background][error]', error.message);
+    // [PROXY] forward event to proper target
+    switch (event.__target) {
+        case $SHARED.targets.spy:
+            $SHARED_FOREGROUND.dispatchToSpy(event);
+            break;
     }
+
+    sendResponse();
 }
 
 /**
@@ -90,9 +87,6 @@ function foregroundEventsListener({ detail }) {
                 });
                 break;
             }
-            case $SHARED.targets.content:
-                contentForegroundEventsHandler(detail);
-                break;
         }
     } catch (error) {
         $$DEBUG && console.log('[n01.RCU.content][foreground][error]', error.message);

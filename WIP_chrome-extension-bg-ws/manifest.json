@@ -13,8 +13,6 @@
             ],
             "js": [
                 "src/shared.js",
-                "src/content/websocket.js",
-                "src/content/events.js",
                 "src/content.js"
             ],
             "all_frames": true
@@ -24,10 +22,6 @@
         {
             "resources": [
                 "src/shared.js",
-                                
-                "src/content/websocket.js",
-                "src/content/events.js",
-
                 "src/spy/providers/data.js",
                 "src/spy/providers/search.js",
                 "src/spy/providers/game.js",

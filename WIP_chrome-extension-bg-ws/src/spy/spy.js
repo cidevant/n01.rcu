@@ -5,8 +5,8 @@ window.onload = () => {
     // (not all variables are available now, we have to wait)
     setTimeout(() => {
         // add listeners
-        document.removeEventListener($SHARED.targets.spy, backgroundEventsListener);
-        document.addEventListener($SHARED.targets.spy, backgroundEventsListener, false);
+        // document.removeEventListener($SHARED.targets.spy, backgroundEventsListener);
+        // document.addEventListener($SHARED.targets.spy, backgroundEventsListener, false);
 
         // report load finished
         $SHARED_FOREGROUND.dispatchToBackground({ type: $SHARED.actions.SPY_LOADED });
@@ -15,8 +15,8 @@ window.onload = () => {
 
 window.onbeforeunload = () => {
     // remove listener
-    document.removeEventListener($SHARED.targets.spy, backgroundEventsListener);
+    // document.removeEventListener($SHARED.targets.spy, backgroundEventsListener);
 
     // report unload started
-    $SHARED_FOREGROUND.dispatchToContent({ type: $SHARED.actions.SPY_UNLOAD });
+    $SHARED_FOREGROUND.dispatchToBackground({ type: $SHARED.actions.SPY_UNLOAD });
 };
