@@ -9,12 +9,12 @@ async function n01rcu$background$onConnectEventListener(port) {
     if (port.name === 'n01.rcu.background') {
         $$DEBUG && $$VERBOSE && console.log('[n01.RCU.background] onConnect', port);
 
+        n01rcu$background$webSocketInit();
+
         port.onMessage.addListener((event) => n01rcu$background$spyMessagesHandler(event, port));
         port.onDisconnect.addListener((port) => {
             console.log('[n01.RCU.background] onConnect: onDisconnect');
         });
-
-        n01rcu$background$webSocketInit();
     }
 }
 

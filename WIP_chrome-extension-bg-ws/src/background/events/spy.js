@@ -1,7 +1,7 @@
 /**
- * Handles messages received from [`SPY`, `POPUP`, `CONTENT`]
+ * Handles messages received from [`SPY`]
  *
- * @param {*} event
+ * @param {*} event Message data
  * @param {*} port connected tab port
  */
 async function n01rcu$background$spyMessagesHandler(event, port) {

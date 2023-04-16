@@ -1,10 +1,17 @@
 let $$WEBSOCKET = null;
 
-const intID = null;
-
-// creates websocket instance
-async function n01rcu$background$webSocketInit(params) {
-    if (!$$WEBSOCKET) {
+/**
+ * Creates $SHARED_WEBSOCKET instance
+ *
+ */
+async function n01rcu$background$webSocketInit() {
+    if ($$WEBSOCKET) {
+        $$DEBUG &&
+            console.log(
+                '[n01.RCU.background.websocket][error] webSocketInit: instance already exists',
+                $$WEBSOCKET.connectionInfo
+            );
+    } else {
         $$WEBSOCKET = new $SHARED_WEBSOCKET();
         $$WEBSOCKET.onmessage = async (event) => {
             await n01rcu$background$webSocketMessagesHandler(event);

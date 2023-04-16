@@ -593,6 +593,8 @@ class $SHARED_STORAGE extends $SHARED {
 // WEBSOCKET
 // ---------------------------------------------------------------------------------------------
 
+let statusID = null;
+
 class $SHARED_WEBSOCKET {
     static connectionTimeout = 5000; // must be same as on server
     static connectionTimeoutThreshold = 3000; // don't disconnect from server instantly
@@ -603,12 +605,29 @@ class $SHARED_WEBSOCKET {
     // PUBLIC METHODS
     // ------------------------------------------
 
+    constructor() {
+        if (statusID != null) {
+            clearInterval(statusID);
+            statusID = null;
+        }
+
+        if ($$DEBUG && $$VERBOSE && $$VERY_VERBOSE) {
+            statusID = setInterval(() => {
+                $$DEBUG && console.log('[n01.RCU][websocket] status', this.connectionInfo);
+            }, 5000);
+        }
+    }
+
     onopen;
     onmessage;
     onclose;
 
     connect() {
-        return this.validForConnect ? this.#connect() : false;
+        const isValidForConnect = this.validForConnect;
+
+        $$DEBUG && console.log('[n01.RCU][websocket] connect', this.connectionInfo);
+
+        return isValidForConnect ? this.#connect() : false;
     }
 
     disconnect(code = 1000, reason) {
@@ -742,10 +761,7 @@ class $SHARED_WEBSOCKET {
     };
 
     #onopen = () => {
-        this.#closeCode = null;
-        this.#closeReason = null;
-        this.#closeError = null;
-
+        this.#clearCloseReason();
         this.#clearErrors();
         this.#stopTryingToReconnect();
         this.#pingPongStart();
@@ -828,6 +844,14 @@ class $SHARED_WEBSOCKET {
 
     #clearErrors = () => {
         this.#errors = [];
+    };
+
+    // CLOSE REASON
+
+    #clearCloseReason = () => {
+        this.#closeCode = null;
+        this.#closeReason = null;
+        this.#closeError = null;
     };
 
     // RECONNECT
