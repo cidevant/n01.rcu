@@ -1,6 +1,6 @@
 const $$DEBUG = true;
-const $$VERBOSE = true;
-const $$VERY_VERBOSE = true;
+const $$VERBOSE = false;
+const $$VERY_VERBOSE = false;
 
 // ---------------------------------------------------------------------------------------------
 // SHARED
@@ -589,7 +589,11 @@ class $SHARED_STORAGE extends $SHARED {
     }
 }
 
-class $BACKGROUND_WEBSOCKET {
+// ---------------------------------------------------------------------------------------------
+// WEBSOCKET
+// ---------------------------------------------------------------------------------------------
+
+class $SHARED_WEBSOCKET {
     static connectionTimeout = 5000; // must be same as on server
     static connectionTimeoutThreshold = 3000; // don't disconnect from server instantly
     static reconnectMaxTries = 24;
@@ -752,7 +756,7 @@ class $BACKGROUND_WEBSOCKET {
         this.#socket = null;
         this.#closeCode = event?.code ?? null;
         this.#closeReason = event?.reason ?? null;
-        this.#closeError = $BACKGROUND_WEBSOCKET.closeErrors[event?.code] ?? null;
+        this.#closeError = $SHARED_WEBSOCKET.closeErrors[event?.code] ?? null;
 
         this.#pingPongStop();
         this.onclose?.(event);
@@ -840,12 +844,12 @@ class $BACKGROUND_WEBSOCKET {
     };
 
     #startTryingToReconnect = () => {
-        if (this.#reconnectTries < $BACKGROUND_WEBSOCKET.reconnectMaxTries) {
+        if (this.#reconnectTries < $SHARED_WEBSOCKET.reconnectMaxTries) {
             this.#reconnectTries += 1;
 
             this.#reconnectTimeoutID = setTimeout(() => {
                 this.#connect();
-            }, $BACKGROUND_WEBSOCKET.reconnectDelay);
+            }, $SHARED_WEBSOCKET.reconnectDelay);
         }
     };
 
@@ -885,10 +889,10 @@ class $BACKGROUND_WEBSOCKET {
         this.#pingPongStop();
 
         this.#pingPongTimeoutID = setTimeout(() => {
-            const closeError = $BACKGROUND_WEBSOCKET.closeErrors['4053'];
+            const closeError = $SHARED_WEBSOCKET.closeErrors['4053'];
 
             this.#socket?.close?.(closeError?.code, closeError?.text);
-        }, $BACKGROUND_WEBSOCKET.connectionTimeout + $BACKGROUND_WEBSOCKET.connectionTimeoutThreshold);
+        }, $SHARED_WEBSOCKET.connectionTimeout + $SHARED_WEBSOCKET.connectionTimeoutThreshold);
     };
 
     #pingPongStop = () => {

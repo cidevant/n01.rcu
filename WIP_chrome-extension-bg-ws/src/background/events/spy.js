@@ -15,7 +15,7 @@ async function n01rcu$background$spyMessagesHandler(event, port) {
             break;
         case $SHARED.actions.SPY_UNLOAD:
             {
-                // const reason = $BACKGROUND_WEBSOCKET.closeErrors['4051'];
+                // const reason = $SHARED_WEBSOCKET.closeErrors['4051'];
                 // webSocketDisconnect({
                 //     code: reason?.code,
                 //     reason: reason?.text,

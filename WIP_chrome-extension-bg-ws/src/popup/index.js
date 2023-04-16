@@ -70,7 +70,7 @@ window.addEventListener('DOMContentLoaded', async function popupLoadedCallback()
     $('#disconnect_button').on('click', async () => {
         $$DEBUG && $$VERBOSE && console.log('[n01.RCU.popup] #disconnect_button');
 
-        const reason = $BACKGROUND_WEBSOCKET.closeErrors['4050'];
+        const reason = $SHARED_WEBSOCKET.closeErrors['4050'];
 
         await $SHARED_BACKGROUND.dispatchToBackground({
             type: $SHARED.actions.WEBSOCKET_DISCONNECT,

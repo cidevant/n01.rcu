@@ -7,7 +7,7 @@ async function n01rcu$background$webSocketConnect() {
 
     // creates websocket instance
     if (!$$WEBSOCKET) {
-        $$WEBSOCKET = new $BACKGROUND_WEBSOCKET();
+        $$WEBSOCKET = new $SHARED_WEBSOCKET();
         $$WEBSOCKET.onmessage = async (event) => {
             await n01rcu$background$webSocketMessagesHandler(event);
         };
