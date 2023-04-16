@@ -5,7 +5,7 @@ init();
 function init() {
     // ORDER IS IMPORTANT!
     Promise.resolve()
-        // 1. Handles events from `BACKGROUND`, `POPUP`, `CONTENT`
+        // 1. Handles events from [`BACKGROUND`, `POPUP`]
         .then(() => {
             try {
                 if (chrome == null || chrome.runtime == null || chrome.runtime.id == null) {
@@ -42,7 +42,7 @@ function init() {
 }
 
 /**
- * Proxify events from `WEBSOCKET`, `BACKGROUND`, `POPUP`
+ * Proxies events from [`BACKGROUND`, `POPUP`] to [`SPY`]
  *
  * @param {*} event received event
  */
@@ -52,7 +52,7 @@ function backgroundEventsListener(event, _sender, sendResponse) {
         $$VERY_VERBOSE &&
         console.log('[n01.RCU.content][background] got event', event);
 
-    // [PROXY] forward event to proper target
+    // [PROXY] forward event to spy
     switch (event.__target) {
         case $SHARED.targets.spy:
             $SHARED_FOREGROUND.dispatchToSpy(event);
@@ -63,7 +63,7 @@ function backgroundEventsListener(event, _sender, sendResponse) {
 }
 
 /**
- * Proxify events from `SPY`
+ * Proxies events from [`SPY`] to [`BACKGROUND`]
  *
  * @param {*} event received event
  */
@@ -78,7 +78,7 @@ function foregroundEventsListener({ detail }) {
             $$VERY_VERBOSE &&
             console.log('[n01.RCU.content][foreground] got event', detail);
 
-        // [PROXY] forward event to proper target
+        // [PROXY] forward event to `BACKGROUND`
         switch (detail.__target) {
             case $SHARED.targets.background: {
                 $SHARED_BACKGROUND.dispatchToBackground({
