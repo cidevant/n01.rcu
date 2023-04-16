@@ -88,36 +88,33 @@ window.addEventListener('DOMContentLoaded', async function popupLoadedCallback()
             url: 'https://nakka.com/n01/online/',
         });
     });
+});
 
-    chrome.runtime.onMessage.addListener(async (event, _sender, sendResponse) => {
-        if (event.__target === $SHARED.targets.popup) {
-            $$DEBUG &&
-                $$VERBOSE &&
-                $$VERY_VERBOSE &&
-                console.log('[n01.RCU.popup] got event', event);
+chrome.runtime.onMessage.addListener(async (event, _sender, sendResponse) => {
+    if (event.__target === $SHARED.targets.popup) {
+        $$DEBUG && $$VERBOSE && $$VERY_VERBOSE && console.log('[n01.RCU.popup] got event', event);
 
-            await checkEnabledUI();
+        await checkEnabledUI();
 
-            switch (event.type) {
-                case $SHARED.actions.WEBSOCKET_CONNECTION_OPEN: {
-                    $VALIDATION.url = true;
-                    $VALIDATION.accessCode = true;
+        switch (event.type) {
+            case $SHARED.actions.WEBSOCKET_CONNECTION_OPEN: {
+                $VALIDATION.url = true;
+                $VALIDATION.accessCode = true;
 
-                    await $SHARED_STORAGE.updateConnection({
-                        urlValid: true,
-                        accessCodeValid: true,
-                    });
-                    await updateUI();
-                    break;
-                }
-                default:
-                    await updateUI();
-                    break;
+                await $SHARED_STORAGE.updateConnection({
+                    urlValid: true,
+                    accessCodeValid: true,
+                });
+                await updateUI();
+                break;
             }
+            default:
+                await updateUI();
+                break;
         }
+    }
 
-        sendResponse();
-    });
+    sendResponse();
 });
 
 /**

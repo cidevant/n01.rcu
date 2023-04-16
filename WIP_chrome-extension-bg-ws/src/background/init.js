@@ -13,8 +13,6 @@ async function n01rcu$background$onConnectEventListener(port) {
         port.onDisconnect.addListener((port) => {
             console.log('[n01.RCU.background] onConnect: onDisconnect');
         });
-
-        n01rcu$background$webSocketConnect();
     }
 }
 
@@ -48,8 +46,8 @@ async function n01rcu$background$onInstallEventListener(event) {
         await $SHARED_STORAGE.updateConnection({
             url: 'wss://n01.devant.cz/ws',
             urlValid: true,
-            accessCode: 'ACDC',
-            accessCodeValid: true,
+            accessCode: '',
+            accessCodeValid: false,
             paired: false,
         });
     }

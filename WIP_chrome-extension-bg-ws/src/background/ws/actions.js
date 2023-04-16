@@ -8,8 +8,9 @@ async function n01rcu$background$webSocketConnect() {
     // creates websocket instance
     if (!$$WEBSOCKET) {
         $$WEBSOCKET = new $BACKGROUND_WEBSOCKET();
-        $$WEBSOCKET.onmessage = async (event) =>
+        $$WEBSOCKET.onmessage = async (event) => {
             await n01rcu$background$webSocketMessagesHandler(event);
+        };
         $$WEBSOCKET.onopen = async () => {
             await n01rcu$background$webSocketConnectionHandler(
                 $SHARED.actions.WEBSOCKET_CONNECTION_OPEN
@@ -110,7 +111,7 @@ function n01rcu$background$webSocketSend(message) {
 async function n01rcu$background$webSocketConnectionHandler(type) {
     if ($$WEBSOCKET) {
         await $SHARED_STORAGE.updateConnection($$WEBSOCKET.connectionInfo);
-        // await $SHARED_BACKGROUND.dispatchToPopup({ type });
+        await $SHARED_BACKGROUND.dispatchToPopup({ type });
     } else {
         $$DEBUG &&
             console.log(

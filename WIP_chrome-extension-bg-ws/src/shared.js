@@ -298,8 +298,6 @@ class $SHARED_HELPERS {
 
 class $SHARED_BACKGROUND {
     static #bg_dispatchTo(to, action = {}) {
-        console.log('===================> bg_dispatchTo', to, action);
-
         return $SHARED_HELPERS.tryToPromise((resolve, reject) => {
             if ($SHARED_VALIDATORS.isValidTarget(to) && $SHARED_VALIDATORS.isValidAction(action)) {
                 $$DEBUG &&
@@ -327,8 +325,6 @@ class $SHARED_BACKGROUND {
     }
 
     static #bg_dispatchToActiveTab(to, action = {}) {
-        console.log('===================> bg_dispatchToActiveTab', to, action);
-
         return $SHARED_HELPERS.tryToPromise((resolve, reject) => {
             if ($SHARED_VALIDATORS.isValidTarget(to) && $SHARED_VALIDATORS.isValidAction(action)) {
                 $$DEBUG &&

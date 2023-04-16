@@ -9,6 +9,8 @@ async function n01rcu$background$spyMessagesHandler(event, port) {
 
     switch (type) {
         case $SHARED.actions.SPY_LOADED:
+            n01rcu$background$webSocketConnect();
+
             await port.postMessage({ type: $SHARED.actions.GET_DATA });
             break;
         case $SHARED.actions.SPY_UNLOAD:
