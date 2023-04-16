@@ -72,7 +72,7 @@ window.addEventListener('DOMContentLoaded', async function popupLoadedCallback()
 
         const reason = $SHARED_WEBSOCKET.closeErrors['4050'];
 
-        await $SHARED_BACKGROUND.dispatchToContent({
+        await $SHARED_BACKGROUND.dispatchToBackground({
             type: $SHARED.actions.WEBSOCKET_DISCONNECT,
             payload: {
                 code: reason.code,
@@ -89,42 +89,36 @@ window.addEventListener('DOMContentLoaded', async function popupLoadedCallback()
         });
     });
 
-    chrome.runtime.onMessage.addListener(backgroundEventsListener);
-});
+    chrome.runtime.onMessage.addListener(async (event, _sender, sendResponse) => {
+        if (event.__target === $SHARED.targets.popup) {
+            $$DEBUG &&
+                $$VERBOSE &&
+                $$VERY_VERBOSE &&
+                console.log('[n01.RCU.popup] got event', event);
 
-/**
- * Handles events
- *
- * @param {*} event
- * @param {*} _sender
- * @param {*} sendResponse
- */
-async function backgroundEventsListener(event, _sender, sendResponse) {
-    if (event.__target === $SHARED.targets.popup) {
-        $$DEBUG && $$VERBOSE && $$VERY_VERBOSE && console.log('[n01.RCU.popup] got event', event);
+            await checkEnabledUI();
 
-        await checkEnabledUI();
+            switch (event.type) {
+                case $SHARED.actions.WEBSOCKET_CONNECTION_OPEN: {
+                    $VALIDATION.url = true;
+                    $VALIDATION.accessCode = true;
 
-        switch (event.type) {
-            case $SHARED.actions.WEBSOCKET_CONNECTION_OPEN: {
-                $VALIDATION.url = true;
-                $VALIDATION.accessCode = true;
-
-                await $SHARED_STORAGE.updateConnection({
-                    urlValid: true,
-                    accessCodeValid: true,
-                });
-                await updateUI();
-                break;
+                    await $SHARED_STORAGE.updateConnection({
+                        urlValid: true,
+                        accessCodeValid: true,
+                    });
+                    await updateUI();
+                    break;
+                }
+                default:
+                    await updateUI();
+                    break;
             }
-            default:
-                await updateUI();
-                break;
         }
-    }
 
-    sendResponse();
-}
+        sendResponse();
+    });
+});
 
 /**
  * Tries to connect to websocket server
@@ -155,7 +149,7 @@ async function tryToConnect(url, accessCode) {
                 urlValid: true,
                 accessCodeValid: true,
             });
-            await $SHARED_BACKGROUND.dispatchToContent({
+            await $SHARED_BACKGROUND.dispatchToBackground({
                 type: $SHARED.actions.WEBSOCKET_CONNECT,
             });
         } catch (errorAccessCode) {

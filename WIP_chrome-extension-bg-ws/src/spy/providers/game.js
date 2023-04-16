@@ -92,7 +92,7 @@ function $GAME_PROVIDER_FACTORY() {
      */
     function sendScoreLeft() {
         try {
-            $SHARED_FOREGROUND.dispatchToContent({
+            $SHARED_FOREGROUND.dispatchToBackground({
                 type: $SHARED.actions.WEBSOCKET_SEND,
                 payload: {
                     type: 'CONTROLLERS:SET_SCORE_LEFT',
@@ -164,7 +164,7 @@ function $GAME_PROVIDER_FACTORY() {
                     if (outs.length === 1) {
                         $(`#${outs[0]}`).click();
                     } else {
-                        $SHARED_FOREGROUND.dispatchToContent({
+                        $SHARED_FOREGROUND.dispatchToBackground({
                             type: $SHARED.actions.WEBSOCKET_SEND,
                             payload: {
                                 type: 'CONTROLLERS:GET_FINISH_DARTS',
@@ -199,7 +199,7 @@ function $GAME_PROVIDER_FACTORY() {
 
                 $('#msg_net_ok').click(); // press OK
 
-                $SHARED_FOREGROUND.dispatchToContent({
+                $SHARED_FOREGROUND.dispatchToBackground({
                     type: $SHARED.actions.WEBSOCKET_SEND,
                     payload: {
                         type: 'CONTROLLERS:MATCH_END',
@@ -230,7 +230,7 @@ function $GAME_PROVIDER_FACTORY() {
 
 // Disable browser alerting and send it to CONTROLLERS
 window.alert = function (message) {
-    $SHARED_FOREGROUND.dispatchToContent({
+    $SHARED_FOREGROUND.dispatchToBackground({
         type: $SHARED.actions.WEBSOCKET_SEND,
         payload: {
             type: 'CONTROLLERS:ALERT',

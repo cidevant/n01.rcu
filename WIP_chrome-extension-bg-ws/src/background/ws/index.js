@@ -48,11 +48,15 @@ class $BACKGROUND_WEBSOCKET {
 
     // PUBLIC SETTERS
 
-    set data({ url, accessCode }) {
-        this.#url = url;
-        this.#accessCode = accessCode;
+    set data(data) {
+        if (data) {
+            const { url, accessCode } = data;
 
-        this.#validate(url, accessCode);
+            this.#url = url;
+            this.#accessCode = accessCode;
+
+            this.#validate(url, accessCode);
+        }
     }
 
     // PUBLIC GETTERS
@@ -365,5 +369,3 @@ class $BACKGROUND_WEBSOCKET {
         },
     };
 }
-
-$$WEBSOCKET = new $BACKGROUND_WEBSOCKET();

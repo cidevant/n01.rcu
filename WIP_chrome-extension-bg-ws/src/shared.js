@@ -371,12 +371,6 @@ class $SHARED_BACKGROUND {
         return $SHARED_BACKGROUND.#bg_dispatchTo($SHARED.targets.popup, action);
     }
 
-    static dispatchToContent(action) {
-        console.error('OBSOLETE');
-
-        return $SHARED_BACKGROUND.#bg_dispatchToActiveTab($SHARED.targets.content, action);
-    }
-
     static dispatchToSpy(action) {
         return $SHARED_BACKGROUND.#bg_dispatchToActiveTab($SHARED.targets.spy, action);
     }
@@ -431,13 +425,6 @@ class $SHARED_FOREGROUND extends $SHARED {
     }
 
     // used by SPY
-    static dispatchToContent(action) {
-        console.error('OBSOLETE');
-
-        return $SHARED_FOREGROUND.#fg_dispatchTo($SHARED.targets.content, action);
-    }
-
-    // used by SPY
     static dispatchToBackground(action) {
         return $SHARED_FOREGROUND.#fg_dispatchTo($SHARED.targets.background, action);
     }
@@ -445,11 +432,6 @@ class $SHARED_FOREGROUND extends $SHARED {
     // used by SPY
     static dispatchToPopup(action) {
         return $SHARED_FOREGROUND.#fg_dispatchTo($SHARED.targets.popup, action);
-    }
-
-    // used by CONTENT (don't use `CONTENT` as proxy -> avoids sending event form `CONTENT` to `CONTENT` (infinite loop))
-    static dispatchToSpy(action) {
-        return $SHARED_FOREGROUND.#fg_dispatchTo($SHARED.targets.spy, action, false);
     }
 }
 

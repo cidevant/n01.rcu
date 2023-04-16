@@ -156,7 +156,7 @@ function $SEARCH_PROVIDER_FACTORY() {
                 if ($$PREVIOUS_SEARCH_RESULT == null || searchResult !== $$PREVIOUS_SEARCH_RESULT) {
                     $$PREVIOUS_SEARCH_RESULT = JSON.stringify(searchResult);
 
-                    $SHARED_FOREGROUND.dispatchToContent({
+                    $SHARED_FOREGROUND.dispatchToBackground({
                         type: $SHARED.actions.WEBSOCKET_SEND,
                         payload: {
                             type: 'CONTROLLERS:SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT',

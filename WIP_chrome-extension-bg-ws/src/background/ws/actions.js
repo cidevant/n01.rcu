@@ -1,46 +1,65 @@
-/**
- * Tries to connect to WS server
- *
- * @returns {*}
- */
+let $$WEBSOCKET = null;
+
 async function webSocketConnect() {
-    $$DEBUG && $$VERBOSE && console.log('[n01.RCU.content.websocket] webSocketConnect');
+    $$DEBUG && $$VERBOSE && console.log('[n01.RCU.background.websocket] webSocketConnect');
+
+    // creates websocket instance
+    if (!$$WEBSOCKET) {
+        $$WEBSOCKET = new $BACKGROUND_WEBSOCKET();
+        $$WEBSOCKET.onmessage = async (event) =>
+            await n01rcu$background$webSocketMessagesHandler(event);
+        $$WEBSOCKET.onopen = async () => {
+            await n01rcu$background$webSocketConnectionHandler(
+                $SHARED.actions.WEBSOCKET_CONNECTION_OPEN
+            );
+            $SHARED_HELPERS.changeChromeExtensionIcon({
+                icon: 'connected',
+            });
+        };
+        $$WEBSOCKET.onclose = async () => {
+            await $SHARED_STORAGE.updateConnection({ paired: false });
+            await n01rcu$background$webSocketConnectionHandler(
+                $SHARED.actions.WEBSOCKET_CONNECTION_CLOSED
+            );
+            $SHARED_HELPERS.changeChromeExtensionIcon({
+                icon: 'default',
+            });
+        };
+    }
 
     // gets connection data from store
     const data = await $SHARED_STORAGE.getConnection();
 
-    // creates websocket instance
-    if (!$$WEBSOCKET) {
-        $$WEBSOCKET.onmessage = async (event) => await webSocketMessageHandler(event);
-        $$WEBSOCKET.onopen = async () => {
-            await $SHARED_STORAGE.updateConnection($$WEBSOCKET.connectionInfo);
-        };
-        $$WEBSOCKET.onclose = async () => {
-            await $SHARED_STORAGE.updateConnection({ paired: false });
-        };
-    }
+    if (data) {
+        // sets connection data
+        $$WEBSOCKET.data = data;
 
-    // sets connection data
-    $$WEBSOCKET.data = data;
+        // validate connection data and try to connect
+        const validateAndConnect = async () => {
+            if ($$WEBSOCKET.valid) {
+                $$WEBSOCKET.connect();
+            } else {
+                await n01rcu$background$webSocketConnectionHandler(
+                    $SHARED.actions.WEBSOCKET_CONNECTION_ERROR
+                );
+            }
+        };
 
-    // validate connection data and try to connect
-    const validateAndConnect = async () => {
-        if ($$WEBSOCKET.valid) {
-            $$WEBSOCKET.connect();
+        // checks existing open connection
+        if ($$WEBSOCKET.open) {
+            $$WEBSOCKET.disconnect();
+            // waits for connection close and tries to connect
+            setTimeout(async () => {
+                await validateAndConnect();
+            }, 500);
         } else {
-            // await webSocketConnectionHandler($SHARED.actions.WEBSOCKET_CONNECTION_ERROR);
-        }
-    };
-
-    // checks existing open connection
-    if ($$WEBSOCKET.open) {
-        $$WEBSOCKET.disconnect();
-        // waits for connection close and tries to connect
-        setTimeout(async () => {
             await validateAndConnect();
-        }, 500);
+        }
     } else {
-        await validateAndConnect();
+        $$DEBUG &&
+            console.log(
+                '[n01.RCU.background.websocket][error] webSocketConnect: no connection data'
+            );
     }
 }
 
@@ -49,13 +68,13 @@ async function webSocketConnect() {
  *
  * @param {*} { code, reason }
  */
-function webSocketDisconnect({ code, reason }) {
+function n01rcu$background$webSocketDisconnect({ code, reason }) {
     if ($$WEBSOCKET && $$WEBSOCKET.open) {
         $$WEBSOCKET.disconnect(code, reason);
     } else {
         $$DEBUG &&
             console.log(
-                '[n01.RCU.content.websocket][error] webSocketDisconnect no connection to ws server'
+                '[n01.RCU.background.websocket][error] webSocketDisconnect no connection to ws server'
             );
     }
 }
@@ -65,13 +84,30 @@ function webSocketDisconnect({ code, reason }) {
  *
  * @param {*} { type, payload }
  */
-function webSocketSend(message) {
+function n01rcu$background$webSocketSend(message) {
     if ($$WEBSOCKET && $$WEBSOCKET.open) {
         $$WEBSOCKET.send(message);
     } else {
         $$DEBUG &&
             console.log(
-                '[n01.RCU.content.websocket][error] webSocketSend: no connection to ws server'
+                '[n01.RCU.background.websocket][error] webSocketSend: no connection to ws server'
+            );
+    }
+}
+
+/**
+ * Saves connection status to storage and sends event to `POPUP`
+ *
+ * @param {string} type Event type
+ */
+async function n01rcu$background$webSocketConnectionHandler(type) {
+    if ($$WEBSOCKET) {
+        await $SHARED_STORAGE.updateConnection($$WEBSOCKET.connectionInfo);
+        await $SHARED_BACKGROUND.dispatchToPopup({ type });
+    } else {
+        $$DEBUG &&
+            console.log(
+                "[n01.RCU.background.websocket][error] webSocketConnectionHandler: $$WEBSOCKET instance doesn't exists"
             );
     }
 }

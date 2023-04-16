@@ -1,65 +1,63 @@
 console.log('[n01.RCU.content] loaded');
 
-init();
+n01rcu$content$init();
 
-function init() {
+let $$BACKGROUND_CONNECTION_PORT = null;
+
+function n01rcu$content$init() {
     // ORDER IS IMPORTANT!
     Promise.resolve()
-        // 1. Handles events from [`BACKGROUND`, `POPUP`]
+        // // 1. Forwards messages from `BACKGROUND` to `SPY`
         .then(() => {
             try {
                 if (chrome == null || chrome.runtime == null || chrome.runtime.id == null) {
                     throw new Error('no chrome runtime');
                 }
-                chrome.runtime.onMessage.removeListener(backgroundEventsListener);
-                chrome.runtime.onMessage.addListener(backgroundEventsListener);
+
+                $$BACKGROUND_CONNECTION_PORT = chrome.runtime.connect({
+                    name: 'n01.rcu.background',
+                });
+                $$BACKGROUND_CONNECTION_PORT.onMessage.addListener((message) => {
+                    $$DEBUG &&
+                        console.log('[n01.RCU.content] got message from BACKGROUND', error.message);
+
+                    $SHARED_BACKGROUND.dispatchToSpy(message);
+                });
 
                 return Promise.resolve();
             } catch (error) {
+                $$BACKGROUND_CONNECTION_PORT = null;
+
                 $$DEBUG && console.log('[n01.RCU.content][background][error]', error.message);
 
                 return Promise.reject();
             }
         })
-        // 2. Handles events from `SPY`
+        // 2. Forwards messages from `SPY` to `BACKGROUND`
         .then(() => {
-            document.removeEventListener($SHARED.targets.content, foregroundEventsListener);
-            document.addEventListener($SHARED.targets.content, foregroundEventsListener, false);
+            document.removeEventListener(
+                $SHARED.targets.content,
+                n01rcu$content$spyMessagesListener
+            );
+            document.addEventListener(
+                $SHARED.targets.content,
+                n01rcu$content$spyMessagesListener,
+                false
+            );
 
             return Promise.resolve();
         })
         // [LAST] Injects `SPY` into page context to access functions and variables
         .then(() => {
             return Promise.resolve()
-                .then(() => scriptInjector('src/shared.js')) // [FIRST]
-                .then(() => scriptInjector('src/spy/providers/data.js'))
-                .then(() => scriptInjector('src/spy/providers/user.js'))
-                .then(() => scriptInjector('src/spy/providers/search.js'))
-                .then(() => scriptInjector('src/spy/providers/game.js'))
-                .then(() => scriptInjector('src/spy/events.js'))
-                .then(() => scriptInjector('src/spy/spy.js')); // [LAST]
+                .then(() => n01rcu$content$scriptInjector('src/shared.js')) // [FIRST]
+                .then(() => n01rcu$content$scriptInjector('src/spy/providers/data.js'))
+                .then(() => n01rcu$content$scriptInjector('src/spy/providers/user.js'))
+                .then(() => n01rcu$content$scriptInjector('src/spy/providers/search.js'))
+                .then(() => n01rcu$content$scriptInjector('src/spy/providers/game.js'))
+                .then(() => n01rcu$content$scriptInjector('src/spy/events.js'))
+                .then(() => n01rcu$content$scriptInjector('src/spy/spy.js')); // [LAST]
         });
-}
-
-/**
- * Proxies events from [`BACKGROUND`, `POPUP`] to [`SPY`]
- *
- * @param {*} event received event
- */
-function backgroundEventsListener(event, _sender, sendResponse) {
-    $$DEBUG &&
-        $$VERBOSE &&
-        $$VERY_VERBOSE &&
-        console.log('[n01.RCU.content][background] got event', event);
-
-    // [PROXY] forward event to spy
-    switch (event.__target) {
-        case $SHARED.targets.spy:
-            $SHARED_FOREGROUND.dispatchToSpy(event);
-            break;
-    }
-
-    sendResponse();
 }
 
 /**
@@ -67,21 +65,25 @@ function backgroundEventsListener(event, _sender, sendResponse) {
  *
  * @param {*} event received event
  */
-function foregroundEventsListener({ detail }) {
+function n01rcu$content$spyMessagesListener({ detail }) {
+    $$DEBUG &&
+        $$VERBOSE &&
+        $$VERY_VERBOSE &&
+        console.log('[n01.RCU.content] message from SPY', detail);
+
     try {
         if (chrome == null || chrome.runtime == null || chrome.runtime.id == null) {
             throw new Error('no chrome runtime');
         }
 
-        $$DEBUG &&
-            $$VERBOSE &&
-            $$VERY_VERBOSE &&
-            console.log('[n01.RCU.content][foreground] got event', detail);
+        if (!$$BACKGROUND_CONNECTION_PORT) {
+            throw new Error("chrome port doesn't exist");
+        }
 
         // [PROXY] forward event to `BACKGROUND`
         switch (detail.__target) {
             case $SHARED.targets.background: {
-                $SHARED_BACKGROUND.dispatchToBackground({
+                $$BACKGROUND_CONNECTION_PORT.postMessage({
                     ...detail,
                     payload: detail?.payload?.length > 0 ? JSON.parse(detail.payload) : null,
                 });
@@ -99,7 +101,7 @@ function foregroundEventsListener({ detail }) {
  * @param {string} path script path
  * @returns {Promise}
  */
-function scriptInjector(path) {
+function n01rcu$content$scriptInjector(path) {
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
 
