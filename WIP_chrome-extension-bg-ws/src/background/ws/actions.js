@@ -122,6 +122,18 @@ async function n01rcu$background$webSocketConnectionHandler(type) {
     if ($$WEBSOCKET) {
         await $SHARED_STORAGE.updateConnection($$WEBSOCKET.connectionInfo);
         await $SHARED_BACKGROUND.dispatchToPopup({ type });
+
+        switch (type) {
+            case $SHARED.actions.WEBSOCKET_CONNECTION_CLOSED:
+            case $SHARED.actions.WEBSOCKET_CONNECTION_ERROR:
+                $SHARED_HELPERS.changeChromeExtensionIcon({ icon: 'default' });
+                break;
+            case $SHARED.actions.WEBSOCKET_CONNECTION_OPEN:
+                $SHARED_HELPERS.changeChromeExtensionIcon({ icon: 'connected' });
+                break;
+            default:
+                break;
+        }
     } else {
         $$DEBUG &&
             console.log(

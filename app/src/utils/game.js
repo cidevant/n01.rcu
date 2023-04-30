@@ -168,39 +168,11 @@ const SCORES_OUTS = [
             style: 'outs',
         },
     ],
-    [
-        22,
-        23,
-        {
-            value: 24,
-            style: 'outs',
-        },
-    ],
-    [
-        28,
-        30,
-        {
-            value: 32,
-            style: 'outs',
-        },
-    ],
-    [
-        35,
-        {
-            value: 36,
-            style: 'outs',
-        },
-        38,
-    ],
-    [
-        39,
-        {
-            value: 40,
-            style: 'outs',
-        },
-        51,
-    ],
-    [55, 57, 59],
+    [21, 23, 25],
+    [32, 33, 34],
+    [35, 37, 44],
+    [46, 51, 54],
+    [56, 57, 59],
 ];
 
 const SCORES_HIGH = [
