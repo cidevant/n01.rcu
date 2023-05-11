@@ -161,17 +161,14 @@ function $GAME_PROVIDER_FACTORY() {
 
                 setTimeout(() => {
                     // if only one possibility - send without confirmation
-                    if (outs.length === 1) {
-                        $(`#${outs[0]}`).click();
-                    } else {
-                        $SHARED_FOREGROUND.dispatchToContent({
-                            type: $SHARED.actions.WEBSOCKET_SEND,
-                            payload: {
-                                type: 'CONTROLLERS:GET_FINISH_DARTS',
-                                payload: outs,
-                            },
-                        });
-                    }
+
+                    $SHARED_FOREGROUND.dispatchToContent({
+                        type: $SHARED.actions.WEBSOCKET_SEND,
+                        payload: {
+                            type: 'CONTROLLERS:GET_FINISH_DARTS',
+                            payload: outs,
+                        },
+                    });
                 }, 500);
             },
 

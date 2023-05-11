@@ -2,18 +2,14 @@ const $SEARCH_PROVIDER = $SEARCH_PROVIDER_FACTORY();
 
 let $$SCROLL_BOTTOM = false;
 let $$SEARCH_FILTER = null;
-let $$PREVIOUS_SEARCH_RESULT = null;
-let $$SENDING_SEARCH_RESULT = false;
 let $$SENDING_SEARCH_RESULT_TIMEOUT = null;
 
 function $SEARCH_PROVIDER_FACTORY() {
     function reset() {
         $$SEARCH_FILTER = null;
-        $$PREVIOUS_SEARCH_RESULT = null;
         $$SCROLL_BOTTOM = false;
 
         clearSendingTimeout();
-        $$SENDING_SEARCH_RESULT = false;
     }
 
     function clearSendingTimeout(params) {
@@ -134,11 +130,8 @@ function $SEARCH_PROVIDER_FACTORY() {
         if ($$SEARCH_FILTER != null) {
             if (force) {
                 clearSendingTimeout();
-
-                $$SENDING_SEARCH_RESULT = false;
-
                 wsSendSearchResults($$SEARCH_FILTER);
-            } else {
+            } else if ($$SENDING_SEARCH_RESULT_TIMEOUT == null) {
                 // Don't spam server, send updates only once in 2 seconds
                 $$SENDING_SEARCH_RESULT_TIMEOUT = setTimeout(() => {
                     wsSendSearchResults($$SEARCH_FILTER);
@@ -154,42 +147,22 @@ function $SEARCH_PROVIDER_FACTORY() {
      * @param {Array<Object>} data Search results
      */
     function wsSendSearchResults(data) {
-        if ($$SENDING_SEARCH_RESULT === true) {
-            return;
-        }
         const { activity } = $DATA_PROVIDER.activity();
 
         if (activity === 'search') {
             try {
-                const searchResult = [...(getSearchResults(data)?.passedFilter ?? [])].reverse();
-                const searchResultString = JSON.stringify(searchResult);
-
-                if (searchResultString !== $$PREVIOUS_SEARCH_RESULT) {
-                    $$SENDING_SEARCH_RESULT = true;
-                    $$PREVIOUS_SEARCH_RESULT = searchResultString;
-
-                    $SHARED_FOREGROUND.dispatchToContent({
-                        type: $SHARED.actions.WEBSOCKET_SEND,
-                        payload: {
-                            type: 'CONTROLLERS:SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT',
-                            payload: searchResult,
-                        },
-                    });
-
-                    $$SENDING_SEARCH_RESULT = false;
-                }
-
+                $SHARED_FOREGROUND.dispatchToContent({
+                    type: $SHARED.actions.WEBSOCKET_SEND,
+                    payload: {
+                        type: 'CONTROLLERS:SEARCH_PAGE_FILTER_BY_AVERAGE_RESULT',
+                        payload: [...(getSearchResults(data)?.passedFilter ?? [])].reverse(),
+                    },
+                });
                 scrollToBottom();
             } catch (error) {
-                $$PREVIOUS_SEARCH_RESULT = null;
-                $$SENDING_SEARCH_RESULT = false;
-
                 console.log('[n01.RCU.spy.search][error] search', error?.message ?? error);
             }
         } else {
-            $$PREVIOUS_SEARCH_RESULT = null;
-            $$SENDING_SEARCH_RESULT = false;
-
             console.log(
                 '[n01.RCU.spy.search][error] search',
                 `activity must be "search", but got "${activity}"`
@@ -219,8 +192,10 @@ function $SEARCH_PROVIDER_FACTORY() {
         if ($$SCROLL_BOTTOM === true) {
             try {
                 $('#schedule_button').hide();
-                $('#page_bottom').hide();
-                $('#chat_button').hide();
+                // $('#page_bottom').hide();
+                // $('#chat_button').hide();
+                $('#button_history').hide();
+                $('#share').hide();
                 $('#menu_button').hide();
                 $('#article').css('padding-bottom', 0);
                 $('#article').css('margin-bottom', 0);

@@ -140,45 +140,19 @@ const SCORES_COMMON = [
 ];
 
 const SCORES_OUTS = [
-    [
-        {
-            value: 2,
-            style: 'outs',
-        },
-        {
-            value: 4,
-            style: 'outs',
-        },
-        {
-            value: 8,
-            style: 'outs',
-        },
-    ],
-    [
-        {
-            value: 10,
-            style: 'outs',
-        },
-        {
-            value: 16,
-            style: 'outs',
-        },
-        {
-            value: 20,
-            style: 'outs',
-        },
-    ],
+    [2, 4, 8],
+    [10, 16, 20],
     [21, 23, 25],
     [32, 33, 34],
     [35, 37, 44],
-    [46, 51, 54],
+    [46, 48, 54],
     [56, 57, 59],
 ];
 
 const SCORES_HIGH = [
     [40, 62, 64],
     [66, 68, 70],
-    [76, 77, 78],
+    [76, 78, 79],
     [80, 96, 97],
     [99, 120, 121],
     [123, 125, 134],
