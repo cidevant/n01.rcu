@@ -9,7 +9,8 @@ import useData from '../../hooks/useData';
 function SearchFilterForm() {
     const { dispatchSetFilter, dispatchFilter } = useHomeInfo();
     const { activity } = useData();
-    const { filter, keepScrollingBottom, dispatchKeepScrollingBottom } = useHomeInfo();
+    const { filter, keepScrollingBottom, dispatchKeepScrollingBottom, dispatchScrollBottom } =
+        useHomeInfo();
     const [scroll, setScroll] = useState(keepScrollingBottom);
     const [from, setFrom] = useState(filter.from);
     const [to, setTo] = useState(filter.to);
@@ -64,6 +65,7 @@ function SearchFilterForm() {
 
         setScroll(!scroll);
         dispatchKeepScrollingBottom(!scroll);
+        dispatchScrollBottom(!scroll);
     }
 
     return (

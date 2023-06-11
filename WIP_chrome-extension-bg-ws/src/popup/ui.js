@@ -44,7 +44,6 @@ async function checkEnabledUI() {
         }
 
         const tabs = await chrome.tabs.query({
-            currentWindow: true,
             url: 'https://nakka.com/n01/online/*',
         });
         const value = tabs != null && tabs?.length > 0;
@@ -57,13 +56,6 @@ async function checkEnabledUI() {
         } else {
             $('#UI_table').hide();
             $('#UI_disabled').show();
-
-            await $SHARED_BACKGROUND.dispatchToBackground({
-                type: $SHARED.actions.SET_ICON,
-                payload: {
-                    icon: 'default',
-                },
-            });
         }
     } catch (error) {
         $$DEBUG && console.log('[n01.RCU.popup][error] checkEnabledUI', error?.message ?? error);

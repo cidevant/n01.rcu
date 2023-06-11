@@ -4,10 +4,26 @@ let $$SCROLL_BOTTOM = false;
 let $$SEARCH_FILTER = null;
 let $$SENDING_SEARCH_RESULT_TIMEOUT = null;
 
+function $$_getScrollBottom() {
+    return $$SCROLL_BOTTOM;
+}
+
+function $$_setScrollBottom(input) {
+    $$SCROLL_BOTTOM = input;
+}
+
+function $$_getSearchFilter() {
+    return $$SEARCH_FILTER;
+}
+
+function $$_setSearchFilter(input) {
+    $$SEARCH_FILTER = input;
+}
+
 function $SEARCH_PROVIDER_FACTORY() {
     function reset() {
-        $$SEARCH_FILTER = null;
-        $$SCROLL_BOTTOM = false;
+        $$_setSearchFilter(null);
+        $$_setScrollBottom(false);
 
         clearSendingTimeout();
     }
@@ -127,14 +143,14 @@ function $SEARCH_PROVIDER_FACTORY() {
      * @param {boolean} [force=false] Disables throttling
      */
     function sendSearchResults(force = false) {
-        if ($$SEARCH_FILTER != null) {
+        if ($$_getSearchFilter() != null) {
             if (force) {
                 clearSendingTimeout();
-                wsSendSearchResults($$SEARCH_FILTER);
+                wsSendSearchResults($$_getSearchFilter());
             } else if ($$SENDING_SEARCH_RESULT_TIMEOUT == null) {
                 // Don't spam server, send updates only once in 2 seconds
                 $$SENDING_SEARCH_RESULT_TIMEOUT = setTimeout(() => {
-                    wsSendSearchResults($$SEARCH_FILTER);
+                    wsSendSearchResults($$_getSearchFilter());
                     $$SENDING_SEARCH_RESULT_TIMEOUT = null;
                 }, 2000);
             }
@@ -176,9 +192,9 @@ function $SEARCH_PROVIDER_FACTORY() {
      * @param {boolean} [payload=true] is autoscroll enabled
      */
     function setScrollBottom(payload = true) {
-        const changed = $$SCROLL_BOTTOM !== payload;
+        const changed = $$_getScrollBottom() !== payload;
 
-        $$SCROLL_BOTTOM = payload;
+        $$_setScrollBottom(payload);
 
         if (changed) {
             scrollToBottom();
@@ -189,7 +205,7 @@ function $SEARCH_PROVIDER_FACTORY() {
      * Scrolls down on search page if enabled
      */
     function scrollToBottom() {
-        if ($$SCROLL_BOTTOM === true) {
+        if ($$_getScrollBottom() === true) {
             try {
                 $('#schedule_button').hide();
                 // $('#page_bottom').hide();
@@ -217,10 +233,10 @@ function $SEARCH_PROVIDER_FACTORY() {
      * @returns {boolean} is same?
      */
     function isSearchFilterChanged(newFilter) {
-        if ($$SEARCH_FILTER != null) {
+        if ($$_getSearchFilter() != null) {
             try {
                 const newFilterString = JSON.stringify(newFilter);
-                const previousFilterString = JSON.stringify($$SEARCH_FILTER);
+                const previousFilterString = JSON.stringify($$_getSearchFilter());
 
                 return newFilterString !== previousFilterString;
             } catch (error) {
@@ -244,7 +260,7 @@ function $SEARCH_PROVIDER_FACTORY() {
     function search(data, ws) {
         const changed = isSearchFilterChanged(data);
 
-        $$SEARCH_FILTER = data;
+        $$_setSearchFilter(data);
 
         sendSearchResults(changed);
     }

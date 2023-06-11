@@ -19,4 +19,4 @@ chrome.runtime.onConnect.addListener(n01rcu$background$onConnectEventListener);
 chrome.runtime.onMessage.addListener(n01rcu$background$onMessageEventListener);
 
 // REMOVE
-chrome.tabs.onRemoved.addListener(n01rcu$background$onRemovedEventListener);
+// chrome.tabs.onRemoved.addListener(n01rcu$background$onRemovedEventListener);

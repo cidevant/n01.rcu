@@ -13,7 +13,7 @@ async function n01rcu$background$onConnectEventListener(port) {
 
         port.onMessage.addListener((event) => n01rcu$background$spyMessagesHandler(event, port));
         port.onDisconnect.addListener((port) => {
-            console.log('[n01.RCU.background] onConnect: onDisconnect');
+            console.log('[n01.RCU.background] onConnect: onDisconnect', port);
         });
     }
 }
@@ -26,8 +26,10 @@ async function n01rcu$background$onConnectEventListener(port) {
  * @param {*} sendResponse
  */
 async function n01rcu$background$onMessageEventListener(event, _sender, sendResponse) {
+    $$DEBUG && $$VERBOSE && console.log('[n01.RCU.background] onMessage', event);
+
     if (event.__target === $SHARED.targets.background) {
-        $$DEBUG && $$VERBOSE && console.log('[n01.RCU.background] onMessage', event);
+        // $$DEBUG && $$VERBOSE && console.log('[n01.RCU.background] onMessage', event);
 
         n01rcu$background$popupMessagesHandler(event);
         sendResponse();
