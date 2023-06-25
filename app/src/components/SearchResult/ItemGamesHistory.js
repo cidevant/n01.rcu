@@ -2,11 +2,13 @@ import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { stripAverageFromName } from '../../utils/stats';
 import styled from 'styled-components';
-import { usePlayerGameHistory } from '../../hooks/useGameHistory';
+import { usePlayerGameHistory, usePlayerId } from '../../hooks/useGameHistory';
+import { GamePlayerLegs as GamePlayerLegsBase } from '../GameStats/index.style';
 
 function ItemGamesHistory({ playerName, close }) {
     const name = stripAverageFromName(playerName)?.trim?.();
-    const { stats, loading } = usePlayerGameHistory(name);
+    const userId = usePlayerId();
+    const { stats, loading } = usePlayerGameHistory(name, userId);
 
     return (
         <Modal
@@ -33,6 +35,7 @@ function ItemGamesHistory({ playerName, close }) {
                                     {game.p1name}
                                 </PlayerName>
                                 <PlayerStats>{p1Stats}</PlayerStats>
+                                <GamePlayerLegs>{game.p1winLegs}</GamePlayerLegs>
                             </Player>
 
                             <Player>
@@ -42,6 +45,7 @@ function ItemGamesHistory({ playerName, close }) {
                                     {game.p2name}
                                 </PlayerName>
                                 <PlayerStats>{p2Stats}</PlayerStats>
+                                <GamePlayerLegs second>{game.p2winLegs}</GamePlayerLegs>
                             </Player>
                         </Wrapper>
                     );
@@ -77,6 +81,7 @@ export const Player = styled.div`
     padding-bottom: 10px;
     padding-top: 10px;
     border-bottom: 1px solid #999;
+    position: relative;
 `;
 export const PlayerName = styled.div`
     font-size: 30px;
@@ -86,4 +91,8 @@ export const PlayerName = styled.div`
 export const PlayerStats = styled.div`
     font-size: 42px;
     font-weight: bold;
+`;
+
+const GamePlayerLegs = styled(GamePlayerLegsBase)`
+    z-index: 0;
 `;

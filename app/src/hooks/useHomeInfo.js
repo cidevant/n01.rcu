@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
     sendScrollBottom,
@@ -15,9 +14,10 @@ export function useHomeInfo() {
     const { players, filter, keepScrollingBottom, loading, stats, games } = useSelector(
         (state) => state.home
     );
-    const dispatchFilter = useCallback(() => {
-        dispatch(sendFilterByAverage(filter));
-    }, [dispatch, filter]);
+
+    function dispatchFilter(payload) {
+        dispatch(sendFilterByAverage(payload));
+    }
 
     function dispatchSetStats(payload) {
         dispatch(setStats(payload));

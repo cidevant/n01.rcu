@@ -20,15 +20,20 @@ function SearchFilterForm() {
         event.preventDefault();
 
         const { value } = event.target;
+        const val = parseInt(value, 10);
+        const valTo = parseInt(to, 10);
 
-        if (value >= 0 && value <= 180) {
-            setFrom(value);
-            dispatchSetFilter({
-                from: parseInt(value, 10),
-                to: parseInt(to, 10),
+        setFrom(value);
+
+        if (val >= 0 && val <= 180 && valTo >= 0 && valTo <= 180) {
+            const filter = {
+                from: val,
+                to: valTo,
                 cam,
-            });
-            dispatchFilter();
+            };
+
+            dispatchSetFilter(filter);
+            dispatchFilter(filter);
         }
     }
 
@@ -36,15 +41,20 @@ function SearchFilterForm() {
         event.preventDefault();
 
         const { value } = event.target;
+        const val = parseInt(value, 10);
+        const valFrom = parseInt(from, 10);
 
-        if (value >= 0 && value <= 180) {
-            setTo(value);
-            dispatchSetFilter({
-                from: parseInt(from, 10),
-                to: parseInt(value, 10),
+        setTo(value);
+
+        if (val >= 0 && val <= 180 && valFrom >= 0 && valFrom <= 180) {
+            const filter = {
+                from: valFrom,
+                to: val,
                 cam,
-            });
-            dispatchFilter();
+            };
+
+            dispatchSetFilter(filter);
+            dispatchFilter(filter);
         }
     }
 
@@ -52,12 +62,20 @@ function SearchFilterForm() {
         event.preventDefault();
 
         setCam(!cam);
-        dispatchSetFilter({
-            from: parseInt(from, 10),
-            to: parseInt(to, 10),
-            cam: !cam,
-        });
-        dispatchFilter();
+
+        const valFrom = parseInt(from, 10);
+        const valTo = parseInt(to, 10);
+
+        if (valFrom >= 0 && valFrom <= 180 && valTo >= 0 && valTo <= 180) {
+            const filter = {
+                from: valFrom,
+                to: valTo,
+                cam: !cam,
+            };
+
+            dispatchSetFilter(filter);
+            dispatchFilter(filter);
+        }
     }
 
     function updateScroll(event) {

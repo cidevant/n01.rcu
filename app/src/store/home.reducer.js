@@ -1,5 +1,5 @@
 import { WS_IN_PREFIX, WS_OUT_PREFIX } from '../utils/ws';
-
+import { ACTIONS as GAME_ACTIONS } from './game.reducer';
 const ACTIONS = {
     SET_STATS: 'SET_STATS',
     SET_GAMES: 'SET_GAMES',
@@ -134,6 +134,14 @@ export default function homeReducer(state, action) {
             break;
 
         // Scroll bottom
+        case GAME_ACTIONS.MATCH_END:
+        case ACTIONS.START_GAME:
+            state = {
+                ...state,
+                // loading: false,
+                players: [],
+            };
+            break;
         case ACTIONS.SET_KEEP_SCROLLING_BOTTOM:
             state = {
                 ...state,

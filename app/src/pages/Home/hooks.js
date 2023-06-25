@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { config } from '../../config';
 import useData from '../../hooks/useData';
 import useHomeInfo from '../../hooks/useHomeInfo';
-import useInterval from '../../hooks/useInterval';
+import { usePlayerId } from '../../hooks/useGameHistory';
 
 /**
  * Watches game start and redirects to game page
@@ -29,13 +29,14 @@ export function useStartGameWatcher(page) {
  * @param {*} activity
  */
 export function useSearchPolling(activity) {
-    const { dispatchFilter, dispatchScrollBottom, keepScrollingBottom } = useHomeInfo();
+    const { dispatchFilter, dispatchScrollBottom, keepScrollingBottom, filter } = useHomeInfo();
 
     useEffect(() => {
         if (activity === 'search') {
-            dispatchFilter();
+            dispatchFilter(filter);
             dispatchScrollBottom(keepScrollingBottom);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activity]);
 }
 
@@ -47,22 +48,7 @@ export function useSearchPolling(activity) {
 export function useStats() {
     const prevStatsId = useRef();
     const { dispatchSetStats, dispatchSetGames } = useHomeInfo();
-    const { player } = useData();
-    const userId = useMemo(() => {
-        if (player?.fid) {
-            return `fid=${player.fid}`;
-        }
-
-        if (player?.gid) {
-            return `gid=${player.gid}`;
-        }
-
-        if (player?.tid) {
-            return `tid=${player.tid}`;
-        }
-
-        return null;
-    }, [player]);
+    const userId = usePlayerId();
 
     useEffect(() => {
         if (!_.isEmpty(userId) && prevStatsId.current !== userId) {
