@@ -43,7 +43,7 @@ async function checkEnabledUI() {
 
         const tabs = await chrome.tabs.query({
             currentWindow: true,
-            url: 'https://nakka.com/n01/online/*',
+            url: 'https://n01darts.com/n01/online/*',
         });
         const value = tabs != null && tabs?.length > 0;
 

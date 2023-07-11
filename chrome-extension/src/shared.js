@@ -341,7 +341,7 @@ class $SHARED_BACKGROUND {
                 chrome.tabs
                     .query({
                         currentWindow: true,
-                        url: 'https://nakka.com/n01/online/*',
+                        url: 'https://n01darts.com/n01/online/*',
                     })
                     .then((tabs) => {
                         if (tabs.length === 0) {

@@ -50,21 +50,35 @@ export const SCENES_GREETINGS = [
 ];
 
 export const SCENES_MEMES = [
-    {
-        name: 'nice',
-        code: 'nice_scene',
-        style: 'yellow',
-    },
-    {
-        name: 'wow',
-        code: 'wow_scene',
-        style: 'yellow',
-    },
-    {
-        name: 'gg',
-        code: 'gg_scene',
-        style: 'yellow',
-    },
+    [
+        {
+            name: 'nice',
+            code: 'nice_scene',
+            style: 'yellow',
+        },
+        {
+            name: 'wow',
+            code: 'wow_scene',
+            style: 'yellow',
+        },
+        {
+            name: 'gg',
+            code: 'gg_scene',
+            style: 'yellow',
+        },
+    ],
+    [
+        {
+            name: 'your turn',
+            code: 'your_turn_scene',
+            style: 'yellow',
+        },
+        {
+            name: 'repeat?',
+            code: 'repeat_game_scene',
+            style: 'yellow',
+        },
+    ],
 ];
 
 const SCORES_COMMON = [

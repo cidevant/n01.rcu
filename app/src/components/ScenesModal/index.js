@@ -62,11 +62,13 @@ function ScenesList({ sendSceneScore, toggleSendSceneScore }) {
                 ))}{' '}
             </Flex>
 
-            <Flex>
-                {SCENES_MEMES.map((scene) => (
-                    <Item scene={scene} key={scene.code} />
-                ))}{' '}
-            </Flex>
+            {SCENES_MEMES.map((memes) => (
+                <Flex>
+                    {memes.map((scene) => (
+                        <Item scene={scene} key={scene.code} />
+                    ))}{' '}
+                </Flex>
+            ))}
 
             <Flex>
                 {SCENES_GREETINGS.map((scene) => (

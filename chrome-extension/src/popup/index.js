@@ -85,7 +85,7 @@ window.addEventListener('DOMContentLoaded', async function popupLoadedCallback()
         $$DEBUG && $$VERBOSE && console.log('[n01.RCU.popup] #open_nakka_button');
 
         chrome?.tabs?.create?.({
-            url: 'https://nakka.com/n01/online/',
+            url: 'https://n01darts.com/n01/online/',
         });
     });
 
