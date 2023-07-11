@@ -5,12 +5,12 @@ import { useNetworkInfo } from '../../hooks/useNetworkInfo';
 import { obsToggleScene } from '../../utils/obs';
 import LongPressButton from '../LongPressButton';
 
-function Item({ scene, sendScore, useLongPress = false }) {
+function Item({ scene, sendScore, delay, useLongPress = false }) {
     const { obsUrl, obsPassword } = useNetworkInfo();
     const { dispatchInputScore } = useGameInfo();
 
     async function setScene() {
-        await obsToggleScene(scene.code, obsUrl, obsPassword);
+        await obsToggleScene(scene.code, obsUrl, obsPassword, delay);
 
         if (sendScore && scene.score) {
             const score = parseInt(scene.score, 10);

@@ -77,6 +77,7 @@ export const SCENES_MEMES = [
             name: 'repeat?',
             code: 'repeat_game_scene',
             style: 'yellow',
+            delay: 4000,
         },
     ],
 ];

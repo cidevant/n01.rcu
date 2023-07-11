@@ -2,7 +2,7 @@ import OBSWebSocket from 'obs-websocket-js';
 
 export const obs = new OBSWebSocket();
 
-export async function obsToggleScene(sceneName, url, password) {
+export async function obsToggleScene(sceneName, url, password, delay = 2000) {
     if (!url) {
         return 'no obs url';
     }
@@ -17,7 +17,7 @@ export async function obsToggleScene(sceneName, url, password) {
 
             setTimeout(async () => {
                 await obs.call('SetCurrentProgramScene', { sceneName: 'main_scene' });
-            }, 2000);
+            }, delay);
         } catch (error) {
             console.log('[ws.obs] obsToggleScene error', error?.message ?? error);
         }
