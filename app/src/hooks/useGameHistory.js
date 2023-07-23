@@ -33,7 +33,7 @@ export function usePlayerGameHistory(name, withPlayer) {
             const withPlayerUrl = withPlayer == null ? '' : `&${withPlayer}`;
             const url = `${
                 config.nakkaApiEndpoint
-            }/n01/online/n01_history.php?cmd=history_list&skip=0&count=10${withPlayerUrl}&keyword=${encodeURIComponent(
+            }/n01/online/n01_history.php?cmd=history_list&skip=0&count=10${withPlayerUrl}&keyword=~${encodeURIComponent(
                 `${name}`
             )}`;
 

@@ -6,7 +6,7 @@ import Countdown from 'react-countdown';
 
 let timeoutId;
 
-const exitAfter = 2500;
+const exitAfter = 7000;
 
 function ExitTimeoutModal({ show, close }) {
     const { dispatchExitGame } = useGameInfo();
