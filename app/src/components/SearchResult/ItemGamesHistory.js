@@ -95,4 +95,5 @@ export const PlayerStats = styled.div`
 
 const GamePlayerLegs = styled(GamePlayerLegsBase)`
     z-index: 0;
+    ${({ second }) => `${second ? 'right' : 'left'}: 20px;`};
 `;

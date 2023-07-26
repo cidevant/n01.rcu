@@ -24,7 +24,7 @@ function Game() {
             <Wrapper {...swipeScoreList}>
                 <GameScoreList scores={scores} />
                 <FinishDartsModal />
-                <ExitTimeoutModal show={show} close={close} />
+                {show && <ExitTimeoutModal close={close} />}
             </Wrapper>
             <InputKeyboard />
         </>

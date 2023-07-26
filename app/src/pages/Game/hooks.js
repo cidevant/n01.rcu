@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { useData } from '../../hooks/useData';
 import { useNavigate } from 'react-router-dom';
 import { useSwipeable, LEFT, RIGHT } from 'react-swipeable';

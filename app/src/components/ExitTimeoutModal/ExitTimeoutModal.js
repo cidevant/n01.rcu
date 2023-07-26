@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import styled from 'styled-components';
 import useGameInfo from '../../hooks/useGameInfo';
@@ -8,8 +8,9 @@ let timeoutId;
 
 const exitAfter = 7000;
 
-function ExitTimeoutModal({ show, close }) {
+function ExitTimeoutModal({ close }) {
     const { dispatchExitGame } = useGameInfo();
+    const exitAt = useRef(Date.now() + exitAfter);
 
     function stopTimer() {
         if (timeoutId != null) {
@@ -28,34 +29,28 @@ function ExitTimeoutModal({ show, close }) {
     }
 
     useEffect(() => {
-        if (show === true) {
-            stopTimer();
-
+        if (timeoutId == null) {
             timeoutId = setTimeout(() => {
                 dispatchExitGame();
                 stopTimer();
                 close();
             }, exitAfter);
-        } else {
-            stopTimer();
         }
-
-        return () => {
-            stopTimer();
-        };
-    }, [show, dispatchExitGame, close]);
+    }, [close, dispatchExitGame]);
 
     return (
-        <Modal dialogClassName="XL_MODAL" show={show} fullscreen={false} onHide={closeModal}>
+        <Modal dialogClassName="XL_MODAL" show fullscreen={false} onHide={closeModal}>
             <Wrapper>
                 <Title>
                     Exit after <br />
-                    <Countdown
-                        date={Date.now() + exitAfter}
-                        intervalDelay={10}
-                        precision={3}
-                        renderer={(props) => <>{props.total / 1000}</>}
-                    />
+                    {
+                        <Countdown
+                            date={exitAt.current}
+                            intervalDelay={30}
+                            precision={1}
+                            renderer={(props) => <>{(props.total / 1000).toFixed(1)}</>}
+                        />
+                    }
                     <br />
                     seconds
                 </Title>
