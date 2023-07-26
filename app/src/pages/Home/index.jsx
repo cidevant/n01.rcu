@@ -7,6 +7,7 @@ import WaitingForPairing from './WaitingForPairing';
 import ConnectForm from './ConnectForm';
 import TopBar from '../../components/TopBar';
 import ScenesModal from '../../components/ScenesModal';
+import ExitTimeoutModal from '../../components/ExitTimeoutModal/ExitTimeoutModal';
 
 function Home() {
     const { activity, page } = useData();
@@ -36,6 +37,7 @@ function Home() {
         <>
             <TopBar />
             {renderContent()}
+            {/* <ExitTimeoutModal show={() => {}} close={() => {}} /> */}
             {/* <ScenesModal show={true} close={() => {}} /> */}
         </>
     );

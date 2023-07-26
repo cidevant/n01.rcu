@@ -9,7 +9,7 @@ import {
 import { GameScoreList } from '../../components/GameScoreList';
 import styled from 'styled-components';
 import InputKeyboard from '../../components/InputKeyboard';
-import ExitTimeoutModal from './ExitTimeoutModal';
+import ExitTimeoutModal from '../../components/ExitTimeoutModal/ExitTimeoutModal';
 
 function Game() {
     const { scoreList, swipeScoreList } = useSwipeableScoreList();
