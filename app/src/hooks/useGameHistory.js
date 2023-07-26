@@ -41,11 +41,14 @@ export function usePlayerGameHistory(name, withPlayer) {
             fetch(url)
                 .then((data) => data.json())
                 .then((data) => {
-                    setStats(
-                        data.filter(
-                            (game) => name.includes(game.p1name) || name.includes(game.p2name)
-                        )
-                    );
+                    const filtered =
+                        withPlayerUrl == null
+                            ? data.filter(
+                                  (game) => name.includes(game.p1name) || name.includes(game.p2name)
+                              )
+                            : data;
+
+                    setStats(filtered);
                 })
                 .finally(() => {
                     setLoading(false);

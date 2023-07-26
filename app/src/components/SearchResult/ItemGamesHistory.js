@@ -1,14 +1,26 @@
-import React from 'react';
+import { useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { stripAverageFromName } from '../../utils/stats';
 import styled from 'styled-components';
 import { usePlayerGameHistory, usePlayerId } from '../../hooks/useGameHistory';
 import { GamePlayerLegs as GamePlayerLegsBase } from '../GameStats/index.style';
+import MatchDetailModal from '../NakkaMatchDetailModal';
 
 function ItemGamesHistory({ playerName, close }) {
     const name = stripAverageFromName(playerName)?.trim?.();
     const userId = usePlayerId();
     const { stats, loading } = usePlayerGameHistory(name, userId);
+    const [matchDetail, setMatchDetail] = useState(false);
+
+    function openDetail(matchId) {
+        return () => {
+            setMatchDetail(matchId);
+        };
+    }
+
+    function closeDetail() {
+        setMatchDetail(false);
+    }
 
     return (
         <Modal
@@ -27,7 +39,7 @@ function ItemGamesHistory({ playerName, close }) {
                     const p2Stats = ((game.p2allScore / game.p2allDarts) * 3).toFixed(2);
 
                     return (
-                        <Wrapper key={game.mid}>
+                        <Wrapper key={game.mid} onClick={openDetail(game.mid)}>
                             <Player>
                                 <PlayerName
                                     owner={stripAverageFromName(playerName).includes(game.p1name)}
@@ -50,10 +62,10 @@ function ItemGamesHistory({ playerName, close }) {
                         </Wrapper>
                     );
                 })}
+            {matchDetail !== false && <MatchDetailModal close={closeDetail} mid={matchDetail} />}
         </Modal>
     );
 }
-
 export default ItemGamesHistory;
 
 const LoadingState = styled.div`

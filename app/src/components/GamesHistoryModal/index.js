@@ -13,6 +13,7 @@ import {
     GamePlayerName,
     GamePlayerStats,
 } from './index.style';
+import MatchDetailModal from '../NakkaMatchDetailModal';
 
 export function GamesHistoryModal({ show, close }) {
     const { games } = useHomeInfo();
@@ -79,11 +80,6 @@ export function GamesHistoryModal({ show, close }) {
                 </Button>
             </ButtonWrapper>
             <Offcanvas.Body>
-                <GameHistoryDetail
-                    show={showGameInfoModal !== false}
-                    mid={showGameInfoModal}
-                    close={closeModal}
-                />
                 {(!games || games?.length === 0) && <Alert>No games</Alert>}
                 {games?.map?.((game) => {
                     const { clientStats, opponentStats } = getGameStats(game);
@@ -111,6 +107,9 @@ export function GamesHistoryModal({ show, close }) {
                         </GameInfo>
                     );
                 })}{' '}
+                {showGameInfoModal !== false && (
+                    <MatchDetailModal close={closeModal} mid={showGameInfoModal} />
+                )}
             </Offcanvas.Body>
         </Offcanvas>
     );
