@@ -19,13 +19,15 @@ export function GameScoreList({ scores }) {
     }, []);
 
     return (
-        <Table>
-            <tbody>
-                {scores.map((row, index1) => (
-                    <Row row={row} key={index1} />
-                ))}
-            </tbody>
-        </Table>
+        <div style={{ paddingBottom: '190px' }}>
+            <Table>
+                <tbody>
+                    {scores.map((row, index1) => (
+                        <Row row={row} key={index1} />
+                    ))}
+                </tbody>
+            </Table>
+        </div>
     );
 }
 

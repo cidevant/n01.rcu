@@ -1,15 +1,17 @@
 const $SEARCH_PROVIDER = $SEARCH_PROVIDER_FACTORY();
 
 let $$SCROLL_BOTTOM = false;
+let $$SCROLL_BOTTOM_USER = false;
 let $$SEARCH_FILTER = null;
 let $$SENDING_SEARCH_RESULT_TIMEOUT = null;
 
 function $$_getScrollBottom() {
-    return $$SCROLL_BOTTOM;
+    return $$SCROLL_BOTTOM && $$SCROLL_BOTTOM_USER;
 }
 
 function $$_setScrollBottom(input) {
     $$SCROLL_BOTTOM = input;
+    $$SCROLL_BOTTOM_USER = input;
 }
 
 function $$_getSearchFilter() {
