@@ -5,11 +5,15 @@ import styled from 'styled-components';
 import { usePlayerGameHistory, usePlayerId } from '../../hooks/useGameHistory';
 import { GamePlayerLegs as GamePlayerLegsBase } from '../GameStats/index.style';
 import MatchDetailModal from '../NakkaMatchDetailModal';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+let timeoutId = null;
 
 function ItemGamesHistory({ playerName, close }) {
     const name = stripAverageFromName(playerName)?.trim?.();
+    const [opponentName, setOpponentName] = useState(name);
     const userId = usePlayerId();
-    const { stats, loading } = usePlayerGameHistory(name, userId);
+    const { stats, loading, search } = usePlayerGameHistory(name, userId);
     const [matchDetail, setMatchDetail] = useState(false);
 
     function openDetail(matchId) {
@@ -22,6 +26,21 @@ function ItemGamesHistory({ playerName, close }) {
         setMatchDetail(false);
     }
 
+    function setName(event) {
+        const { value } = event.target;
+
+        setOpponentName(value);
+
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+        }
+
+        timeoutId = setTimeout(() => {
+            search(value);
+        }, 500);
+    }
+
     return (
         <Modal
             dialogClassName="XL_MODAL"
@@ -29,7 +48,8 @@ function ItemGamesHistory({ playerName, close }) {
             fullscreen={false}
             onHide={close}
         >
-            <H1>{playerName}</H1>
+            {/* <H1>{playerName}</H1> */}
+            <Input value={opponentName} onChange={setName} />
 
             {loading === true && <LoadingState>Loading...</LoadingState>}
             {loading === false && stats?.length === 0 && <LoadingState>No data</LoadingState>}
@@ -67,6 +87,20 @@ function ItemGamesHistory({ playerName, close }) {
     );
 }
 export default ItemGamesHistory;
+
+const SearchButton = styled.button`
+    width: 60px;
+    height: 66px;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    border: 0;
+`;
+
+const Input = styled.input`
+    text-align: center;
+    font-size: 42px;
+`;
 
 const LoadingState = styled.div`
     font-size: 42px;
