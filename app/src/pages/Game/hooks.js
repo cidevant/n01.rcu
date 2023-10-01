@@ -86,6 +86,7 @@ export function useSwipeableScoreList() {
 
     return {
         scoreList: SCORES_LIST[SCORES_SEQUENCE[scoreList]],
+        scoreSceneName: SCORES_SEQUENCE[scoreList],
         swipeScoreList,
     };
 }
@@ -97,50 +98,6 @@ export function useSwipeableScoreList() {
  * @param {*} scoreList
  * @returns {Array<any>}
  */
-export function useScores(scoreList) {
-    // return SCORES[scoreList];
-
-    const { scoreLeft } = useGameInfo();
-    const scores = useMemo(() => {
-        const result = [...SCORES[scoreList]];
-
-        if (scoreLeft <= 170) {
-            result.push([
-                {
-                    value: scoreLeft,
-                    style: 'finish',
-                },
-                {
-                    colspan: 2,
-                    value: 0,
-                    style: 'zero',
-                },
-            ]);
-            // if (isOneDartCheckout(scoreLeft)) {
-            //     result.push([
-            //         {
-            //             value: scoreLeft,
-            //             style: 'finish',
-            //         },
-            //         {
-            //             colspan: 2,
-            //             value: 0,
-            //             style: 'zero',
-            //         },
-            //     ]);
-            // } else {
-            //     result.push([
-            //         {
-            //             colspan: 3,
-            //             value: 0,
-            //             style: 'zero',
-            //         },
-            //     ]);
-            // }
-        }
-
-        return result;
-    }, [scoreLeft, scoreList]);
-
-    return scores;
+export function useScores(scoreList, scoreSceneName) {
+    return [...SCORES[scoreList]];
 }

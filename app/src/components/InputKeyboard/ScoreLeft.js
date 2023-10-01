@@ -1,22 +1,20 @@
 import styled from 'styled-components';
-import React, { useState, useMemo } from 'react';
-import { CheckoutsModal } from '../CheckoutsModal';
+import React, { useState } from 'react';
 import { useGameInfo } from '../../hooks/useGameInfo';
-import { getCheckouts } from '../../utils/game';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import ScoreButton from '../ScoreButton';
 
 export function ScoreLeft() {
     const { scoreLeft } = useGameInfo();
-    const [modalShow, setModalShow] = useState(false);
-    const checkouts = useMemo(() => getCheckouts(scoreLeft), [scoreLeft]);
-    const anyCheckout = checkouts.length > 0;
+    const anyCheckout = scoreLeft <= 170;
+    const [show, setShow] = useState(false);
 
-    function onShow() {
-        if (anyCheckout) {
-            setModalShow(true);
-        }
+    function toggleShow() {
+        setShow(!show);
     }
-    function onClose() {
-        setModalShow(false);
+
+    function close() {
+        setShow(false);
     }
 
     if (scoreLeft == null) {
@@ -26,27 +24,66 @@ export function ScoreLeft() {
     return (
         <>
             <ScoreLeftWrapper
-                onClick={onShow}
                 active={anyCheckout}
+                onClick={toggleShow}
                 className="d-flex align-items-center justify-content-end"
             >
-                <div>
-                    <ScoreLeftTitle active={anyCheckout}>SCORE LEFT</ScoreLeftTitle>
-
-                    <ScoreLeftValue active={anyCheckout}>{scoreLeft}</ScoreLeftValue>
-                </div>
+                <OverlayTrigger
+                    show={show}
+                    key="score-selector"
+                    placement="top"
+                    overlay={
+                        <div>
+                            <ScoreSelector close={close} />
+                        </div>
+                    }
+                >
+                    <div>
+                        <ScoreLeftTitle active={anyCheckout}>SCORE LEFT</ScoreLeftTitle>
+                        <ScoreLeftValue active={anyCheckout}>{scoreLeft}</ScoreLeftValue>
+                    </div>
+                </OverlayTrigger>
             </ScoreLeftWrapper>
-            <CheckoutsModal
-                show={modalShow}
-                close={onClose}
-                scoreLeft={scoreLeft}
-                checkouts={checkouts}
-            />
         </>
     );
 }
 
 export default ScoreLeft;
+
+function ScoreSelector({ close }) {
+    const { scoreLeft, dispatchInputScore } = useGameInfo();
+
+    function action(value) {
+        dispatchInputScore(parseInt(value, 10));
+        close();
+    }
+
+    return (
+        <ScoreSelectorWrapper>
+            <ScoreSelectorItem>
+                <ScoreButton buttonStyle="finish" score={scoreLeft} action={action} />
+            </ScoreSelectorItem>
+            <ScoreSelectorItem wide>
+                <ScoreButton buttonStyle="zero" score="0" action={action} />
+            </ScoreSelectorItem>
+        </ScoreSelectorWrapper>
+    );
+}
+
+const ScoreSelectorWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    top: -10px;
+    position: relative;
+`;
+
+const ScoreSelectorItem = styled.div`
+    flex-grow: 1;
+    margin-left: 10px;
+    width: 250px;
+
+    ${({ wide }) => wide && 'width: 500px;'};
+`;
 
 const ScoreLeftWrapper = styled.div`
     position: absolute;
@@ -55,7 +92,12 @@ const ScoreLeftWrapper = styled.div`
     height: 100%;
     cursor: pointer !important;
     padding: 0 50px;
-    ${({ active }) => active && 'background-color: #FF1493;'}
+    ${({ active }) => active && 'background-color: #FF1493;'};
+    user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 `;
 
 const ScoreLeftTitle = styled.div`
@@ -65,12 +107,22 @@ const ScoreLeftTitle = styled.div`
     top: 20px;
     position: relative;
     width: 100%;
-    ${({ active }) => active && 'color: white; background-color: black;'}
+    ${({ active }) => active && 'color: white; background-color: black;'};
+    user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 `;
 
 const ScoreLeftValue = styled.div`
     font-size: 100px;
     color: #666;
     text-align: center;
-    ${({ active }) => active && 'color: #111'}
+    ${({ active }) => active && 'color: #111'};
+    user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 `;

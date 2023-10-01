@@ -7,6 +7,7 @@ import {
     refreshPage,
 } from '../store/game.reducer';
 import { validInputValue } from '../utils/game';
+import { config } from '../config';
 
 export function useGameInfo() {
     const dispatch = useDispatch();
@@ -38,9 +39,10 @@ export function useGameInfo() {
         dispatch(refreshPage());
     }
 
+    const leftScore = config.fakeGameState ? 132 : scoreLeft;
+
     return {
-        scoreLeft,
-        // scoreLeft: 332,
+        scoreLeft: leftScore,
         finishDarts,
         currentPlayer,
         playerIndex,

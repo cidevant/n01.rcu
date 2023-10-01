@@ -60,7 +60,7 @@ function ExitTimeoutModal({ close }) {
                         EXIT NOW
                     </Button>
                 </ButtonWrapper>
-                <ButtonWrapper onClick={close}>
+                <ButtonWrapper onClick={closeModal}>
                     <Button variant="danger" size="lg">
                         CANCEL
                     </Button>
