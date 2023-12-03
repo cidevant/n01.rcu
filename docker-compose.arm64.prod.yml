@@ -3,6 +3,7 @@ services:
   n01rcu:
     container_name: arm64-n01rcu
     image: registry.docker.devant.cz/arm64/n01rcu
+    restart: always
     environment:
       - PORT=3000
       - APP_PORT=3001
